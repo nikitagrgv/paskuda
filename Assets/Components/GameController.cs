@@ -1,19 +1,28 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class GameController : MonoBehaviour
+namespace Components
 {
-    private void Start()
+    public class GameController : MonoBehaviour
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
+        public GameObject enemy;
+        public int enemySpawnCount = 100;
+        public float enemySpawnRadius = 50;
 
-    private void Update()
-    {
-        if (Keyboard.current is not { } keyboard)
+        public float gravityMultiplier = 1.5f;
+
+        private void Start()
         {
-            return;
+            Physics.gravity = Vector3.down * 9.81f * gravityMultiplier;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            for (int i = 0; i < enemySpawnCount; ++i)
+            {
+                Vector2 pos2 = Random.insideUnitCircle * enemySpawnRadius;
+                Vector3 pos3 = new Vector3(pos2.x, 1.5f, pos2.y);
+                Instantiate(enemy, pos3, Quaternion.identity);
+            }
         }
     }
 }
