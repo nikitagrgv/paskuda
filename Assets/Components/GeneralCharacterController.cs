@@ -32,7 +32,7 @@ namespace Components
 
         public float moveAccelerationOnFly = 0.55f;
         public float uncontrolledSpeed = 15f;
-        public float accelerationOnUncontrolledSpeedMultiplier = 0.1f;
+        public float accelerationMultiplierOnUncontrolledSpeed = 0.1f;
         public float jumpHeight = 2f;
         public float jumpReloadTime = 0.1f;
         public float maxSlopeAngle = 45f;
@@ -44,11 +44,14 @@ namespace Components
         public float normalCheckMaxDistance = 0.5f;
 
         [Header("Weapons")]
-        public float fireReloadTime = 1f;
+        public Projectile projectilePrefab;
 
+        public float fireReloadTime = 1f;
         public float bulletLifeTime = 4f;
         public float bulletSpeed = 100f;
-        public float bulletImpulse = 100f;
+        public float bulletImpulse = 40f;
+        public float bulletBackImpulse = 10f;
+        public float bulletDamage = 10f;
 
         public float LookPitch
         {
@@ -83,7 +86,8 @@ namespace Components
         public ProjectileManager ProjectileManager { get; private set; }
 
         private Rigidbody _rb;
-        private RelationshipsActor _relActor;
+        private RelationshipsActor _relationshipsActor;
+        private Health _health;
 
         private float _lookPitch;
         private float _lookYaw;
@@ -110,7 +114,10 @@ namespace Components
             _rb = GetComponent<Rigidbody>();
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-            _relActor = GetComponent<RelationshipsActor>();
+            _health = GetComponent<Health>();
+            _health.Died += OnDied;
+
+            _relationshipsActor = GetComponent<RelationshipsActor>();
             UpdateColorFromTeam();
         }
 
@@ -218,32 +225,57 @@ namespace Components
 
         private void DoFire()
         {
+            Projectile projectile = SpawnProjectile();
+
             Vector3 start = firePoint.transform.position;
-            Vector3 dir = firePoint.transform.forward;
-            ProjectileManager.SpawnProjectile(gameObject, start, dir, bulletLifeTime, bulletSpeed, bulletImpulse);
+            Vector3 lookDir = firePoint.transform.forward;
+            Vector3 resultVelocity = _rb.linearVelocity + lookDir * bulletSpeed;
+            float resultSpeed = resultVelocity.magnitude;
+            Vector3 dir = resultVelocity / resultSpeed;
+
+            ProjectileManager.AddProjectile(gameObject, projectile, start, dir, bulletLifeTime, bulletDamage,
+                resultSpeed,
+                bulletImpulse);
+            _rb.AddForceAtPosition(-lookDir * bulletBackImpulse, start, ForceMode.Impulse);
+        }
+
+        private Projectile SpawnProjectile()
+        {
+            Projectile projectile = Instantiate(projectilePrefab);
+            Color color = Teams.ToColor(_relationshipsActor.Team);
+            projectile.SetColor(color);
+            return projectile;
+        }
+        
+        
+        private void OnDied()
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
         private void UpdateColorFromTeam()
         {
-            if (_relActor != null)
+            Color color = Teams.ToColor(_relationshipsActor.Team);
+            // color = Color.Lerp(color, Color.gray, 0.0f);
+            if (_relationshipsActor != null)
             {
-                Color color = Teams.ToColor(_relActor.Team);
                 UpdateColorRecursively(transform, color);
             }
         }
 
         private static void UpdateColorRecursively(Transform transform, Color color)
         {
+            GameObject go = transform.gameObject;
+
+            Renderer rnd = go.GetComponent<Renderer>();
+            if (rnd)
+            {
+                rnd.material.color = color;
+            }
+
             foreach (Transform child in transform)
             {
-                GameObject go = child.gameObject;
-                Renderer rnd = go.GetComponent<Renderer>();
-                if (rnd != null)
-                {
-                    color = Color.Lerp(color, Color.gray, 0.0f);
-                    rnd.material.color = color;
-                }
-
                 UpdateColorRecursively(child, color);
             }
         }

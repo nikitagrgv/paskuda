@@ -24,6 +24,9 @@ namespace Components
         public float maxPeriodChangeWantedPosition = 20f;
         public float wantedPositionMaxRadius = 50f;
 
+        public float minPeriodWantFire = 0.1f;
+        public float maxPeriodWantFire = 10f;
+
         private GeneralCharacterController _ctrl;
 
         private float _timerUpdateYaw;
@@ -37,9 +40,13 @@ namespace Components
         private float _timerChangeWantedPosition;
         private Vector3 _wantedPosition;
 
+        private float _timerWantFire;
+
         private void Start()
         {
             _ctrl = GetComponent<GeneralCharacterController>();
+
+            RandomizeWantFire();
         }
 
         private void Update()
@@ -49,6 +56,7 @@ namespace Components
             UpdateRotation(dt);
             UpdateJump(dt);
             UpdateTargetPosition(dt);
+            UpdateFire(dt);
         }
 
         private void UpdateRotation(float dt)
@@ -129,6 +137,21 @@ namespace Components
             {
                 _ctrl.TargetVelocity = deltaPosition.normalized * moveSpeed;
             }
+        }
+
+        private void UpdateFire(float dt)
+        {
+            _timerWantFire -= dt;
+            if (_timerWantFire <= 0)
+            {
+                RandomizeWantFire();
+                _ctrl.FireRequest = GeneralCharacterController.FireRequestType.FireWhenReady;
+            }
+        }
+
+        private void RandomizeWantFire()
+        {
+            _timerWantFire = Random.Range(minPeriodWantFire, maxPeriodWantFire);
         }
     }
 }

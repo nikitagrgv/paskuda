@@ -8,14 +8,13 @@ namespace Components
 {
     public class ProjectileManager : MonoBehaviour
     {
-        public Projectile projectilePrefab;
-
-        struct ProjectileInfo
+        private struct ProjectileInfo
         {
             public GameObject Sender;
             public Projectile Projectile;
-            public float TimeToLive;
             public Vector3 Direction;
+            public float TimeToLive;
+            public float Damage;
             public float Speed;
             public float Impulse;
         }
@@ -23,16 +22,20 @@ namespace Components
         private readonly List<ProjectileInfo> _active = new();
         private readonly List<ProjectileInfo> _dying = new();
 
-        public void SpawnProjectile(GameObject sender, Vector3 start, Vector3 dir, float lifetime, float speed,
+        public void AddProjectile(GameObject sender, Projectile projectile, Vector3 start, Vector3 dir,
+            float lifetime, float damage,
+            float speed,
             float impulse)
         {
-            Quaternion rot = Quaternion.LookRotation(dir);
+            projectile.transform.position = start;
+            projectile.transform.rotation = Quaternion.LookRotation(dir);
             ProjectileInfo info = new ProjectileInfo
             {
                 Sender = sender,
-                Projectile = Instantiate(projectilePrefab, start, rot),
-                TimeToLive = lifetime,
+                Projectile = projectile,
                 Direction = dir,
+                TimeToLive = lifetime,
+                Damage = damage,
                 Speed = speed,
                 Impulse = impulse
             };
@@ -85,7 +88,7 @@ namespace Components
                 Vector3 oldPosition = info.Projectile.transform.position;
                 if (Physics.Raycast(oldPosition, info.Direction, out RaycastHit hit, info.Speed * dt))
                 {
-                    hit.rigidbody?.AddForceAtPosition(info.Direction * info.Impulse, hit.point, ForceMode.Impulse);
+                    ApplyHit(hit, info);
 
                     info.Projectile.transform.position = hit.point;
                     _active.RemoveAtSwapBack(i);
@@ -100,9 +103,24 @@ namespace Components
             }
         }
 
+        private static void ApplyHit(RaycastHit hit, ProjectileInfo info)
+        {
+            hit.rigidbody?.AddForceAtPosition(info.Direction * info.Impulse, hit.point, ForceMode.Impulse);
+
+            GameObject go = hit.collider?.gameObject;
+            if (!go) return;
+            
+            Health health = go.GetComponentInParent<Health>();
+            if (!health) return;
+            
+            health.ApplyDamage(info.Damage);
+        }
+
         private void MoveToDying(ProjectileInfo info)
         {
-            info.TimeToLive = 2f;
+            info.TimeToLive = 1f;
+            info.Projectile.projectileBase.gameObject.SetActive(false);
+            info.Projectile.projectileExplosion.gameObject.SetActive(true);
             _dying.Add(info);
         }
     }
