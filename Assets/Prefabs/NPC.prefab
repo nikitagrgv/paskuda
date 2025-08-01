@@ -333,11 +333,11 @@ MonoBehaviour:
   firePoint: {fileID: 502479783636877160}
   moveAccelerationOnGround: 0.7
   moveAccelerationOnFly: 0.55
-  uncontrolledSpeed: 15
-  accelerationMultiplierOnUncontrolledSpeed: 0.1
   jumpHeight: 2
   jumpReloadTime: 0.1
   maxSlopeAngle: 45
+  dashVelocityChange: 20
+  dashReloadTime: 2
   groundCheckerRadius: 0.49
   groundCheckerOffset: 0.57
   normalCheckMaxDistance: 0.5
@@ -346,6 +346,7 @@ MonoBehaviour:
   bulletLifeTime: 4
   bulletSpeed: 170
   bulletImpulse: 40
+  bulletReboundChance: 0.5
   bulletBackImpulse: 5
   bulletDamage: 10
 --- !u!114 &3646358203114439129
@@ -401,8 +402,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   impulseMultiplier: 2
+  multiplierIgnoreTag: Ground
   ignoreKinematic: 1
-  ignoreTag: Ground
+  impulseToDamageCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 10
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 14
+      value: 5
+      inSlope: 2.3025002
+      outSlope: 2.3025002
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.26949248
+      outWeight: 0.04711881
+    - serializedVersion: 3
+      time: 50
+      value: 50
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &1371490772475302317
 MonoBehaviour:
   m_ObjectHideFlags: 0

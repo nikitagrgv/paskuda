@@ -18,7 +18,7 @@ namespace Components
 
         private void LateUpdate()
         {
-            transform.rotation = Quaternion.LookRotation(_cam.transform.position - transform.position);
+            transform.rotation = Quaternion.LookRotation(transform.position - _cam.transform.position);
         }
 
         private void OnHealthChanged()

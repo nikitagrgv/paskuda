@@ -42,7 +42,7 @@ namespace Components
                 NotifyHealthChanged();
             }
 
-            if (_currentHealth <= 0 && !god)
+            if (IsDead)
             {
                 NotifyDied();
             }

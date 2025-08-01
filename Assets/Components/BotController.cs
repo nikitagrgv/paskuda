@@ -111,7 +111,7 @@ namespace Components
             if (_timerJump <= 0)
             {
                 _timerJump = Random.Range(minPeriodJump, maxPeriodJump);
-                _ctrl.JumpRequest = GeneralCharacterController.JumpRequestType.TryJumpNow;
+                _ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
         }
 
@@ -145,7 +145,7 @@ namespace Components
             if (_timerWantFire <= 0)
             {
                 RandomizeWantFire();
-                _ctrl.FireRequest = GeneralCharacterController.FireRequestType.FireWhenReady;
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoWhenReady;
             }
         }
 

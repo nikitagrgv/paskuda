@@ -10,34 +10,22 @@ namespace Components
     public class PlayerController : MonoBehaviour
     {
         [Header("Movement")]
-        public float moveSpeed = 5f;
+        public float runMoveSprint = 9f;
 
-        public float moveSpeedSprint = 9f;
+        public float walkMoveSpeed = 5f;
 
         [Header("Control")]
         public float lookSensitivity = 0.06f;
 
-        [Header("Crosshair")]
-        public float crosshairSize = 20f;
-
-        public float crosshairThickness = 2f;
-        public Color crosshairColor = new(100, 50, 20, 100);
-
         private Vector2 _moveInputDir = Vector2.zero;
 
-        private bool _isSprinting;
-
-        private Texture2D _crosshairTexture;
+        private bool _isWalking;
 
         private GeneralCharacterController _ctrl;
 
         private void Start()
         {
             _ctrl = GetComponent<GeneralCharacterController>();
-
-            _crosshairTexture = new Texture2D(1, 1);
-            _crosshairTexture.SetPixel(0, 0, crosshairColor);
-            _crosshairTexture.Apply();
         }
 
         public void OnMove(InputAction.CallbackContext context)
@@ -54,9 +42,17 @@ namespace Components
             UpdateTargetVelocity();
         }
 
-        public void OnSprint(InputAction.CallbackContext context)
+        public void OnDash(InputAction.CallbackContext context)
         {
-            _isSprinting = context.ReadValueAsButton();
+            if (context.ReadValueAsButton())
+            {
+                _ctrl.DashRequest = GeneralCharacterController.ActionRequestType.TryNow;
+            }
+        }
+
+        public void OnWalk(InputAction.CallbackContext context)
+        {
+            _isWalking = context.ReadValueAsButton();
             UpdateTargetVelocity();
         }
 
@@ -64,7 +60,7 @@ namespace Components
         {
             if (context.ReadValueAsButton())
             {
-                _ctrl.JumpRequest = GeneralCharacterController.JumpRequestType.TryJumpNow;
+                _ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
         }
 
@@ -72,18 +68,8 @@ namespace Components
         {
             if (context.ReadValueAsButton())
             {
-                _ctrl.FireRequest = GeneralCharacterController.FireRequestType.TryFireNow;
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
-        }
-
-        private void OnGUI()
-        {
-            Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
-
-            GUI.DrawTexture(new Rect(screenCenter.x - crosshairSize / 2f, screenCenter.y - crosshairThickness / 2f,
-                crosshairSize, crosshairThickness), _crosshairTexture);
-            GUI.DrawTexture(new Rect(screenCenter.x - crosshairThickness / 2f, screenCenter.y - crosshairSize / 2f,
-                crosshairThickness, crosshairSize), _crosshairTexture);
         }
 
         private void UpdateTargetVelocity()
@@ -99,7 +85,7 @@ namespace Components
             Vector3 right = yawRotation * Vector3.right;
             Vector3 dir = forward * _moveInputDir.y + right * _moveInputDir.x;
             dir.Normalize();
-            float speed = _isSprinting ? moveSpeedSprint : moveSpeed;
+            float speed = _isWalking ? walkMoveSpeed : runMoveSprint;
             _ctrl.TargetVelocity = speed * dir;
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
+using Random = UnityEngine.Random;
 
 namespace Components
 {
@@ -17,6 +18,7 @@ namespace Components
             public float Damage;
             public float Speed;
             public float Impulse;
+            public float ReboundChance;
         }
 
         private readonly List<ProjectileInfo> _active = new();
@@ -25,7 +27,8 @@ namespace Components
         public void AddProjectile(GameObject sender, Projectile projectile, Vector3 start, Vector3 dir,
             float lifetime, float damage,
             float speed,
-            float impulse)
+            float impulse,
+            float reboundChance)
         {
             projectile.transform.position = start;
             projectile.transform.rotation = Quaternion.LookRotation(dir);
@@ -37,7 +40,8 @@ namespace Components
                 TimeToLive = lifetime,
                 Damage = damage,
                 Speed = speed,
-                Impulse = impulse
+                Impulse = impulse,
+                ReboundChance = reboundChance
             };
             _active.Add(info);
         }
@@ -90,6 +94,14 @@ namespace Components
                 {
                     ApplyHit(hit, info);
 
+                    if (info.ReboundChance > 0f && Random.value <= info.ReboundChance)
+                    {
+                        info.Direction = Vector3.Reflect(info.Direction, hit.normal);
+                        info.Projectile.transform.position = hit.point + info.Direction * 0.01f;
+                        _active[i] = info;
+                        continue;
+                    }
+
                     info.Projectile.transform.position = hit.point;
                     _active.RemoveAtSwapBack(i);
                     MoveToDying(info);
@@ -109,10 +121,10 @@ namespace Components
 
             GameObject go = hit.collider?.gameObject;
             if (!go) return;
-            
+
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
-            
+
             health.ApplyDamage(info.Damage);
         }
 

@@ -7,13 +7,17 @@ namespace Components
     public class ImpulseAware : MonoBehaviour
     {
         public float impulseMultiplier = 2f;
+        public string multiplierIgnoreTag = "Ground";
         public bool ignoreKinematic = true;
-        public string ignoreTag = "Ground";
 
-        public float damageImpulseThreshold = 12f;
-        public float damageImpulseMax = 50f;
-        public float minImpulseDamage = 4f;
-        public float maxImpulseDamage = 50f;
+        public AnimationCurve impulseToDamageCurve = new AnimationCurve(
+            new Keyframe(12f, 4f),
+            new Keyframe(50f, 50f)
+        )
+        {
+            preWrapMode = WrapMode.Clamp,
+            postWrapMode = WrapMode.Clamp
+        };
 
         private Rigidbody _rb;
         private Health _health;
@@ -26,14 +30,15 @@ namespace Components
 
         private void OnCollisionEnter(Collision other)
         {
-            ApplyDamage(other.impulse.magnitude * impulseMultiplier);
+            bool multiplyIgnored = other.gameObject.CompareTag(multiplierIgnoreTag);
+            ApplyDamage(other.impulse.magnitude * (multiplyIgnored ? 1 : impulseMultiplier));
 
-            if (Mathf.Approximately(impulseMultiplier, 1f))
+            if (multiplyIgnored)
             {
                 return;
             }
 
-            if (other.gameObject.CompareTag(ignoreTag))
+            if (Mathf.Approximately(impulseMultiplier, 1f))
             {
                 return;
             }
@@ -56,17 +61,11 @@ namespace Components
                 return;
             }
 
-            if (impulseMagnitude < damageImpulseThreshold)
+            float damage = impulseToDamageCurve.Evaluate(impulseMagnitude);
+            if (damage <= 0.1)
             {
                 return;
             }
-
-            impulseMagnitude = Mathf.Min(impulseMagnitude, damageImpulseMax);
-
-            float d = damageImpulseMax - damageImpulseThreshold;
-            float k = maxImpulseDamage - minImpulseDamage;
-            float b = damageImpulseMax * minImpulseDamage - damageImpulseThreshold * maxImpulseDamage;
-            float damage = (impulseMagnitude * k + b) / d;
 
             _health.ApplyDamage(damage);
         }

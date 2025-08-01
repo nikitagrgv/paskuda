@@ -10,18 +10,11 @@ namespace Components
         public const float MinPitch = -87f;
         public const float MaxPitch = 87f;
 
-        public enum JumpRequestType
+        public enum ActionRequestType
         {
             NotRequested,
-            TryJumpNow,
-            JumpWhenReady,
-        }
-
-        public enum FireRequestType
-        {
-            NotRequested,
-            TryFireNow,
-            FireWhenReady,
+            TryNow,
+            DoWhenReady,
         }
 
         public GameObject eyeObject;
@@ -31,11 +24,12 @@ namespace Components
         public float moveAccelerationOnGround = 0.7f;
 
         public float moveAccelerationOnFly = 0.55f;
-        public float uncontrolledSpeed = 15f;
-        public float accelerationMultiplierOnUncontrolledSpeed = 0.1f;
         public float jumpHeight = 2f;
         public float jumpReloadTime = 0.1f;
         public float maxSlopeAngle = 45f;
+
+        public float dashVelocityChange = 20f;
+        public float dashReloadTime = 2f;
 
         [Header("Ground Check")]
         public float groundCheckerRadius = 0.49f;
@@ -50,6 +44,7 @@ namespace Components
         public float bulletLifeTime = 4f;
         public float bulletSpeed = 100f;
         public float bulletImpulse = 40f;
+        public float bulletReboundChance = 0.9f;
         public float bulletBackImpulse = 10f;
         public float bulletDamage = 10f;
 
@@ -65,16 +60,22 @@ namespace Components
             set => _lookYaw = ToValidYaw(value);
         }
 
-        public JumpRequestType JumpRequest
+        public ActionRequestType JumpRequest
         {
             get => _jumpRequest;
             set => _jumpRequest = value;
         }
 
-        public FireRequestType FireRequest
+        public ActionRequestType FireRequest
         {
             get => _fireRequest;
             set => _fireRequest = value;
+        }
+
+        public ActionRequestType DashRequest
+        {
+            get => _dashRequest;
+            set => _dashRequest = value;
         }
 
         public Vector3 TargetVelocity
@@ -83,7 +84,11 @@ namespace Components
             set => _targetVelocity = value;
         }
 
-        public ProjectileManager ProjectileManager { get; private set; }
+        public bool IsDashReady => _dashTimer <= 0;
+        public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
+        public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / fireReloadTime, 0f, 1f);
+
+        private ProjectileManager _projectileManager;
 
         private Rigidbody _rb;
         private RelationshipsActor _relationshipsActor;
@@ -95,12 +100,16 @@ namespace Components
         private Vector3 _targetVelocity = Vector3.zero;
         private bool _isGrounded;
         private bool _isGoodAngle;
-        private JumpRequestType _jumpRequest = JumpRequestType.NotRequested;
+
+        private ActionRequestType _jumpRequest = ActionRequestType.NotRequested;
         private float _jumpTimer;
         private bool _hasDoubleJump;
 
-        private FireRequestType _fireRequest = FireRequestType.NotRequested;
+        private ActionRequestType _fireRequest = ActionRequestType.NotRequested;
         private float _fireTimer;
+
+        private ActionRequestType _dashRequest = ActionRequestType.NotRequested;
+        private float _dashTimer;
 
         private readonly Collider[] _colliderBuffer = new Collider[10];
         private readonly RaycastHit[] _raycastHitBuffer = new RaycastHit[10];
@@ -109,7 +118,7 @@ namespace Components
         {
             GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
             Assert.IsNotNull(gameController);
-            ProjectileManager = gameController?.GetComponent<ProjectileManager>();
+            _projectileManager = gameController?.GetComponent<ProjectileManager>();
 
             _rb = GetComponent<Rigidbody>();
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -128,19 +137,34 @@ namespace Components
             eyeObject.transform.rotation = Quaternion.Euler(_lookPitch, _lookYaw, 0);
 
             _fireTimer = Math.Max(0, _fireTimer - dt);
-
-            if (_fireRequest != FireRequestType.NotRequested)
+            if (_fireRequest != ActionRequestType.NotRequested)
             {
-                if (_fireRequest == FireRequestType.TryFireNow)
+                if (_fireRequest == ActionRequestType.TryNow)
                 {
-                    _fireRequest = FireRequestType.NotRequested;
+                    _fireRequest = ActionRequestType.NotRequested;
                 }
 
                 if (_fireTimer <= 0)
                 {
-                    _fireRequest = FireRequestType.NotRequested;
+                    _fireRequest = ActionRequestType.NotRequested;
                     DoFire();
                     _fireTimer = fireReloadTime;
+                }
+            }
+
+            _dashTimer = Math.Max(0, _dashTimer - dt);
+            if (_dashRequest != ActionRequestType.NotRequested)
+            {
+                if (_dashRequest == ActionRequestType.TryNow)
+                {
+                    _dashRequest = ActionRequestType.NotRequested;
+                }
+
+                if (_dashTimer <= 0 && _targetVelocity.sqrMagnitude > 0.01)
+                {
+                    _dashRequest = ActionRequestType.NotRequested;
+                    DoDash();
+                    _dashTimer = dashReloadTime;
                 }
             }
         }
@@ -151,6 +175,7 @@ namespace Components
             _jumpTimer = Math.Max(0, _jumpTimer - dt);
 
             gameObject.transform.rotation = Quaternion.Euler(0, _lookYaw, 0);
+            eyeObject.transform.rotation = Quaternion.Euler(_lookPitch, _lookYaw, 0);
 
             Vector3 groundCheckerCenter = GetGroundCheckerCenter();
             _isGrounded = CheckGround(groundCheckerCenter, groundCheckerRadius);
@@ -187,11 +212,11 @@ namespace Components
                 _rb.AddForce(appliedDeltaVelocity, ForceMode.VelocityChange);
             }
 
-            if (_jumpRequest != JumpRequestType.NotRequested)
+            if (_jumpRequest != ActionRequestType.NotRequested)
             {
-                if (_jumpRequest == JumpRequestType.TryJumpNow)
+                if (_jumpRequest == ActionRequestType.TryNow)
                 {
-                    _jumpRequest = JumpRequestType.NotRequested;
+                    _jumpRequest = ActionRequestType.NotRequested;
                 }
 
                 bool canDoJump = _isGrounded && _isGoodAngle && _jumpTimer <= 0;
@@ -203,7 +228,7 @@ namespace Components
 
                 if (canDoJump)
                 {
-                    _jumpRequest = JumpRequestType.NotRequested;
+                    _jumpRequest = ActionRequestType.NotRequested;
 
                     _jumpTimer = jumpReloadTime;
                     float impulse = Mathf.Sqrt(jumpHeight * 2f * Physics.gravity.magnitude);
@@ -223,6 +248,12 @@ namespace Components
             Gizmos.DrawLine(groundCheckerCenter, end);
         }
 
+        private void DoDash()
+        {
+            Vector3 change = _targetVelocity.normalized * dashVelocityChange;
+            _rb.AddForce(change, ForceMode.VelocityChange);
+        }
+
         private void DoFire()
         {
             Projectile projectile = SpawnProjectile();
@@ -233,9 +264,10 @@ namespace Components
             float resultSpeed = resultVelocity.magnitude;
             Vector3 dir = resultVelocity / resultSpeed;
 
-            ProjectileManager.AddProjectile(gameObject, projectile, start, dir, bulletLifeTime, bulletDamage,
+            _projectileManager.AddProjectile(gameObject, projectile, start, dir, bulletLifeTime, bulletDamage,
                 resultSpeed,
-                bulletImpulse);
+                bulletImpulse,
+                bulletReboundChance);
             _rb.AddForceAtPosition(-lookDir * bulletBackImpulse, start, ForceMode.Impulse);
         }
 
@@ -246,8 +278,8 @@ namespace Components
             projectile.SetColor(color);
             return projectile;
         }
-        
-        
+
+
         private void OnDied()
         {
             gameObject.SetActive(false);
