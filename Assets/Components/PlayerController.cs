@@ -37,28 +37,40 @@ namespace Components
         public void OnLook(InputAction.CallbackContext context)
         {
             Vector2 lookDir = context.ReadValue<Vector2>();
-            _ctrl.LookPitch = _ctrl.LookPitch - lookDir.y * lookSensitivity;
-            _ctrl.LookYaw = _ctrl.LookYaw + lookDir.x * lookSensitivity;
+            _ctrl.LookPitch -= lookDir.y * lookSensitivity;
+            _ctrl.LookYaw += lookDir.x * lookSensitivity;
             UpdateTargetVelocity();
         }
 
         public void OnDash(InputAction.CallbackContext context)
         {
-            if (context.ReadValueAsButton())
+            if (context.performed)
             {
-                _ctrl.DashRequest = GeneralCharacterController.ActionRequestType.TryNow;
+                Vector3 dir = InputDirToGlobalDir(_moveInputDir, _ctrl.LookYaw);
+                _ctrl.RequestDash(dir, GeneralCharacterController.ActionRequestType.TryNow);
             }
         }
 
-        public void OnWalk(InputAction.CallbackContext context)
+        public void OnToggleSlowMotion(InputAction.CallbackContext context)
         {
-            _isWalking = context.ReadValueAsButton();
-            UpdateTargetVelocity();
+            if (!context.performed)
+            {
+                return;
+            }
+
+            if (Mathf.Approximately(Time.timeScale, 1f))
+            {
+                Time.timeScale = 0.1f;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+            }
         }
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (context.ReadValueAsButton())
+            if (context.performed)
             {
                 _ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
@@ -66,7 +78,7 @@ namespace Components
 
         public void OnFire(InputAction.CallbackContext context)
         {
-            if (context.ReadValueAsButton())
+            if (context.performed)
             {
                 _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
@@ -74,19 +86,25 @@ namespace Components
 
         private void UpdateTargetVelocity()
         {
-            if (_moveInputDir == Vector2.zero)
+            if (_moveInputDir.sqrMagnitude <= 0.0001f)
             {
                 _ctrl.TargetVelocity = Vector3.zero;
                 return;
             }
 
-            Quaternion yawRotation = Quaternion.Euler(0, _ctrl.LookYaw, 0);
-            Vector3 forward = yawRotation * Vector3.forward;
-            Vector3 right = yawRotation * Vector3.right;
-            Vector3 dir = forward * _moveInputDir.y + right * _moveInputDir.x;
-            dir.Normalize();
+            Vector3 dir = InputDirToGlobalDir(_moveInputDir, _ctrl.LookYaw);
             float speed = _isWalking ? walkMoveSpeed : runMoveSprint;
             _ctrl.TargetVelocity = speed * dir;
+        }
+
+        private static Vector3 InputDirToGlobalDir(Vector2 dir, float yaw)
+        {
+            Quaternion yawRotation = Quaternion.Euler(0, yaw, 0);
+            Vector3 forward = yawRotation * Vector3.forward;
+            Vector3 right = yawRotation * Vector3.right;
+            Vector3 globDir = forward * dir.y + right * dir.x;
+            globDir.Normalize();
+            return globDir;
         }
     }
 }

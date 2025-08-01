@@ -21,7 +21,7 @@ namespace Components
             transform.rotation = Quaternion.LookRotation(transform.position - _cam.transform.position);
         }
 
-        private void OnHealthChanged()
+        private void OnHealthChanged(Health.HealthChangeInfo info)
         {
             healthImage.fillAmount = health.CurrentHealthPercentage;
         }

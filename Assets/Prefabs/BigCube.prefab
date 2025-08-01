@@ -118,7 +118,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7223854242454336936}
   serializedVersion: 5
-  m_Mass: 2
+  m_Mass: 7
   m_LinearDamping: 0.1
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -149,6 +149,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4372f0a715f4fb844b99755c26175a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impulseMultiplier: 2
-  ignoreKinematic: 1
-  ignoreTag: Ground
+  impulseMultiplier: 3
+  multiplierIgnoreTag: Ground
+  applyImpulseOnlyWhenNonKinematic: 1
+  impulseToDamageCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 12
+      value: 4
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 50
+      value: 50
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

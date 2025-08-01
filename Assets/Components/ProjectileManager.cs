@@ -32,7 +32,7 @@ namespace Components
         {
             projectile.transform.position = start;
             projectile.transform.rotation = Quaternion.LookRotation(dir);
-            ProjectileInfo info = new ProjectileInfo
+            ProjectileInfo info = new()
             {
                 Sender = sender,
                 Projectile = projectile,
@@ -46,7 +46,7 @@ namespace Components
             _active.Add(info);
         }
 
-        public void Update()
+        private void Update()
         {
             float dt = Time.deltaTime;
             UpdateDying(dt);
@@ -125,7 +125,7 @@ namespace Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            health.ApplyDamage(info.Damage);
+            health.ApplyDamageHit(info.Damage, info.Sender);
         }
 
         private void MoveToDying(ProjectileInfo info)

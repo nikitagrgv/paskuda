@@ -88,7 +88,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Walk",
+                    "name": "ToggleSlowMotionMode",
                     "type": "Button",
                     "id": "bbb3571f-7c9a-4794-9a5c-71bb86187d7d",
                     "expectedControlType": "",
@@ -497,11 +497,11 @@
                 {
                     "name": "",
                     "id": "70b7c658-5b5a-450a-88f9-4948d76d2bc1",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Walk",
+                    "action": "ToggleSlowMotionMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

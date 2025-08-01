@@ -72,19 +72,36 @@ namespace Components
             set => _fireRequest = value;
         }
 
-        public ActionRequestType DashRequest
-        {
-            get => _dashRequest;
-            set => _dashRequest = value;
-        }
-
         public Vector3 TargetVelocity
         {
             get => _targetVelocity;
             set => _targetVelocity = value;
         }
 
+        public void RequestDash(Vector3 dirXZ, ActionRequestType requestType)
+        {
+            _dashTargetXZ = dirXZ;
+            _dashTargetXZ.y = 0;
+            float magnitude = _dashTargetXZ.magnitude;
+            if (magnitude <= 0.01)
+            {
+                CancelDashRequest();
+                return;
+            }
+
+            _dashTargetXZ /= magnitude;
+            _dashRequest = requestType;
+        }
+
+        public void CancelDashRequest()
+        {
+            _dashTargetXZ = Vector3.zero;
+            _dashRequest = ActionRequestType.NotRequested;
+        }
+
         public bool IsDashReady => _dashTimer <= 0;
+        public float RemainingDashTimeNormalized => Mathf.Clamp(_dashTimer / dashReloadTime, 0f, 1f);
+        
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
         public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / fireReloadTime, 0f, 1f);
 
@@ -108,6 +125,7 @@ namespace Components
         private ActionRequestType _fireRequest = ActionRequestType.NotRequested;
         private float _fireTimer;
 
+        private Vector3 _dashTargetXZ = Vector3.zero;
         private ActionRequestType _dashRequest = ActionRequestType.NotRequested;
         private float _dashTimer;
 
@@ -160,12 +178,17 @@ namespace Components
                     _dashRequest = ActionRequestType.NotRequested;
                 }
 
-                if (_dashTimer <= 0 && _targetVelocity.sqrMagnitude > 0.01)
+                if (_dashTimer <= 0)
                 {
                     _dashRequest = ActionRequestType.NotRequested;
                     DoDash();
                     _dashTimer = dashReloadTime;
                 }
+            }
+
+            if (gameObject.transform.position.y < -1000)
+            {
+                _health.ApplyDamageGeneral(500);
             }
         }
 
@@ -250,7 +273,7 @@ namespace Components
 
         private void DoDash()
         {
-            Vector3 change = _targetVelocity.normalized * dashVelocityChange;
+            Vector3 change = _dashTargetXZ * dashVelocityChange;
             _rb.AddForce(change, ForceMode.VelocityChange);
         }
 

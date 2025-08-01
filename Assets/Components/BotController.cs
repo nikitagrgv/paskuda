@@ -19,6 +19,9 @@ namespace Components
 
         public float minPeriodJump = 0.1f;
         public float maxPeriodJump = 5f;
+        
+        public float minPeriodDash = 0.1f;
+        public float maxPeriodDash = 7f;
 
         public float minPeriodChangeWantedPosition = 0.1f;
         public float maxPeriodChangeWantedPosition = 20f;
@@ -36,6 +39,8 @@ namespace Components
         private float _targetPitch;
 
         private float _timerJump;
+        
+        private float _timerDash;
 
         private float _timerChangeWantedPosition;
         private Vector3 _wantedPosition;
@@ -55,6 +60,7 @@ namespace Components
 
             UpdateRotation(dt);
             UpdateJump(dt);
+            UpdateDash(dt);
             UpdateTargetPosition(dt);
             UpdateFire(dt);
         }
@@ -112,6 +118,18 @@ namespace Components
             {
                 _timerJump = Random.Range(minPeriodJump, maxPeriodJump);
                 _ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
+            }
+        }
+        
+        private void UpdateDash(float dt)
+        {
+            _timerDash -= dt;
+            if (_timerDash <= 0)
+            {
+                _timerDash = Random.Range(minPeriodDash, maxPeriodDash);
+                Vector2 dashDir2d = Random.insideUnitCircle;
+                Vector3 dashDir = new(dashDir2d.x, 0, dashDir2d.y);
+                _ctrl.RequestDash(dashDir, GeneralCharacterController.ActionRequestType.TryNow);
             }
         }
 

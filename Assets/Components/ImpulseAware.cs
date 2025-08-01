@@ -8,7 +8,7 @@ namespace Components
     {
         public float impulseMultiplier = 2f;
         public string multiplierIgnoreTag = "Ground";
-        public bool ignoreKinematic = true;
+        public bool applyImpulseOnlyWhenNonKinematic = true;
 
         public AnimationCurve impulseToDamageCurve = new AnimationCurve(
             new Keyframe(12f, 4f),
@@ -28,30 +28,36 @@ namespace Components
             _health = GetComponent<Health>();
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnCollisionEnter(Collision collision)
         {
-            bool multiplyIgnored = other.gameObject.CompareTag(multiplierIgnoreTag);
-            ApplyDamage(other.impulse.magnitude * (multiplyIgnored ? 1 : impulseMultiplier));
+            float multiplier = collision.gameObject.CompareTag(multiplierIgnoreTag) ? 1f : impulseMultiplier;
+            bool ignoreImpulseAdding = Mathf.Approximately(multiplier, 1f) ||
+                                       (applyImpulseOnlyWhenNonKinematic &&
+                                        (!collision.rigidbody || collision.rigidbody.isKinematic));
+            
+            float fullImpulseMagnitude = collision.impulse.magnitude * multiplier;
+            ApplyDamage(fullImpulseMagnitude);
 
-            if (multiplyIgnored)
-            {
+            if (ignoreImpulseAdding)
                 return;
-            }
 
-            if (Mathf.Approximately(impulseMultiplier, 1f))
+            multiplier -= 1f;
+            
+            int contactsCount = collision.contactCount;
+            for (int i = 0; i < contactsCount; i++)
             {
-                return;
-            }
+                ContactPoint contact = collision.GetContact(i);
+                Vector3 impulse = contact.impulse;
+                Vector3 normal = contact.normal;
+                Vector3 point = contact.point;
 
-            if (ignoreKinematic && (!other.rigidbody || other.rigidbody.isKinematic))
-            {
-                return;
-            }
+                float mul = multiplier;
+                if (Vector3.Dot(normal, impulse) < 0f)
+                    mul = -mul;
 
-            Vector3 initImpulse = other.impulse;
-            initImpulse *= (impulseMultiplier - 1);
-            // TODO: AddForceAtPosition!
-            _rb.AddForce(initImpulse, ForceMode.Impulse);
+                impulse *= mul;
+                _rb.AddForceAtPosition(impulse, point, ForceMode.Impulse);
+            }
         }
 
         private void ApplyDamage(float impulseMagnitude)
@@ -67,7 +73,7 @@ namespace Components
                 return;
             }
 
-            _health.ApplyDamage(damage);
+            _health.ApplyDamageImpulsive(damage);
         }
     }
 }

@@ -1,15 +1,35 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
+using System.Collections.ObjectModel;
 
 namespace Components
 {
     public class GameController : MonoBehaviour
     {
+        public GameObject player;
+
         public GameObject npcPrefab;
         public int npcSpawnCount = 100;
         public float npcSpawnRadius = 50;
 
         public float gravityMultiplier = 1.5f;
+
+        public bool IsSpawnFinished { get; private set; }
+
+        public event Action<Teams.TeamType, int> AliveCountChanged;
+
+        public struct TeamInfo
+        {
+            public Teams.TeamType Team;
+            public int Alive;
+        }
+
+        public ReadOnlyCollection<TeamInfo> AllTeams => _teams.AsReadOnly();
+
+        private readonly List<TeamInfo> _teams = new();
 
         private void Start()
         {
@@ -17,6 +37,8 @@ namespace Components
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            RegisterPlayer();
 
             for (int i = 0; i < npcSpawnCount; ++i)
             {
@@ -31,33 +53,61 @@ namespace Components
 
                 SpawnNpc(team);
             }
+
+            IsSpawnFinished = true;
+        }
+
+        private void RegisterPlayer()
+        {
+            RelationshipsActor playerRelationships = player.GetComponent<RelationshipsActor>();
+            if (!playerRelationships) return;
+
+            RegisterCharacter(playerRelationships);
         }
 
         private void SpawnNpc(Teams.TeamType team)
         {
             Vector2 pos2 = Random.insideUnitCircle * npcSpawnRadius;
-            Vector3 pos3 = new Vector3(pos2.x, 1.5f, pos2.y);
+            Vector3 pos3 = new(pos2.x, 1.5f, pos2.y);
             GameObject obj = Instantiate(npcPrefab, pos3, Quaternion.identity);
+
             RelationshipsActor relationships = obj.GetComponent<RelationshipsActor>();
-            if (relationships)
-            {
-                relationships.Team = team;
-            }
+            if (!relationships) return;
+
+            relationships.Team = team;
+            RegisterCharacter(relationships);
         }
 
-        private void Update()
+        private void RegisterCharacter(RelationshipsActor actor)
         {
-            if (Keyboard.current.f3Key.wasPressedThisFrame)
+            AddTeamAlive(actor.Team, 1);
+            actor.Died += () => OnCharacterDied(actor);
+        }
+
+        private void OnCharacterDied(RelationshipsActor actor)
+        {
+            AddTeamAlive(actor.Team, -1);
+        }
+
+        private void AddTeamAlive(Teams.TeamType team, int delta)
+        {
+            int index = _teams.FindIndex(ts => ts.Team == team);
+            if (index < 0)
             {
-                if (Mathf.Approximately(Time.timeScale, 1f))
-                {
-                    Time.timeScale = 0.1f;
-                }
-                else
-                {
-                    Time.timeScale = 1f;
-                }
+                _teams.Add(new TeamInfo { Team = team, Alive = 0 });
+                index = _teams.Count - 1;
             }
+
+            TeamInfo teamInfo = _teams[index];
+            teamInfo.Alive += delta;
+            _teams[index] = teamInfo;
+
+            NotifyAliveCountChanged(team, delta);
+        }
+
+        private void NotifyAliveCountChanged(Teams.TeamType team, int score)
+        {
+            AliveCountChanged?.Invoke(team, score);
         }
     }
 }

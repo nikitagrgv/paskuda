@@ -371,6 +371,8 @@ MonoBehaviour:
   speedRotatePitch: 200
   minPeriodJump: 0.1
   maxPeriodJump: 6
+  minPeriodDash: 0.1
+  maxPeriodDash: 7
   minPeriodChangeWantedPosition: 0.1
   maxPeriodChangeWantedPosition: 20
   wantedPositionMaxRadius: 80
@@ -401,9 +403,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4372f0a715f4fb844b99755c26175a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impulseMultiplier: 2
+  impulseMultiplier: 1.8
   multiplierIgnoreTag: Ground
-  ignoreKinematic: 1
+  applyImpulseOnlyWhenNonKinematic: 1
   impulseToDamageCurve:
     serializedVersion: 2
     m_Curve:
@@ -426,8 +428,17 @@ MonoBehaviour:
       inWeight: 0.26949248
       outWeight: 0.04711881
     - serializedVersion: 3
-      time: 50
-      value: 50
+      time: 57.9219
+      value: 69.5695
+      inSlope: 0.81810886
+      outSlope: 0.81810886
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14497845
+      outWeight: 0.18599245
+    - serializedVersion: 3
+      time: 110.177734
+      value: 110.331436
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -450,6 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   god: 0
+  dieEffect: {fileID: 7004678617841129273, guid: 4febd10bd18d509409f1cb81542824d9, type: 3}
 --- !u!1001 &3265645473035418971
 PrefabInstance:
   m_ObjectHideFlags: 0
