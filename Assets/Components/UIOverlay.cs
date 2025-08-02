@@ -83,7 +83,7 @@ namespace Components
             if (_fpsCounterTime > 1f)
             {
                 float fps = _fpsCounterNumFrames / _fpsCounterTime;
-                fpsText.text = $"FPS: {fps:F2}";
+                fpsText.text = $"FPS: {fps:F1}";
 
                 _fpsCounterTime = 0f;
                 _fpsCounterNumFrames = 0;
