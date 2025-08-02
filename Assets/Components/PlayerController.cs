@@ -52,7 +52,7 @@ namespace Components
 
         private void OnDestroy()
         {
-            Camera playerCamera = GetComponent<Camera>();
+            Camera playerCamera = GetComponentInChildren<Camera>();
             playerCamera.enabled = false;
 
             spectatorCamera.gameObject.SetActive(true);
