@@ -25,7 +25,6 @@ namespace Components
 
         public float minPeriodChangeWantedPosition = 0.1f;
         public float maxPeriodChangeWantedPosition = 20f;
-        public float wantedPositionMaxRadius = 50f;
 
         public float minPeriodWantFire = 0.1f;
         public float maxPeriodWantFire = 10f;
@@ -46,6 +45,8 @@ namespace Components
         private Vector3 _wantedPosition;
 
         private float _timerWantFire;
+
+        private GeneralCharacterController _targetEnemy;
 
         private void Start()
         {
@@ -139,7 +140,7 @@ namespace Components
             if (_timerChangeWantedPosition <= 0)
             {
                 _timerChangeWantedPosition = Random.Range(minPeriodChangeWantedPosition, maxPeriodChangeWantedPosition);
-                Vector2 rand = Random.insideUnitCircle * wantedPositionMaxRadius;
+                Vector2 rand = Random.insideUnitCircle * _ctrl.gameConstants.npcSpawnRadius;
                 _wantedPosition = new Vector3(rand.x, 0, rand.y);
             }
 
