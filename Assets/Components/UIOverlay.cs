@@ -117,8 +117,11 @@ namespace Components
         private void OnPlayerDied()
         {
             _hasPlayer = false;
+            playerController = null;
+            playerHealth = null;
+
             playerOverlay.gameObject.SetActive(false);
-            
+
             Health.AnyHealthChanged -= OnAnyHealthChanged;
         }
 
