@@ -1214,7 +1214,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!65 &1055604815
@@ -1604,6 +1604,7 @@ GameObject:
   - component: {fileID: 1140413246}
   - component: {fileID: 1140413247}
   - component: {fileID: 1140413248}
+  - component: {fileID: 1140413249}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: GameController
@@ -1820,11 +1821,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a59f68e3da6844584877ea9cadd51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2116517879}
-  npcPrefab: {fileID: 5142210715877961110, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  npcSpawnCount: 300
-  npcSpawnRadius: 70
-  gravityMultiplier: 1.2
 --- !u!114 &1140413248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1837,12 +1833,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de51663642bff6b49aa01950f770be40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1140413249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140413244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1efb7eea5924e9479f5c7cdcf2f064b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2059177129}
+  npcPrefab: {fileID: 898362589482774158, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
+  npcSpawnCount: 100
+  npcSpawnRadius: 50
+  gravityMultiplier: 1.2
 --- !u!114 &1143200942 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7167312169005661983, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
   m_PrefabInstance: {fileID: 7406894898832855806}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116517879}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01d0dac0e5f753548a8a0cc458d4d6d8, type: 3}
@@ -1853,7 +1866,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1888688231931819344, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
   m_PrefabInstance: {fileID: 7406894898832855806}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116517879}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a137c786aca8384bab1fd5bdc8dcccd, type: 3}
@@ -3431,7 +3444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   impulseMultiplier: 2
   multiplierIgnoreTag: Ground
-  ignoreKinematic: 1
+  applyImpulseOnlyWhenNonKinematic: 1
   impulseToDamageCurve:
     serializedVersion: 2
     m_Curve:
@@ -4269,17 +4282,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3255179121981898597, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
   m_PrefabInstance: {fileID: 7406894898832855806}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116517879}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 528bcf55e058a464e8b68dbcb60df6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2116517879 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8686222816301400131, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
-  m_PrefabInstance: {fileID: 7406894898832855806}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2142013798
 PrefabInstance:
   m_ObjectHideFlags: 0

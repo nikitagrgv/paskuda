@@ -19,7 +19,7 @@ namespace Components
 
         public float minPeriodJump = 0.1f;
         public float maxPeriodJump = 5f;
-        
+
         public float minPeriodDash = 0.1f;
         public float maxPeriodDash = 7f;
 
@@ -39,7 +39,7 @@ namespace Components
         private float _targetPitch;
 
         private float _timerJump;
-        
+
         private float _timerDash;
 
         private float _timerChangeWantedPosition;
@@ -120,7 +120,7 @@ namespace Components
                 _ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
         }
-        
+
         private void UpdateDash(float dt)
         {
             _timerDash -= dt;

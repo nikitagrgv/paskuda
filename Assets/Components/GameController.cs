@@ -4,19 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using System.Collections.ObjectModel;
+using UnityEngine.Assertions;
 
 namespace Components
 {
     public class GameController : MonoBehaviour
     {
-        public GameObject player;
-
-        public GameObject npcPrefab;
-        public int npcSpawnCount = 100;
-        public float npcSpawnRadius = 50;
-
-        public float gravityMultiplier = 1.5f;
-
         public bool IsSpawnFinished { get; private set; }
 
         public event Action<Teams.TeamType, int> AliveCountChanged;
@@ -31,16 +24,22 @@ namespace Components
 
         private readonly List<TeamInfo> _teams = new();
 
+        private GameConstants _consts;
+
         private void Start()
         {
-            Physics.gravity = Vector3.down * 9.81f * gravityMultiplier;
+            _consts = GetComponent<GameConstants>();
+            Assert.IsNotNull(_consts);
+
+            Physics.gravity = Vector3.down * 9.81f * _consts.gravityMultiplier;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
             RegisterPlayer();
 
-            for (int i = 0; i < npcSpawnCount; ++i)
+            int count = _consts.npcSpawnCount;
+            for (int i = 0; i < count; ++i)
             {
                 int teamTypeNum = i % 3;
                 Teams.TeamType team;
@@ -59,26 +58,37 @@ namespace Components
 
         private void RegisterPlayer()
         {
-            RelationshipsActor playerRelationships = player.GetComponent<RelationshipsActor>();
-            if (!playerRelationships) return;
+            RegisterCharacter(_consts.player);
 
-            RegisterCharacter(playerRelationships);
+            RelationshipsActor playerRelationships = _consts.player.GetComponent<RelationshipsActor>();
+            if (playerRelationships)
+            {
+                RegisterRelationshipsActor(playerRelationships);
+            }
         }
 
         private void SpawnNpc(Teams.TeamType team)
         {
-            Vector2 pos2 = Random.insideUnitCircle * npcSpawnRadius;
+            Vector2 pos2 = Random.insideUnitCircle * _consts.npcSpawnRadius;
             Vector3 pos3 = new(pos2.x, 1.5f, pos2.y);
-            GameObject obj = Instantiate(npcPrefab, pos3, Quaternion.identity);
+            GeneralCharacterController npc = Instantiate(_consts.npcPrefab, pos3, Quaternion.identity);
 
-            RelationshipsActor relationships = obj.GetComponent<RelationshipsActor>();
-            if (!relationships) return;
+            RegisterCharacter(npc);
 
-            relationships.Team = team;
-            RegisterCharacter(relationships);
+            RelationshipsActor relationships = npc.GetComponent<RelationshipsActor>();
+            if (relationships)
+            {
+                relationships.Team = team;
+                RegisterRelationshipsActor(relationships);
+            }
         }
 
-        private void RegisterCharacter(RelationshipsActor actor)
+        private void RegisterCharacter(GeneralCharacterController character)
+        {
+            character.gameConstants = _consts;
+        }
+
+        private void RegisterRelationshipsActor(RelationshipsActor actor)
         {
             AddTeamAlive(actor.Team, 1);
             actor.Died += () => OnCharacterDied(actor);

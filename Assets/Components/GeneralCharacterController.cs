@@ -17,6 +17,8 @@ namespace Components
             DoWhenReady,
         }
 
+        public GameConstants gameConstants;
+
         public GameObject eyeObject;
         public GameObject firePoint;
 
@@ -101,7 +103,7 @@ namespace Components
 
         public bool IsDashReady => _dashTimer <= 0;
         public float RemainingDashTimeNormalized => Mathf.Clamp(_dashTimer / dashReloadTime, 0f, 1f);
-        
+
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
         public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / fireReloadTime, 0f, 1f);
 
@@ -134,6 +136,8 @@ namespace Components
 
         private void Start()
         {
+            Assert.IsNotNull(gameConstants);
+
             GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
             Assert.IsNotNull(gameController);
             _projectileManager = gameController?.GetComponent<ProjectileManager>();
