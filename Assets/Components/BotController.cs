@@ -163,7 +163,7 @@ namespace Components
             if (_timerWantFire <= 0)
             {
                 RandomizeWantFire();
-                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoWhenReady;
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoWhenReadyAndFinish;
             }
         }
 
