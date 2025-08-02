@@ -52,6 +52,10 @@ namespace Components
 
         private void OnDestroy()
         {
+            Camera playerCamera = GetComponent<Camera>();
+            playerCamera.enabled = false;
+
+            spectatorCamera.gameObject.SetActive(true);
         }
 
         public void OnMove(InputAction.CallbackContext context)
