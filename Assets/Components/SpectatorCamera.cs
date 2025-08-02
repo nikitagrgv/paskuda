@@ -138,7 +138,7 @@ namespace Components
             }
 
             Vector3 dir = InputDirToGlobalDir(_moveInputDir, LookPitch, LookYaw);
-            float speed = _fastSpeedEnabled ? normalSpeed : fastSpeed;
+            float speed = _fastSpeedEnabled ? fastSpeed : normalSpeed;
             speed *= _moveInputDir.magnitude;
             _velocity = speed * dir;
         }
