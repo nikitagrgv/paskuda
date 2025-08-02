@@ -164,41 +164,15 @@ namespace Components
             _fireTimer = Math.Max(0, _fireTimer - dt);
             if (_fireRequest != ActionRequestType.NotRequested)
             {
-                if (_fireRequest == ActionRequestType.TryNow)
-                {
-                    _fireRequest = ActionRequestType.NotRequested;
-                }
-
-                if (_fireTimer <= 0)
-                {
-                    if (_fireRequest == ActionRequestType.DoWhenReadyAndFinish)
-                    {
-                        _fireRequest = ActionRequestType.NotRequested;
-                    }
-
-                    _fireTimer = fireReloadTime;
-                    DoFire();
-                }
+                bool done = DoFire();
+                UpdateRequest(ref _fireRequest, done);
             }
 
             _dashTimer = Math.Max(0, _dashTimer - dt);
             if (_dashRequest != ActionRequestType.NotRequested)
             {
-                if (_dashRequest == ActionRequestType.TryNow)
-                {
-                    _dashRequest = ActionRequestType.NotRequested;
-                }
-
-                if (_dashTimer <= 0)
-                {
-                    if (_dashRequest == ActionRequestType.DoWhenReadyAndFinish)
-                    {
-                        _dashRequest = ActionRequestType.NotRequested;
-                    }
-
-                    _dashTimer = dashReloadTime;
-                    DoDash();
-                }
+                bool done = DoDash();
+                UpdateRequest(ref _dashRequest, done);
             }
 
             if (gameObject.transform.position.y < -1000)
@@ -252,29 +226,8 @@ namespace Components
 
             if (_jumpRequest != ActionRequestType.NotRequested)
             {
-                if (_jumpRequest == ActionRequestType.TryNow)
-                {
-                    _jumpRequest = ActionRequestType.NotRequested;
-                }
-
-                bool canDoJump = _isGrounded && _isGoodAngle && _jumpTimer <= 0;
-                if (!canDoJump && _hasDoubleJump && _jumpTimer <= 0)
-                {
-                    canDoJump = true;
-                    _hasDoubleJump = false;
-                }
-
-                if (canDoJump)
-                {
-                    if (_jumpRequest == ActionRequestType.DoWhenReadyAndFinish)
-                    {
-                        _jumpRequest = ActionRequestType.NotRequested;
-                    }
-
-                    _jumpTimer = jumpReloadTime;
-                    float impulse = Mathf.Sqrt(jumpHeight * 2f * Physics.gravity.magnitude);
-                    _rb.AddForce(-impulse * Physics.gravity.normalized, ForceMode.VelocityChange);
-                }
+                bool done = DoJump();
+                UpdateRequest(ref _jumpRequest, done);
             }
         }
 
@@ -289,14 +242,53 @@ namespace Components
             Gizmos.DrawLine(groundCheckerCenter, end);
         }
 
-        private void DoDash()
+        private bool DoJump()
         {
-            Vector3 change = _dashTargetXZ * dashVelocityChange;
-            _rb.AddForce(change, ForceMode.VelocityChange);
+            if (_jumpTimer > 0)
+            {
+                return false;
+            }
+
+            if (!_isGrounded || !_isGoodAngle)
+            {
+                if (!_hasDoubleJump)
+                {
+                    return false;
+                }
+
+                _hasDoubleJump = false;
+            }
+
+            _jumpTimer = jumpReloadTime;
+
+            float impulse = Mathf.Sqrt(jumpHeight * 2f * Physics.gravity.magnitude);
+            _rb.AddForce(-impulse * Physics.gravity.normalized, ForceMode.VelocityChange);
+            return true;
         }
 
-        private void DoFire()
+        private bool DoDash()
         {
+            if (_dashTimer > 0)
+            {
+                return false;
+            }
+
+            _dashTimer = dashReloadTime;
+
+            Vector3 change = _dashTargetXZ * dashVelocityChange;
+            _rb.AddForce(change, ForceMode.VelocityChange);
+            return true;
+        }
+
+        private bool DoFire()
+        {
+            if (_fireTimer > 0)
+            {
+                return false;
+            }
+
+            _fireTimer = fireReloadTime;
+
             Projectile projectile = SpawnProjectile();
 
             Vector3 start = firePoint.transform.position;
@@ -312,6 +304,7 @@ namespace Components
             _rb.AddForceAtPosition(-lookDir * bulletBackImpulse, start, ForceMode.Impulse);
 
             NotifyFired();
+            return true;
         }
 
         private Projectile SpawnProjectile()
@@ -402,7 +395,18 @@ namespace Components
             Fired?.Invoke();
         }
 
-        static float ToValidYaw(float angle)
+        private static void UpdateRequest(ref ActionRequestType type, bool done)
+        {
+            switch (type)
+            {
+                case ActionRequestType.TryNow:
+                case ActionRequestType.DoWhenReadyAndFinish when done:
+                    type = ActionRequestType.NotRequested;
+                    break;
+            }
+        }
+
+        private static float ToValidYaw(float angle)
         {
             angle %= 360f;
             if (angle < 0)
@@ -413,7 +417,7 @@ namespace Components
             return angle;
         }
 
-        static float ToValidPitch(float angle)
+        private static float ToValidPitch(float angle)
         {
             return Mathf.Clamp(angle, MinPitch, MaxPitch);
         }
