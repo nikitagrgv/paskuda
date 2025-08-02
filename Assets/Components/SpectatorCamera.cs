@@ -149,7 +149,8 @@ namespace Components
 
         private void UpdateVelocity()
         {
-            if (_moveInputDir.sqrMagnitude <= 0.0001f)
+            const float eps = 0.0001f;
+            if (_moveInputDir.sqrMagnitude <= eps && Mathf.Abs(_verticalDir) < eps)
             {
                 _velocity = Vector3.zero;
                 return;
