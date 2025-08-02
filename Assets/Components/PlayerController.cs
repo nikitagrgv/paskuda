@@ -80,7 +80,11 @@ namespace Components
         {
             if (context.performed)
             {
-                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.TryNow;
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoRepeat;
+            }
+            else if (context.canceled)
+            {
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.NotRequested;
             }
         }
 

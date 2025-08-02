@@ -14,7 +14,8 @@ namespace Components
         {
             NotRequested,
             TryNow,
-            DoWhenReady,
+            DoWhenReadyAndFinish,
+            DoRepeat,
         }
 
         public GameConstants gameConstants;
@@ -107,6 +108,8 @@ namespace Components
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
         public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / fireReloadTime, 0f, 1f);
 
+        public event Action Fired;
+
         private ProjectileManager _projectileManager;
 
         private Rigidbody _rb;
@@ -168,9 +171,13 @@ namespace Components
 
                 if (_fireTimer <= 0)
                 {
-                    _fireRequest = ActionRequestType.NotRequested;
-                    DoFire();
+                    if (_fireRequest == ActionRequestType.DoWhenReadyAndFinish)
+                    {
+                        _fireRequest = ActionRequestType.NotRequested;
+                    }
+
                     _fireTimer = fireReloadTime;
+                    DoFire();
                 }
             }
 
@@ -184,9 +191,13 @@ namespace Components
 
                 if (_dashTimer <= 0)
                 {
-                    _dashRequest = ActionRequestType.NotRequested;
-                    DoDash();
+                    if (_dashRequest == ActionRequestType.DoWhenReadyAndFinish)
+                    {
+                        _dashRequest = ActionRequestType.NotRequested;
+                    }
+
                     _dashTimer = dashReloadTime;
+                    DoDash();
                 }
             }
 
@@ -255,7 +266,10 @@ namespace Components
 
                 if (canDoJump)
                 {
-                    _jumpRequest = ActionRequestType.NotRequested;
+                    if (_jumpRequest == ActionRequestType.DoWhenReadyAndFinish)
+                    {
+                        _jumpRequest = ActionRequestType.NotRequested;
+                    }
 
                     _jumpTimer = jumpReloadTime;
                     float impulse = Mathf.Sqrt(jumpHeight * 2f * Physics.gravity.magnitude);
@@ -296,6 +310,8 @@ namespace Components
                 bulletImpulse,
                 bulletReboundChance);
             _rb.AddForceAtPosition(-lookDir * bulletBackImpulse, start, ForceMode.Impulse);
+
+            NotifyFired();
         }
 
         private Projectile SpawnProjectile()
@@ -379,6 +395,11 @@ namespace Components
             Vector3 pos = transform.position;
             pos.y -= groundCheckerOffset;
             return pos;
+        }
+
+        private void NotifyFired()
+        {
+            Fired?.Invoke();
         }
 
         static float ToValidYaw(float angle)
