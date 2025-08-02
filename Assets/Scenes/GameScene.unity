@@ -4754,21 +4754,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3255179121981898597, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
-      propertyPath: bulletDamage
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 3255179121981898597, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
-      propertyPath: bulletImpulse
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 3255179121981898597, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
       propertyPath: gameConstants
       value: 
       objectReference: {fileID: 1140413249}
-    - target: {fileID: 3255179121981898597, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
-      propertyPath: fireReloadTime
-      value: 0.4
-      objectReference: {fileID: 0}
     - target: {fileID: 8686222816301400131, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
       propertyPath: m_Name
       value: Player
