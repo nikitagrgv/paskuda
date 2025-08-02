@@ -78,6 +78,8 @@ namespace Components
 
         private void OnPlayerDied()
         {
+            Time.timeScale = 1f;
+            
             Camera playerCamera = _consts.player.GetComponentInChildren<Camera>();
             playerCamera.enabled = false;
 

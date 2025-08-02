@@ -1096,12 +1096,12 @@
                 },
                 {
                     "name": "Move Up and Down",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "6d03182f-a330-44e8-9451-ebe1f6bdd21b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [

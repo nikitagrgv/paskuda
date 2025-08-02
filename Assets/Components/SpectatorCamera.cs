@@ -156,20 +156,18 @@ namespace Components
                 return;
             }
 
-            Vector3 dir = InputDirToGlobalDir(_moveInputDir, _verticalDir, LookPitch, LookYaw);
+            Vector3 dir = InputToGlobalVector(_moveInputDir, _verticalDir, LookPitch, LookYaw);
             float speed = _fastSpeedEnabled ? fastSpeed : normalSpeed;
-            speed *= _moveInputDir.magnitude;
             _velocity = speed * dir;
         }
 
-        private static Vector3 InputDirToGlobalDir(Vector2 dir, float verticalDir, float pitch, float yaw)
+        private static Vector3 InputToGlobalVector(Vector2 dir, float verticalDir, float pitch, float yaw)
         {
             Quaternion yawRotation = Quaternion.Euler(pitch, yaw, 0);
             Vector3 forward = yawRotation * Vector3.forward;
             Vector3 right = yawRotation * Vector3.right;
             Vector3 up = yawRotation * Vector3.up;
             Vector3 globDir = forward * dir.y + right * dir.x + up * verticalDir;
-            globDir.Normalize();
             return globDir;
         }
     }
