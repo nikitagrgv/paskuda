@@ -2236,6 +2236,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 689aaa30-9b8d-428f-b5be-1881018ef220
     m_ActionName: 'Spectator/Look[/DualShock4GamepadHID/rightStick,/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1855342218}
+        m_TargetAssemblyTypeName: Components.SpectatorCamera, Assembly-CSharp
+        m_MethodName: OnMoveUpAndDown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6d03182f-a330-44e8-9451-ebe1f6bdd21b
+    m_ActionName: Spectator/Move Up
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -2280,8 +2296,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2059177129}
   npcPrefab: {fileID: 898362589482774158, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  npcSpawnCount: 500
-  gameFieldRadius: 250
+  npcSpawnCount: 150
+  gameFieldRadius: 50
   gravityMultiplier: 1.2
 --- !u!114 &1143200942 stripped
 MonoBehaviour:
@@ -5064,9 +5080,9 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 1759450130}
   - {fileID: 1411912682}
+  - {fileID: 1140413245}
   - {fileID: 1855342217}
   - {fileID: 7406894898832855806}
-  - {fileID: 1140413245}
   - {fileID: 1208414239}
   - {fileID: 1873263986}
   - {fileID: 3999354056327668557}
