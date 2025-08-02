@@ -15,9 +15,13 @@ namespace Components
         public float walkMoveSpeed = 5f;
 
         [Header("Control")]
-        public float lookSensitivity = 0.06f;
+        public float mouseSensitivity = 0.06f;
+
+        public float gamepadSensitivity = 60f;
 
         private Vector2 _moveInputDir = Vector2.zero;
+
+        private Vector2 _lookGamepadInputDir = Vector2.zero;
 
         private bool _isWalking;
 
@@ -28,17 +32,60 @@ namespace Components
             _ctrl = GetComponent<GeneralCharacterController>();
         }
 
+        private void Update()
+        {
+            float dt = Time.deltaTime;
+            if (_lookGamepadInputDir != Vector2.zero)
+            {
+                float mul = gamepadSensitivity * dt;
+                _ctrl.LookPitch -= _lookGamepadInputDir.y * mul;
+                _ctrl.LookYaw += _lookGamepadInputDir.x * mul;
+                UpdateTargetVelocity();
+            }
+        }
+
         public void OnMove(InputAction.CallbackContext context)
         {
+            if (context.canceled)
+            {
+                _moveInputDir = Vector2.zero;
+                UpdateTargetVelocity();
+                return;
+            }
+
+            if (!context.performed)
+                return;
+
             _moveInputDir = context.ReadValue<Vector2>();
             UpdateTargetVelocity();
         }
 
         public void OnLook(InputAction.CallbackContext context)
         {
+            if (context.canceled)
+            {
+                _lookGamepadInputDir = Vector2.zero;
+                return;
+            }
+
+            if (!context.performed)
+            {
+                return;
+            }
+
+            bool gamepad = context.action.activeControl?.device is Gamepad;
             Vector2 lookDir = context.ReadValue<Vector2>();
-            _ctrl.LookPitch -= lookDir.y * lookSensitivity;
-            _ctrl.LookYaw += lookDir.x * lookSensitivity;
+            if (gamepad)
+            {
+                _lookGamepadInputDir = lookDir;
+                return;
+            }
+
+            float mul = mouseSensitivity * Time.timeScale;
+
+            _lookGamepadInputDir = Vector2.zero;
+            _ctrl.LookPitch -= lookDir.y * mul;
+            _ctrl.LookYaw += lookDir.x * mul;
             UpdateTargetVelocity();
         }
 
@@ -98,6 +145,7 @@ namespace Components
 
             Vector3 dir = InputDirToGlobalDir(_moveInputDir, _ctrl.LookYaw);
             float speed = _isWalking ? walkMoveSpeed : runMoveSprint;
+            speed *= _moveInputDir.magnitude;
             _ctrl.TargetVelocity = speed * dir;
         }
 
