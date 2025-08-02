@@ -96,7 +96,7 @@ namespace Components
             if (_timerUpdatePitch <= 0)
             {
                 _timerUpdatePitch = Random.Range(minPeriodUpdatePitch, maxPeriodUpdatePitch);
-                _targetPitch = Random.Range(GeneralCharacterController.MinPitch, GeneralCharacterController.MaxPitch);
+                _targetPitch = Random.Range(MathUtils.MinPitch, MathUtils.MaxPitch);
             }
 
             float totalDeltaPitch = _targetPitch - _ctrl.LookPitch;

@@ -7,9 +7,6 @@ namespace Components
     [RequireComponent(typeof(Rigidbody))]
     public class GeneralCharacterController : MonoBehaviour
     {
-        public const float MinPitch = -87f;
-        public const float MaxPitch = 87f;
-
         public enum ActionRequestType
         {
             NotRequested,
@@ -54,13 +51,13 @@ namespace Components
         public float LookPitch
         {
             get => _lookPitch;
-            set => _lookPitch = ToValidPitch(value);
+            set => _lookPitch = MathUtils.ToValidPitch(value);
         }
 
         public float LookYaw
         {
             get => _lookYaw;
-            set => _lookYaw = ToValidYaw(value);
+            set => _lookYaw = MathUtils.ToValidYaw(value);
         }
 
         public ActionRequestType JumpRequest
@@ -404,22 +401,6 @@ namespace Components
                     type = ActionRequestType.NotRequested;
                     break;
             }
-        }
-
-        private static float ToValidYaw(float angle)
-        {
-            angle %= 360f;
-            if (angle < 0)
-            {
-                angle += 360f;
-            }
-
-            return angle;
-        }
-
-        private static float ToValidPitch(float angle)
-        {
-            return Mathf.Clamp(angle, MinPitch, MaxPitch);
         }
     }
 }

@@ -10,8 +10,6 @@ namespace Components
     [RequireComponent(typeof(GeneralCharacterController))]
     public class PlayerController : MonoBehaviour
     {
-        public SpectatorCamera spectatorCamera;
-
         [Header("Movement")]
         public float runMoveSprint = 9f;
 
@@ -48,14 +46,6 @@ namespace Components
                 _ctrl.LookYaw += _lookGamepadInputDir.x * mul;
                 UpdateTargetVelocity();
             }
-        }
-
-        private void OnDestroy()
-        {
-            Camera playerCamera = GetComponentInChildren<Camera>();
-            playerCamera.enabled = false;
-
-            spectatorCamera.gameObject.SetActive(true);
         }
 
         public void OnMove(InputAction.CallbackContext context)

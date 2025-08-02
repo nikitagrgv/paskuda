@@ -10,6 +10,8 @@ namespace Components
 {
     public class GameController : MonoBehaviour
     {
+        public SpectatorCamera spectatorCamera;
+
         public bool IsSpawnFinished { get; private set; }
 
         public event Action<Teams.TeamType, int> AliveCountChanged;
@@ -25,11 +27,15 @@ namespace Components
         private readonly List<TeamInfo> _teams = new();
 
         private GameConstants _consts;
+        private PlayerInput _input;
 
         private void Start()
         {
             _consts = GetComponent<GameConstants>();
             Assert.IsNotNull(_consts);
+
+            _input = GetComponent<PlayerInput>();
+            Assert.IsNotNull(_input);
 
             Physics.gravity = Vector3.down * 9.81f * _consts.gravityMultiplier;
 
@@ -60,11 +66,26 @@ namespace Components
         {
             RegisterCharacter(_consts.player);
 
+            Health health = _consts.player.GetComponent<Health>();
+            health.Died += OnPlayerDied;
+
             RelationshipsActor playerRelationships = _consts.player.GetComponent<RelationshipsActor>();
             if (playerRelationships)
             {
                 RegisterRelationshipsActor(playerRelationships);
             }
+        }
+
+        private void OnPlayerDied()
+        {
+            Camera playerCamera = _consts.player.GetComponentInChildren<Camera>();
+            playerCamera.enabled = false;
+
+            spectatorCamera.gameObject.SetActive(true);
+            spectatorCamera.transform.position = _consts.player.transform.position;
+            spectatorCamera.transform.rotation = _consts.player.transform.rotation;
+
+            _input.SwitchCurrentActionMap("Spectator");
         }
 
         private void SpawnNpc(Teams.TeamType team)
