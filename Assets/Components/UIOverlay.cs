@@ -55,10 +55,13 @@ namespace Components
         private float _fpsCounterTime;
         private int _fpsCounterNumFrames;
 
+        private bool _noPlayer;
+
         private void Start()
         {
             gameController.AliveCountChanged += (_, _) => UpdateScore();
             playerHealth.HealthChanged += OnPlayerHealthChanged;
+            playerHealth.Died += OnPlayerDied;
             UpdateDash(true);
             StopHitmark();
             UpdateScore();
@@ -102,6 +105,11 @@ namespace Components
             {
                 RunHitmark();
             }
+        }
+
+        private void OnPlayerDied()
+        {
+            _noPlayer = true;
         }
 
         private void OnPlayerHealthChanged(Health.HealthChangeInfo info)
