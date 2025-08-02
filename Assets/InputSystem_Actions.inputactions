@@ -95,6 +95,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "FastLook",
+                    "type": "Button",
+                    "id": "8dd70d14-d402-4a74-9d87-044e3cc97d45",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -508,11 +517,22 @@
                 {
                     "name": "",
                     "id": "6c4f5615-7ff9-4421-b90d-0e650c5e5340",
-                    "path": "<Gamepad>/rightStickPress",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "ToggleSlowMotionMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "22055a54-48bb-49a9-ad89-8988e1b0d350",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "FastLook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

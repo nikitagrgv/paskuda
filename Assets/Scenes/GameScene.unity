@@ -2105,6 +2105,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: bbb3571f-7c9a-4794-9a5c-71bb86187d7d
     m_ActionName: 'Player/Walk[/Keyboard/leftCtrl]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1143200942}
+        m_TargetAssemblyTypeName: Components.PlayerController, Assembly-CSharp
+        m_MethodName: OnGamepadFastLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8dd70d14-d402-4a74-9d87-044e3cc97d45
+    m_ActionName: 'Player/FastLook[/DualShock4GamepadHID/rightStickPress]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

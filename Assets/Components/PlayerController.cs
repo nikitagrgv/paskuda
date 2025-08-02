@@ -18,10 +18,12 @@ namespace Components
         public float mouseSensitivity = 0.06f;
 
         public float gamepadSensitivity = 60f;
+        public float gamepadFastSensitivity = 160f;
 
         private Vector2 _moveInputDir = Vector2.zero;
 
         private Vector2 _lookGamepadInputDir = Vector2.zero;
+        private bool _gamepadFastLook;
 
         private bool _isWalking;
 
@@ -37,7 +39,8 @@ namespace Components
             float dt = Time.deltaTime;
             if (_lookGamepadInputDir != Vector2.zero)
             {
-                float mul = gamepadSensitivity * dt;
+                float sensitivity = _gamepadFastLook ? gamepadFastSensitivity : gamepadSensitivity;
+                float mul = sensitivity * dt;
                 _ctrl.LookPitch -= _lookGamepadInputDir.y * mul;
                 _ctrl.LookYaw += _lookGamepadInputDir.x * mul;
                 UpdateTargetVelocity();
@@ -87,6 +90,19 @@ namespace Components
             _ctrl.LookPitch -= lookDir.y * mul;
             _ctrl.LookYaw += lookDir.x * mul;
             UpdateTargetVelocity();
+        }
+
+        public void OnGamepadFastLook(InputAction.CallbackContext context)
+        {
+            if (context.canceled)
+            {
+                _gamepadFastLook = false;
+            }
+
+            if (context.performed)
+            {
+                _gamepadFastLook = true;
+            }
         }
 
         public void OnDash(InputAction.CallbackContext context)
