@@ -21,6 +21,7 @@ namespace Components
         public Image reloadProgressImage;
         public TextMeshProUGUI scoreText;
         public CanvasGroup hitmark;
+        public CanvasGroup playerOverlay;
 
         public TextMeshProUGUI fpsText;
 
@@ -55,7 +56,7 @@ namespace Components
         private float _fpsCounterTime;
         private int _fpsCounterNumFrames;
 
-        private bool _noPlayer;
+        private bool _hasPlayer;
 
         private void Start()
         {
@@ -67,13 +68,19 @@ namespace Components
             UpdateScore();
 
             Health.AnyHealthChanged += OnAnyHealthChanged;
+
+            _hasPlayer = true;
         }
 
         private void LateUpdate()
         {
-            UpdateDash(false);
-            UpdateHitmark();
-            UpdateReloadProgress();
+            if (_hasPlayer)
+            {
+                UpdateDash(false);
+                UpdateHitmark();
+                UpdateReloadProgress();
+            }
+
             UpdateFps();
         }
 
@@ -109,7 +116,8 @@ namespace Components
 
         private void OnPlayerDied()
         {
-            _noPlayer = true;
+            _hasPlayer = false;
+            playerOverlay.gameObject.SetActive(false);
         }
 
         private void OnPlayerHealthChanged(Health.HealthChangeInfo info)
