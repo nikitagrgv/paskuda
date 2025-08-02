@@ -118,6 +118,8 @@ namespace Components
         {
             _hasPlayer = false;
             playerOverlay.gameObject.SetActive(false);
+            
+            Health.AnyHealthChanged -= OnAnyHealthChanged;
         }
 
         private void OnPlayerHealthChanged(Health.HealthChangeInfo info)
