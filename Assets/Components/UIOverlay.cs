@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using ColorUtility = UnityEngine.ColorUtility;
 
 namespace Components
 {
@@ -19,6 +21,8 @@ namespace Components
         public Image reloadProgressImage;
         public TextMeshProUGUI scoreText;
         public CanvasGroup hitmark;
+
+        public TextMeshProUGUI fpsText;
 
         public AnimationCurve HitmarkAlphaCurve
         {
@@ -48,6 +52,9 @@ namespace Components
         private float _hitmarkProgress;
         private float _hitmarkCurveEndTime;
 
+        private float _fpsCounterTime;
+        private int _fpsCounterNumFrames;
+
         private void Start()
         {
             gameController.AliveCountChanged += (_, _) => UpdateScore();
@@ -63,7 +70,28 @@ namespace Components
         {
             UpdateDash(false);
             UpdateHitmark();
+            UpdateReloadProgress();
+            UpdateFps();
+        }
 
+        private void UpdateFps()
+        {
+            float dt = Time.unscaledDeltaTime;
+            _fpsCounterTime += dt;
+            _fpsCounterNumFrames++;
+
+            if (_fpsCounterTime > 1f)
+            {
+                float fps = _fpsCounterNumFrames / _fpsCounterTime;
+                fpsText.text = $"FPS: {fps:F2}";
+
+                _fpsCounterTime = 0f;
+                _fpsCounterNumFrames = 0;
+            }
+        }
+
+        private void UpdateReloadProgress()
+        {
             float reload = playerController.RemainingReloadTimeNormalized;
             reloadProgressImage.fillAmount = reload;
         }
