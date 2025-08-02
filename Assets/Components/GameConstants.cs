@@ -7,8 +7,8 @@ namespace Components
         public GeneralCharacterController player;
 
         public GeneralCharacterController npcPrefab;
-        public int npcSpawnCount = 100;
-        public float npcSpawnRadius = 50;
+        public int npcSpawnCount = 500;
+        public float gameFieldRadius = 200;
 
         public float gravityMultiplier = 1.2f;
     }

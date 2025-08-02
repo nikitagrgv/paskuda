@@ -140,7 +140,7 @@ namespace Components
             if (_timerChangeWantedPosition <= 0)
             {
                 _timerChangeWantedPosition = Random.Range(minPeriodChangeWantedPosition, maxPeriodChangeWantedPosition);
-                Vector2 rand = Random.insideUnitCircle * _ctrl.gameConstants.npcSpawnRadius;
+                Vector2 rand = Random.insideUnitCircle * _ctrl.gameConstants.gameFieldRadius;
                 _wantedPosition = new Vector3(rand.x, 0, rand.y);
             }
 

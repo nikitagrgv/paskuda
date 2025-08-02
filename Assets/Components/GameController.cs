@@ -69,7 +69,7 @@ namespace Components
 
         private void SpawnNpc(Teams.TeamType team)
         {
-            Vector2 pos2 = Random.insideUnitCircle * _consts.npcSpawnRadius;
+            Vector2 pos2 = Random.insideUnitCircle * _consts.gameFieldRadius;
             Vector3 pos3 = new(pos2.x, 1.5f, pos2.y);
             GeneralCharacterController npc = Instantiate(_consts.npcPrefab, pos3, Quaternion.identity);
 
