@@ -310,7 +310,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runMoveSprint: 9
   walkMoveSpeed: 5
-  lookSensitivity: 0.03
+  mouseSensitivity: 0.06
+  gamepadSensitivity: 60
 --- !u!136 &4870284494648936503
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -443,5 +444,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a137c786aca8384bab1fd5bdc8dcccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  god: 1
+  god: 0
   dieEffect: {fileID: 7004678617841129273, guid: 4febd10bd18d509409f1cb81542824d9, type: 3}
