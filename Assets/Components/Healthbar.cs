@@ -10,8 +10,6 @@ namespace Components
 
         private Camera _cam;
 
-        private bool _noCamera = false;
-
         private void Start()
         {
             _cam = Camera.main;
@@ -20,17 +18,11 @@ namespace Components
 
         private void LateUpdate()
         {
-            if (_noCamera)
-            {
-                return;
-            }
-
             if (_cam == null)
             {
                 _cam = Camera.main;
                 if (_cam == null)
                 {
-                    _noCamera = true;
                     return;
                 }
             }
