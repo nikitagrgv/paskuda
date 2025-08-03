@@ -90,8 +90,8 @@ namespace Components
         {
             if (info.Delta < 0)
             {
-                float time = 0.1f;
-                float power = Mathf.Clamp01(-info.Delta / 30f);
+                float time = 0.25f;
+                float power = Mathf.Clamp01(-info.Delta / 20f);
                 RunRumbleGamepad(power, time);
             }
         }
