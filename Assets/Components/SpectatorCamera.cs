@@ -13,13 +13,13 @@ namespace Components
         public float gamepadSensitivity = 60f;
         public float gamepadFastSensitivity = 160f;
 
-        private float LookPitch
+        public float LookPitch
         {
             get => _lookPitch;
             set => _lookPitch = MathUtils.ToValidPitch(value);
         }
 
-        private float LookYaw
+        public float LookYaw
         {
             get => _lookYaw;
             set => _lookYaw = MathUtils.ToValidYaw(value);
