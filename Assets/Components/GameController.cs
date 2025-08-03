@@ -30,6 +30,8 @@ namespace Components
         private GameConstants _consts;
         private PlayerInput _input;
 
+        private Coroutine _rumbleCoroutine;
+
         private const string SpectatorMapName = "Spectator";
         private const string PlayerMapName = "Player";
 
@@ -89,17 +91,32 @@ namespace Components
             if (info.Delta < 0)
             {
                 float time = 0.1f;
-                float power = Mathf.Clamp01(-info.Delta / 50f);
-                StartCoroutine(RumbleGamepad(power, time));
+                float power = Mathf.Clamp01(-info.Delta / 30f);
+                RunRumbleGamepad(power, time);
             }
+        }
+
+        private void RunRumbleGamepad(float power, float time)
+        {
+            if (_rumbleCoroutine != null)
+            {
+                StopCoroutine(_rumbleCoroutine);
+            }
+
+            _rumbleCoroutine = StartCoroutine(RumbleGamepad(power, time));
         }
 
 
         private IEnumerator RumbleGamepad(float power, float time)
         {
-            Gamepad.current?.SetMotorSpeeds(0.5f * power, 1f * power);
+            Gamepad pad = Gamepad.current;
+            if (pad == null)
+                yield break;
+
+            pad.SetMotorSpeeds(1f * power, 1f * power);
             yield return new WaitForSeconds(time);
-            Gamepad.current?.SetMotorSpeeds(0, 0);
+            pad.SetMotorSpeeds(0, 0);
+            _rumbleCoroutine = null;
         }
 
         private void OnPlayerDied()
