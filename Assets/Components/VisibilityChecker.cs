@@ -29,6 +29,11 @@ namespace Components
         private static Vector3[] _frustumVertices;
         private static Mesh _frustumMesh;
 
+        private void Start()
+        {
+            GetComponent<MeshCollider>().sharedMesh = FrustumMesh;
+        }
+
         private void Update()
         {
             _visibleObjects.Clear();
@@ -42,6 +47,7 @@ namespace Components
 
                 return deleted;
             });
+            Debug.Log(_visibleObjects.Count);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -56,9 +62,15 @@ namespace Components
 
         private void OnDrawGizmosSelected()
         {
-            var mesh = FrustumMesh;
+            CreateFrustumMeshLazy();
             if (_frustumVertices == null || _frustumVertices.Length < 8)
                 return;
+
+            Gizmos.color = Color.red;
+            foreach (GameObject obj in _visibleObjects)
+            {
+                Gizmos.DrawSphere(obj.transform.position, 2f);
+            }
 
             Gizmos.color = Color.yellow;
             Transform t = transform;
