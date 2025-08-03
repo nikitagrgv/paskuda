@@ -18,6 +18,15 @@ namespace Components
 
         private void LateUpdate()
         {
+            if (_cam == null)
+            {
+                _cam = Camera.main;
+                if (_cam == null)
+                {
+                    return;
+                }
+            }
+
             transform.rotation = Quaternion.LookRotation(transform.position - _cam.transform.position);
         }
 

@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using ColorUtility = UnityEngine.ColorUtility;
 
 namespace Components
 {
@@ -19,6 +19,20 @@ namespace Components
         public Image reloadProgressImage;
         public TextMeshProUGUI scoreText;
         public CanvasGroup hitmark;
+        public CanvasGroup playerOverlay;
+
+        public CanvasGroup diedScreen;
+
+        public AnimationCurve diedAnimationCurve = new(
+            new Keyframe(0f, 0f),
+            new Keyframe(0.3f, 1f),
+            new Keyframe(2f, 0f))
+        {
+            postWrapMode = WrapMode.Clamp,
+            preWrapMode = WrapMode.Clamp
+        };
+
+        public TextMeshProUGUI fpsText;
 
         public AnimationCurve HitmarkAlphaCurve
         {
@@ -48,22 +62,61 @@ namespace Components
         private float _hitmarkProgress;
         private float _hitmarkCurveEndTime;
 
+        private float _fpsCounterTime;
+        private int _fpsCounterNumFrames;
+
+        private bool _hasPlayer;
+
+        private float _diedAnimationCurTime = -1f;
+        private float _diedAnimationEndTime = -1f;
+
         private void Start()
         {
+            diedScreen.gameObject.SetActive(false);
+
             gameController.AliveCountChanged += (_, _) => UpdateScore();
             playerHealth.HealthChanged += OnPlayerHealthChanged;
+            playerHealth.Died += OnPlayerDied;
             UpdateDash(true);
             StopHitmark();
             UpdateScore();
 
             Health.AnyHealthChanged += OnAnyHealthChanged;
+
+            _hasPlayer = true;
         }
 
         private void LateUpdate()
         {
-            UpdateDash(false);
-            UpdateHitmark();
+            if (_hasPlayer)
+            {
+                UpdateDash(false);
+                UpdateHitmark();
+                UpdateReloadProgress();
+            }
 
+            UpdateDiedScreenAnimation();
+            UpdateFps();
+        }
+
+        private void UpdateFps()
+        {
+            float dt = Time.unscaledDeltaTime;
+            _fpsCounterTime += dt;
+            _fpsCounterNumFrames++;
+
+            if (_fpsCounterTime > 1f)
+            {
+                float fps = _fpsCounterNumFrames / _fpsCounterTime;
+                fpsText.text = $"FPS: {fps:F1}";
+
+                _fpsCounterTime = 0f;
+                _fpsCounterNumFrames = 0;
+            }
+        }
+
+        private void UpdateReloadProgress()
+        {
             float reload = playerController.RemainingReloadTimeNormalized;
             reloadProgressImage.fillAmount = reload;
         }
@@ -73,6 +126,42 @@ namespace Components
             if (info.Initiator == playerController.gameObject)
             {
                 RunHitmark();
+            }
+        }
+
+        private void OnPlayerDied()
+        {
+            _hasPlayer = false;
+            playerController = null;
+            playerHealth = null;
+
+            playerOverlay.gameObject.SetActive(false);
+
+            Health.AnyHealthChanged -= OnAnyHealthChanged;
+
+            diedScreen.gameObject.SetActive(true);
+            _diedAnimationCurTime = 0f;
+            _diedAnimationEndTime = diedAnimationCurve[diedAnimationCurve.length - 1].time;
+            UpdateDiedScreenAnimation();
+        }
+
+        private void UpdateDiedScreenAnimation()
+        {
+            if (_diedAnimationCurTime < 0)
+            {
+                return;
+            }
+
+            _diedAnimationCurTime += Time.unscaledDeltaTime;
+
+            float value = diedAnimationCurve.Evaluate(_diedAnimationCurTime);
+            diedScreen.alpha = value;
+            Time.timeScale = 1f - value;
+            if (_diedAnimationCurTime > _diedAnimationEndTime)
+            {
+                diedScreen.gameObject.SetActive(false);
+                _diedAnimationCurTime = -1f;
+                Time.timeScale = 1f;
             }
         }
 

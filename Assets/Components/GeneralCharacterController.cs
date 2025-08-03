@@ -7,15 +7,15 @@ namespace Components
     [RequireComponent(typeof(Rigidbody))]
     public class GeneralCharacterController : MonoBehaviour
     {
-        public const float MinPitch = -87f;
-        public const float MaxPitch = 87f;
-
         public enum ActionRequestType
         {
             NotRequested,
             TryNow,
-            DoWhenReady,
+            DoWhenReadyAndFinish,
+            DoRepeat,
         }
+
+        public GameConstants gameConstants;
 
         public GameObject eyeObject;
         public GameObject firePoint;
@@ -51,13 +51,13 @@ namespace Components
         public float LookPitch
         {
             get => _lookPitch;
-            set => _lookPitch = ToValidPitch(value);
+            set => _lookPitch = MathUtils.ToValidPitch(value);
         }
 
         public float LookYaw
         {
             get => _lookYaw;
-            set => _lookYaw = ToValidYaw(value);
+            set => _lookYaw = MathUtils.ToValidYaw(value);
         }
 
         public ActionRequestType JumpRequest
@@ -101,9 +101,11 @@ namespace Components
 
         public bool IsDashReady => _dashTimer <= 0;
         public float RemainingDashTimeNormalized => Mathf.Clamp(_dashTimer / dashReloadTime, 0f, 1f);
-        
+
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
         public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / fireReloadTime, 0f, 1f);
+
+        public event Action Fired;
 
         private ProjectileManager _projectileManager;
 
@@ -134,6 +136,8 @@ namespace Components
 
         private void Start()
         {
+            Assert.IsNotNull(gameConstants);
+
             GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
             Assert.IsNotNull(gameController);
             _projectileManager = gameController?.GetComponent<ProjectileManager>();
@@ -157,33 +161,15 @@ namespace Components
             _fireTimer = Math.Max(0, _fireTimer - dt);
             if (_fireRequest != ActionRequestType.NotRequested)
             {
-                if (_fireRequest == ActionRequestType.TryNow)
-                {
-                    _fireRequest = ActionRequestType.NotRequested;
-                }
-
-                if (_fireTimer <= 0)
-                {
-                    _fireRequest = ActionRequestType.NotRequested;
-                    DoFire();
-                    _fireTimer = fireReloadTime;
-                }
+                bool done = DoFire();
+                UpdateRequest(ref _fireRequest, done);
             }
 
             _dashTimer = Math.Max(0, _dashTimer - dt);
             if (_dashRequest != ActionRequestType.NotRequested)
             {
-                if (_dashRequest == ActionRequestType.TryNow)
-                {
-                    _dashRequest = ActionRequestType.NotRequested;
-                }
-
-                if (_dashTimer <= 0)
-                {
-                    _dashRequest = ActionRequestType.NotRequested;
-                    DoDash();
-                    _dashTimer = dashReloadTime;
-                }
+                bool done = DoDash();
+                UpdateRequest(ref _dashRequest, done);
             }
 
             if (gameObject.transform.position.y < -1000)
@@ -237,26 +223,8 @@ namespace Components
 
             if (_jumpRequest != ActionRequestType.NotRequested)
             {
-                if (_jumpRequest == ActionRequestType.TryNow)
-                {
-                    _jumpRequest = ActionRequestType.NotRequested;
-                }
-
-                bool canDoJump = _isGrounded && _isGoodAngle && _jumpTimer <= 0;
-                if (!canDoJump && _hasDoubleJump && _jumpTimer <= 0)
-                {
-                    canDoJump = true;
-                    _hasDoubleJump = false;
-                }
-
-                if (canDoJump)
-                {
-                    _jumpRequest = ActionRequestType.NotRequested;
-
-                    _jumpTimer = jumpReloadTime;
-                    float impulse = Mathf.Sqrt(jumpHeight * 2f * Physics.gravity.magnitude);
-                    _rb.AddForce(-impulse * Physics.gravity.normalized, ForceMode.VelocityChange);
-                }
+                bool done = DoJump();
+                UpdateRequest(ref _jumpRequest, done);
             }
         }
 
@@ -271,14 +239,53 @@ namespace Components
             Gizmos.DrawLine(groundCheckerCenter, end);
         }
 
-        private void DoDash()
+        private bool DoJump()
         {
-            Vector3 change = _dashTargetXZ * dashVelocityChange;
-            _rb.AddForce(change, ForceMode.VelocityChange);
+            if (_jumpTimer > 0)
+            {
+                return false;
+            }
+
+            if (!_isGrounded || !_isGoodAngle)
+            {
+                if (!_hasDoubleJump)
+                {
+                    return false;
+                }
+
+                _hasDoubleJump = false;
+            }
+
+            _jumpTimer = jumpReloadTime;
+
+            float impulse = Mathf.Sqrt(jumpHeight * 2f * Physics.gravity.magnitude);
+            _rb.AddForce(-impulse * Physics.gravity.normalized, ForceMode.VelocityChange);
+            return true;
         }
 
-        private void DoFire()
+        private bool DoDash()
         {
+            if (_dashTimer > 0)
+            {
+                return false;
+            }
+
+            _dashTimer = dashReloadTime;
+
+            Vector3 change = _dashTargetXZ * dashVelocityChange;
+            _rb.AddForce(change, ForceMode.VelocityChange);
+            return true;
+        }
+
+        private bool DoFire()
+        {
+            if (_fireTimer > 0)
+            {
+                return false;
+            }
+
+            _fireTimer = fireReloadTime;
+
             Projectile projectile = SpawnProjectile();
 
             Vector3 start = firePoint.transform.position;
@@ -292,6 +299,9 @@ namespace Components
                 bulletImpulse,
                 bulletReboundChance);
             _rb.AddForceAtPosition(-lookDir * bulletBackImpulse, start, ForceMode.Impulse);
+
+            NotifyFired();
+            return true;
         }
 
         private Projectile SpawnProjectile()
@@ -377,20 +387,20 @@ namespace Components
             return pos;
         }
 
-        static float ToValidYaw(float angle)
+        private void NotifyFired()
         {
-            angle %= 360f;
-            if (angle < 0)
-            {
-                angle += 360f;
-            }
-
-            return angle;
+            Fired?.Invoke();
         }
 
-        static float ToValidPitch(float angle)
+        private static void UpdateRequest(ref ActionRequestType type, bool done)
         {
-            return Mathf.Clamp(angle, MinPitch, MaxPitch);
+            switch (type)
+            {
+                case ActionRequestType.TryNow:
+                case ActionRequestType.DoWhenReadyAndFinish when done:
+                    type = ActionRequestType.NotRequested;
+                    break;
+            }
         }
     }
 }

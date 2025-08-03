@@ -275,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 528bcf55e058a464e8b68dbcb60df6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameConstants: {fileID: 0}
   eyeObject: {fileID: 6991890367089023808}
   firePoint: {fileID: 3719713848046124468}
   moveAccelerationOnGround: 0.7
@@ -288,13 +289,13 @@ MonoBehaviour:
   groundCheckerOffset: 0.57
   normalCheckMaxDistance: 0.5
   projectilePrefab: {fileID: 4518421509016054231, guid: cfd35198d285da04f8c257c0f0290908, type: 3}
-  fireReloadTime: 0.5
-  bulletLifeTime: 4
+  fireReloadTime: 0.4
+  bulletLifeTime: 2.5
   bulletSpeed: 170
   bulletImpulse: 40
   bulletReboundChance: 0.5
-  bulletBackImpulse: 5
-  bulletDamage: 10
+  bulletBackImpulse: 2
+  bulletDamage: 12
 --- !u!114 &7167312169005661983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,7 +310,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runMoveSprint: 9
   walkMoveSpeed: 5
-  lookSensitivity: 0.03
+  mouseSensitivity: 0.06
+  gamepadSensitivity: 60
+  gamepadFastSensitivity: 160
 --- !u!136 &4870284494648936503
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -442,5 +445,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a137c786aca8384bab1fd5bdc8dcccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  god: 1
+  god: 0
   dieEffect: {fileID: 7004678617841129273, guid: 4febd10bd18d509409f1cb81542824d9, type: 3}

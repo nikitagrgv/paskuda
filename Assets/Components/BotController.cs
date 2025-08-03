@@ -19,13 +19,12 @@ namespace Components
 
         public float minPeriodJump = 0.1f;
         public float maxPeriodJump = 5f;
-        
+
         public float minPeriodDash = 0.1f;
         public float maxPeriodDash = 7f;
 
         public float minPeriodChangeWantedPosition = 0.1f;
         public float maxPeriodChangeWantedPosition = 20f;
-        public float wantedPositionMaxRadius = 50f;
 
         public float minPeriodWantFire = 0.1f;
         public float maxPeriodWantFire = 10f;
@@ -39,13 +38,15 @@ namespace Components
         private float _targetPitch;
 
         private float _timerJump;
-        
+
         private float _timerDash;
 
         private float _timerChangeWantedPosition;
         private Vector3 _wantedPosition;
 
         private float _timerWantFire;
+
+        private GeneralCharacterController _targetEnemy;
 
         private void Start()
         {
@@ -95,7 +96,7 @@ namespace Components
             if (_timerUpdatePitch <= 0)
             {
                 _timerUpdatePitch = Random.Range(minPeriodUpdatePitch, maxPeriodUpdatePitch);
-                _targetPitch = Random.Range(GeneralCharacterController.MinPitch, GeneralCharacterController.MaxPitch);
+                _targetPitch = Random.Range(MathUtils.MinPitch, MathUtils.MaxPitch);
             }
 
             float totalDeltaPitch = _targetPitch - _ctrl.LookPitch;
@@ -120,7 +121,7 @@ namespace Components
                 _ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
         }
-        
+
         private void UpdateDash(float dt)
         {
             _timerDash -= dt;
@@ -139,7 +140,7 @@ namespace Components
             if (_timerChangeWantedPosition <= 0)
             {
                 _timerChangeWantedPosition = Random.Range(minPeriodChangeWantedPosition, maxPeriodChangeWantedPosition);
-                Vector2 rand = Random.insideUnitCircle * wantedPositionMaxRadius;
+                Vector2 rand = Random.insideUnitCircle * _ctrl.gameConstants.gameFieldRadius;
                 _wantedPosition = new Vector3(rand.x, 0, rand.y);
             }
 
@@ -163,7 +164,7 @@ namespace Components
             if (_timerWantFire <= 0)
             {
                 RandomizeWantFire();
-                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoWhenReady;
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoWhenReadyAndFinish;
             }
         }
 

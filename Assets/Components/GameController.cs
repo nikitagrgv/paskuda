@@ -4,18 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using System.Collections.ObjectModel;
+using UnityEngine.Assertions;
+using System.Collections;
 
 namespace Components
 {
     public class GameController : MonoBehaviour
     {
-        public GameObject player;
-
-        public GameObject npcPrefab;
-        public int npcSpawnCount = 100;
-        public float npcSpawnRadius = 50;
-
-        public float gravityMultiplier = 1.5f;
+        public SpectatorCamera spectatorCamera;
 
         public bool IsSpawnFinished { get; private set; }
 
@@ -31,16 +27,34 @@ namespace Components
 
         private readonly List<TeamInfo> _teams = new();
 
+        private GameConstants _consts;
+        private PlayerInput _input;
+
+        private Coroutine _rumbleCoroutine;
+
+        private const string SpectatorMapName = "Spectator";
+        private const string PlayerMapName = "Player";
+
         private void Start()
         {
-            Physics.gravity = Vector3.down * 9.81f * gravityMultiplier;
+            _consts = GetComponent<GameConstants>();
+            Assert.IsNotNull(_consts);
+
+            _input = GetComponent<PlayerInput>();
+            Assert.IsNotNull(_input);
+            _input.actions.FindActionMap(SpectatorMapName).Disable();
+            _input.actions.FindActionMap(PlayerMapName).Enable();
+            _input.SwitchCurrentActionMap(PlayerMapName);
+
+            Physics.gravity = Vector3.down * 9.81f * _consts.gravityMultiplier;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
             RegisterPlayer();
 
-            for (int i = 0; i < npcSpawnCount; ++i)
+            int count = _consts.npcSpawnCount;
+            for (int i = 0; i < count; ++i)
             {
                 int teamTypeNum = i % 3;
                 Teams.TeamType team;
@@ -59,26 +73,93 @@ namespace Components
 
         private void RegisterPlayer()
         {
-            RelationshipsActor playerRelationships = player.GetComponent<RelationshipsActor>();
-            if (!playerRelationships) return;
+            RegisterCharacter(_consts.player);
 
-            RegisterCharacter(playerRelationships);
+            Health health = _consts.player.GetComponent<Health>();
+            health.Died += OnPlayerDied;
+            health.HealthChanged += OnPlayerHealthChanged;
+
+            RelationshipsActor playerRelationships = _consts.player.GetComponent<RelationshipsActor>();
+            if (playerRelationships)
+            {
+                RegisterRelationshipsActor(playerRelationships);
+            }
+        }
+
+        private void OnPlayerHealthChanged(Health.HealthChangeInfo info)
+        {
+            if (info.Delta < 0)
+            {
+                float time = 0.25f;
+                float power = Mathf.Clamp01(-info.Delta / 20f);
+                RunRumbleGamepad(power, time);
+            }
+        }
+
+        private void RunRumbleGamepad(float power, float time)
+        {
+            if (_rumbleCoroutine != null)
+            {
+                StopCoroutine(_rumbleCoroutine);
+            }
+
+            _rumbleCoroutine = StartCoroutine(RumbleGamepad(power, time));
+        }
+
+
+        private IEnumerator RumbleGamepad(float power, float time)
+        {
+            Gamepad pad = Gamepad.current;
+            if (pad == null)
+                yield break;
+
+            pad.SetMotorSpeeds(1f * power, 1f * power);
+            yield return new WaitForSecondsRealtime(time);
+            pad.SetMotorSpeeds(0, 0);
+            _rumbleCoroutine = null;
+        }
+
+        private void OnPlayerDied()
+        {
+            Time.timeScale = 1f;
+
+            Camera playerCamera = _consts.player.GetComponentInChildren<Camera>();
+            playerCamera.enabled = false;
+
+            spectatorCamera.gameObject.SetActive(true);
+            spectatorCamera.transform.position = _consts.player.transform.position;
+            spectatorCamera.transform.rotation = _consts.player.transform.rotation;
+            Vector3 euler = _consts.player.transform.eulerAngles;
+            spectatorCamera.LookPitch = euler.x;
+            spectatorCamera.LookYaw = euler.y;
+
+            _input.actions.FindActionMap(SpectatorMapName).Enable();
+            _input.actions.FindActionMap(PlayerMapName).Disable();
+            _input.SwitchCurrentActionMap(SpectatorMapName);
         }
 
         private void SpawnNpc(Teams.TeamType team)
         {
-            Vector2 pos2 = Random.insideUnitCircle * npcSpawnRadius;
+            Vector2 pos2 = Random.insideUnitCircle * _consts.gameFieldRadius;
             Vector3 pos3 = new(pos2.x, 1.5f, pos2.y);
-            GameObject obj = Instantiate(npcPrefab, pos3, Quaternion.identity);
+            GeneralCharacterController npc = Instantiate(_consts.npcPrefab, pos3, Quaternion.identity);
 
-            RelationshipsActor relationships = obj.GetComponent<RelationshipsActor>();
-            if (!relationships) return;
+            RegisterCharacter(npc);
 
-            relationships.Team = team;
-            RegisterCharacter(relationships);
+            RelationshipsActor relationships = npc.GetComponent<RelationshipsActor>();
+            if (relationships)
+            {
+                relationships.Team = team;
+                RegisterRelationshipsActor(relationships);
+            }
         }
 
-        private void RegisterCharacter(RelationshipsActor actor)
+        private void RegisterCharacter(GeneralCharacterController character)
+        {
+            character.gameConstants = _consts;
+        }
+
+        private void RegisterRelationshipsActor(RelationshipsActor actor)
         {
             AddTeamAlive(actor.Team, 1);
             actor.Died += () => OnCharacterDied(actor);

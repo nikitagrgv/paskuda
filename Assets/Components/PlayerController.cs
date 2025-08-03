@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Quaternion = UnityEngine.Quaternion;
@@ -15,9 +16,15 @@ namespace Components
         public float walkMoveSpeed = 5f;
 
         [Header("Control")]
-        public float lookSensitivity = 0.06f;
+        public float mouseSensitivity = 0.06f;
+
+        public float gamepadSensitivity = 60f;
+        public float gamepadFastSensitivity = 160f;
 
         private Vector2 _moveInputDir = Vector2.zero;
+
+        private Vector2 _lookGamepadInputDir = Vector2.zero;
+        private bool _gamepadFastLook;
 
         private bool _isWalking;
 
@@ -28,18 +35,75 @@ namespace Components
             _ctrl = GetComponent<GeneralCharacterController>();
         }
 
+        private void Update()
+        {
+            float dt = Time.unscaledDeltaTime;
+            if (_lookGamepadInputDir != Vector2.zero)
+            {
+                float sensitivity = _gamepadFastLook ? gamepadFastSensitivity : gamepadSensitivity;
+                float mul = sensitivity * dt;
+                _ctrl.LookPitch -= _lookGamepadInputDir.y * mul;
+                _ctrl.LookYaw += _lookGamepadInputDir.x * mul;
+                UpdateTargetVelocity();
+            }
+        }
+
         public void OnMove(InputAction.CallbackContext context)
         {
+            if (context.canceled)
+            {
+                _moveInputDir = Vector2.zero;
+                UpdateTargetVelocity();
+                return;
+            }
+
+            if (!context.performed)
+                return;
+
             _moveInputDir = context.ReadValue<Vector2>();
             UpdateTargetVelocity();
         }
 
         public void OnLook(InputAction.CallbackContext context)
         {
+            if (context.canceled)
+            {
+                _lookGamepadInputDir = Vector2.zero;
+                return;
+            }
+
+            if (!context.performed)
+            {
+                return;
+            }
+
+            bool gamepad = context.action.activeControl?.device is Gamepad;
             Vector2 lookDir = context.ReadValue<Vector2>();
-            _ctrl.LookPitch -= lookDir.y * lookSensitivity;
-            _ctrl.LookYaw += lookDir.x * lookSensitivity;
+            if (gamepad)
+            {
+                _lookGamepadInputDir = lookDir;
+                return;
+            }
+
+            float mul = mouseSensitivity;
+
+            _lookGamepadInputDir = Vector2.zero;
+            _ctrl.LookPitch -= lookDir.y * mul;
+            _ctrl.LookYaw += lookDir.x * mul;
             UpdateTargetVelocity();
+        }
+
+        public void OnGamepadFastLook(InputAction.CallbackContext context)
+        {
+            if (context.canceled)
+            {
+                _gamepadFastLook = false;
+            }
+
+            if (context.performed)
+            {
+                _gamepadFastLook = true;
+            }
         }
 
         public void OnDash(InputAction.CallbackContext context)
@@ -80,7 +144,11 @@ namespace Components
         {
             if (context.performed)
             {
-                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.TryNow;
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoRepeat;
+            }
+            else if (context.canceled)
+            {
+                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.NotRequested;
             }
         }
 
@@ -92,18 +160,22 @@ namespace Components
                 return;
             }
 
-            Vector3 dir = InputDirToGlobalDir(_moveInputDir, _ctrl.LookYaw);
+            Vector3 dir = InputToGlobalVector(_moveInputDir, _ctrl.LookYaw);
             float speed = _isWalking ? walkMoveSpeed : runMoveSprint;
             _ctrl.TargetVelocity = speed * dir;
         }
 
         private static Vector3 InputDirToGlobalDir(Vector2 dir, float yaw)
         {
+            return InputToGlobalVector(dir, yaw).normalized;
+        }
+
+        private static Vector3 InputToGlobalVector(Vector2 dir, float yaw)
+        {
             Quaternion yawRotation = Quaternion.Euler(0, yaw, 0);
             Vector3 forward = yawRotation * Vector3.forward;
             Vector3 right = yawRotation * Vector3.right;
             Vector3 globDir = forward * dir.y + right * dir.x;
-            globDir.Normalize();
             return globDir;
         }
     }
