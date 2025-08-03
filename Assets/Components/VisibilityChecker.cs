@@ -8,9 +8,9 @@ namespace Components
     public class VisibilityChecker : MonoBehaviour
     {
         public static float FieldOfView = 90f;
-        public static float Aspect = 0.75f;
+        public static float Aspect = 1f;
         public static float Near = 0.2f;
-        public static float Far = 40f;
+        public static float Far = 35f;
 
         public static Mesh FrustumMesh
         {
@@ -20,6 +20,8 @@ namespace Components
                 return _frustumMesh;
             }
         }
+
+        public GameObject ignore;
 
         public ReadOnlyCollection<GameObject> VisibleObjects => _visibleObjects.AsReadOnly();
 

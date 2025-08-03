@@ -1534,7 +1534,7 @@ GameObject:
   - component: {fileID: 846428782}
   - component: {fileID: 846428783}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: VisibilityChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
