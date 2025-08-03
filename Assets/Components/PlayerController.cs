@@ -37,7 +37,7 @@ namespace Components
 
         private void Update()
         {
-            float dt = Time.deltaTime;
+            float dt = Time.unscaledDeltaTime;
             if (_lookGamepadInputDir != Vector2.zero)
             {
                 float sensitivity = _gamepadFastLook ? gamepadFastSensitivity : gamepadSensitivity;
@@ -85,7 +85,7 @@ namespace Components
                 return;
             }
 
-            float mul = mouseSensitivity * Time.timeScale;
+            float mul = mouseSensitivity;
 
             _lookGamepadInputDir = Vector2.zero;
             _ctrl.LookPitch -= lookDir.y * mul;
