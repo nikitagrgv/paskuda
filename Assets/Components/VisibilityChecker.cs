@@ -36,11 +36,6 @@ namespace Components
 
         private void Update()
         {
-            if (_visibleObjects.Count > 0)
-            {
-                Debug.Log($"V: {_visibleObjects[0].name}");
-            }
-            
             _visibleObjects.Clear();
             _visibleObjectsSet.RemoveWhere(obj =>
             {
@@ -52,7 +47,6 @@ namespace Components
 
                 return deleted;
             });
-            Debug.Log(_visibleObjects.Count);
         }
 
         private void OnTriggerEnter(Collider other)
