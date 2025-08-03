@@ -32,6 +32,8 @@ namespace Components
         public float dashReloadTime = 2f;
 
         [Header("Ground Check")]
+        public LayerMask groundLayers;
+
         public float groundCheckerRadius = 0.49f;
 
         public float groundCheckerOffset = 0.57f;
@@ -180,6 +182,8 @@ namespace Components
 
         private void FixedUpdate()
         {
+            int groundMask = groundLayers.value;
+
             float dt = Time.fixedDeltaTime;
             _jumpTimer = Math.Max(0, _jumpTimer - dt);
 
@@ -187,13 +191,13 @@ namespace Components
             eyeObject.transform.rotation = Quaternion.Euler(_lookPitch, _lookYaw, 0);
 
             Vector3 groundCheckerCenter = GetGroundCheckerCenter();
-            _isGrounded = CheckGround(groundCheckerCenter, groundCheckerRadius);
+            _isGrounded = CheckGround(groundCheckerCenter, groundCheckerRadius, groundMask);
 
             _isGoodAngle = false;
             if (_isGrounded)
             {
-                if (RaycastGround(groundCheckerCenter, groundCheckerRadius + normalCheckMaxDistance,
-                        out Vector3 normal))
+                if (RaycastGround(groundCheckerCenter, groundCheckerRadius + normalCheckMaxDistance, out Vector3 normal,
+                        groundMask))
                 {
                     float slopeAngle = Vector3.Angle(normal, Vector3.up);
                     _isGoodAngle = slopeAngle <= maxSlopeAngle;
@@ -345,9 +349,9 @@ namespace Components
             }
         }
 
-        private bool CheckGround(Vector3 center, float radius)
+        private bool CheckGround(Vector3 center, float radius, int mask)
         {
-            var size = Physics.OverlapSphereNonAlloc(center, radius, _colliderBuffer);
+            var size = Physics.OverlapSphereNonAlloc(center, radius, _colliderBuffer, mask);
             for (int i = 0; i < size; i++)
             {
                 if (_colliderBuffer[i].gameObject == gameObject)
@@ -361,9 +365,9 @@ namespace Components
             return false;
         }
 
-        private bool RaycastGround(Vector3 origin, float distance, out Vector3 normal)
+        private bool RaycastGround(Vector3 origin, float distance, out Vector3 normal, int mask)
         {
-            int numHits = Physics.RaycastNonAlloc(origin, Vector3.down, _raycastHitBuffer, distance);
+            int numHits = Physics.RaycastNonAlloc(origin, Vector3.down, _raycastHitBuffer, distance, mask);
             for (int i = 0; i < numHits; i++)
             {
                 RaycastHit hit = _raycastHitBuffer[i];

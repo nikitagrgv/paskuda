@@ -9,6 +9,8 @@ namespace Components
 {
     public class ProjectileManager : MonoBehaviour
     {
+        public LayerMask interactableLayers;
+
         private struct ProjectileInfo
         {
             public GameObject Sender;
@@ -75,6 +77,8 @@ namespace Components
 
         private void UpdateActive(float dt)
         {
+            int mask = interactableLayers.value;
+
             int count = _active.Count;
             for (int i = 0; i < count; i++)
             {
@@ -90,7 +94,8 @@ namespace Components
                 }
 
                 Vector3 oldPosition = info.Projectile.transform.position;
-                if (Physics.Raycast(oldPosition, info.Direction, out RaycastHit hit, info.Speed * dt))
+                if (Physics.Raycast(oldPosition, info.Direction, out RaycastHit hit, info.Speed * dt,
+                        mask))
                 {
                     ApplyHit(hit, info);
 
