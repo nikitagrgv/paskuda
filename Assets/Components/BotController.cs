@@ -47,7 +47,6 @@ namespace Components
         private float _timerWantFire;
 
         private VisibilityChecker _visibilityChecker;
-
         private GeneralCharacterController _targetEnemy;
 
         private void Start()
