@@ -29,6 +29,9 @@ namespace Components
         private GameConstants _consts;
         private PlayerInput _input;
 
+        private const string SpectatorMapName = "Spectator";
+        private const string PlayerMapName = "Player";
+
         private void Start()
         {
             _consts = GetComponent<GameConstants>();
@@ -36,7 +39,8 @@ namespace Components
 
             _input = GetComponent<PlayerInput>();
             Assert.IsNotNull(_input);
-            _input.actions.FindActionMap("Spectator").Disable();
+            _input.actions.FindActionMap(SpectatorMapName).Disable();
+            _input.actions.FindActionMap(PlayerMapName).Enable();
 
             Physics.gravity = Vector3.down * 9.81f * _consts.gravityMultiplier;
 
@@ -91,9 +95,9 @@ namespace Components
             spectatorCamera.LookPitch = euler.x;
             spectatorCamera.LookYaw = euler.y;
 
-            const string spectatorMapName = "Spectator";
-            _input.SwitchCurrentActionMap(spectatorMapName);
-            _input.actions.FindActionMap("Spectator");
+            _input.actions.FindActionMap(SpectatorMapName).Enable();
+            _input.actions.FindActionMap(PlayerMapName).Disable();
+            _input.SwitchCurrentActionMap(SpectatorMapName);
         }
 
         private void SpawnNpc(Teams.TeamType team)
