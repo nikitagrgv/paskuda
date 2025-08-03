@@ -41,6 +41,7 @@ namespace Components
             Assert.IsNotNull(_input);
             _input.actions.FindActionMap(SpectatorMapName).Disable();
             _input.actions.FindActionMap(PlayerMapName).Enable();
+            _input.SwitchCurrentActionMap(PlayerMapName);
 
             Physics.gravity = Vector3.down * 9.81f * _consts.gravityMultiplier;
 
