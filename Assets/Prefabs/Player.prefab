@@ -294,7 +294,7 @@ MonoBehaviour:
   bulletSpeed: 170
   bulletImpulse: 40
   bulletReboundChance: 0.5
-  bulletBackImpulse: 5
+  bulletBackImpulse: 2
   bulletDamage: 12
 --- !u!114 &7167312169005661983
 MonoBehaviour:
@@ -312,6 +312,7 @@ MonoBehaviour:
   walkMoveSpeed: 5
   mouseSensitivity: 0.06
   gamepadSensitivity: 60
+  gamepadFastSensitivity: 160
 --- !u!136 &4870284494648936503
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using System.Collections.ObjectModel;
 using UnityEngine.Assertions;
+using System.Collections;
 
 namespace Components
 {
@@ -74,12 +75,31 @@ namespace Components
 
             Health health = _consts.player.GetComponent<Health>();
             health.Died += OnPlayerDied;
+            health.HealthChanged += OnPlayerHealthChanged;
 
             RelationshipsActor playerRelationships = _consts.player.GetComponent<RelationshipsActor>();
             if (playerRelationships)
             {
                 RegisterRelationshipsActor(playerRelationships);
             }
+        }
+
+        private void OnPlayerHealthChanged(Health.HealthChangeInfo info)
+        {
+            if (info.Delta < 0)
+            {
+                float time = 0.1f;
+                float power = Mathf.Clamp01(-info.Delta / 50f);
+                StartCoroutine(RumbleGamepad(power, time));
+            }
+        }
+
+
+        private IEnumerator RumbleGamepad(float power, float time)
+        {
+            Gamepad.current?.SetMotorSpeeds(0.5f * power, 1f * power);
+            yield return new WaitForSeconds(time);
+            Gamepad.current?.SetMotorSpeeds(0, 0);
         }
 
         private void OnPlayerDied()
