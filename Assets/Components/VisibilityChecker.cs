@@ -53,11 +53,21 @@ namespace Components
 
         private void OnTriggerEnter(Collider other)
         {
+            if (other.gameObject == ignore)
+            {
+                return;
+            }
+
             _visibleObjectsSet.Add(other.gameObject);
         }
 
         private void OnTriggerExit(Collider other)
         {
+            if (other.gameObject == ignore)
+            {
+                return;
+            }
+
             _visibleObjectsSet.Remove(other.gameObject);
         }
 
