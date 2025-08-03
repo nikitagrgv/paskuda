@@ -46,11 +46,14 @@ namespace Components
 
         private float _timerWantFire;
 
+        private VisibilityChecker _visibilityChecker;
+
         private GeneralCharacterController _targetEnemy;
 
         private void Start()
         {
             _ctrl = GetComponent<GeneralCharacterController>();
+            _visibilityChecker = GetComponentInChildren<VisibilityChecker>();
 
             RandomizeWantFire();
         }
@@ -59,10 +62,14 @@ namespace Components
         {
             float dt = Time.deltaTime;
 
-            UpdateRotation(dt);
+            if (!_targetEnemy)
+            {
+                UpdateTargetPosition(dt);
+                UpdateRotation(dt);
+            }
+
             UpdateJump(dt);
             UpdateDash(dt);
-            UpdateTargetPosition(dt);
             UpdateFire(dt);
         }
 

@@ -125,7 +125,7 @@ namespace Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            GameObject validSender = info.Sender == null ? null : info.Sender;
+            GameObject validSender = info.Sender ? info.Sender : null;
             health.ApplyDamageHit(info.Damage, validSender);
         }
 

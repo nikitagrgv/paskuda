@@ -9,7 +9,7 @@ namespace Components
         static void ToggleCurrentWindowMaximized()
         {
             var window = EditorWindow.focusedWindow;
-            if (window == null)
+            if (!window)
             {
                 return;
             }

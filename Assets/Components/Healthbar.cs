@@ -18,10 +18,10 @@ namespace Components
 
         private void LateUpdate()
         {
-            if (_cam == null)
+            if (!_cam)
             {
                 _cam = Camera.main;
-                if (_cam == null)
+                if (!_cam)
                 {
                     return;
                 }
