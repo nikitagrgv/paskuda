@@ -351,7 +351,8 @@ namespace Components
 
         private bool CheckGround(Vector3 center, float radius, int mask)
         {
-            var size = Physics.OverlapSphereNonAlloc(center, radius, _colliderBuffer, mask);
+            var size = Physics.OverlapSphereNonAlloc(center, radius, _colliderBuffer, mask,
+                QueryTriggerInteraction.Ignore);
             for (int i = 0; i < size; i++)
             {
                 if (_colliderBuffer[i].gameObject == gameObject)
@@ -367,7 +368,8 @@ namespace Components
 
         private bool RaycastGround(Vector3 origin, float distance, out Vector3 normal, int mask)
         {
-            int numHits = Physics.RaycastNonAlloc(origin, Vector3.down, _raycastHitBuffer, distance, mask);
+            int numHits = Physics.RaycastNonAlloc(origin, Vector3.down, _raycastHitBuffer, distance, mask,
+                QueryTriggerInteraction.Ignore);
             for (int i = 0; i < numHits; i++)
             {
                 RaycastHit hit = _raycastHitBuffer[i];

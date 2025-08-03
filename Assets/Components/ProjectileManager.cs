@@ -95,7 +95,7 @@ namespace Components
 
                 Vector3 oldPosition = info.Projectile.transform.position;
                 if (Physics.Raycast(oldPosition, info.Direction, out RaycastHit hit, info.Speed * dt,
-                        mask))
+                        mask, QueryTriggerInteraction.Ignore))
                 {
                     ApplyHit(hit, info);
 
