@@ -36,6 +36,11 @@ namespace Components
 
         private void Update()
         {
+            if (_visibleObjects.Count > 0)
+            {
+                Debug.Log($"V: {_visibleObjects[0].name}");
+            }
+            
             _visibleObjects.Clear();
             _visibleObjectsSet.RemoveWhere(obj =>
             {
