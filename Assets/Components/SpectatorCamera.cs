@@ -110,7 +110,7 @@ namespace Components
                 return;
             }
 
-            float mul = mouseSensitivity * Time.timeScale;
+            float mul = mouseSensitivity;
 
             _lookGamepadInputDir = Vector2.zero;
             LookPitch -= lookDir.y * mul;
