@@ -23,6 +23,17 @@ namespace Components
         public CanvasGroup hitmark;
         public CanvasGroup playerOverlay;
 
+        public CanvasGroup diedScreen;
+
+        public AnimationCurve diedAnimationCurve = new(
+            new Keyframe(0f, 0f),
+            new Keyframe(0.3f, 1f),
+            new Keyframe(2f, 0f))
+        {
+            postWrapMode = WrapMode.Clamp,
+            preWrapMode = WrapMode.Clamp
+        };
+
         public TextMeshProUGUI fpsText;
 
         public AnimationCurve HitmarkAlphaCurve
@@ -58,8 +69,13 @@ namespace Components
 
         private bool _hasPlayer;
 
+        private float _diedAnimationCurTime = -1f;
+        private float _diedAnimationEndTime = -1f;
+
         private void Start()
         {
+            diedScreen.gameObject.SetActive(false);
+
             gameController.AliveCountChanged += (_, _) => UpdateScore();
             playerHealth.HealthChanged += OnPlayerHealthChanged;
             playerHealth.Died += OnPlayerDied;
@@ -81,6 +97,7 @@ namespace Components
                 UpdateReloadProgress();
             }
 
+            UpdateDiedScreenAnimation();
             UpdateFps();
         }
 
@@ -123,6 +140,31 @@ namespace Components
             playerOverlay.gameObject.SetActive(false);
 
             Health.AnyHealthChanged -= OnAnyHealthChanged;
+
+            diedScreen.gameObject.SetActive(true);
+            _diedAnimationCurTime = 0f;
+            _diedAnimationEndTime = diedAnimationCurve[diedAnimationCurve.length - 1].time;
+            UpdateDiedScreenAnimation();
+        }
+
+        private void UpdateDiedScreenAnimation()
+        {
+            if (_diedAnimationCurTime < 0)
+            {
+                return;
+            }
+
+            _diedAnimationCurTime += Time.unscaledDeltaTime;
+
+            float value = diedAnimationCurve.Evaluate(_diedAnimationCurTime);
+            diedScreen.alpha = value;
+            Time.timeScale = 1f - value;
+            if (_diedAnimationCurTime > _diedAnimationEndTime)
+            {
+                diedScreen.gameObject.SetActive(false);
+                _diedAnimationCurTime = -1f;
+                Time.timeScale = 1f;
+            }
         }
 
         private void OnPlayerHealthChanged(Health.HealthChangeInfo info)
