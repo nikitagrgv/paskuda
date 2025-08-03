@@ -114,7 +114,7 @@ namespace Components
                 yield break;
 
             pad.SetMotorSpeeds(1f * power, 1f * power);
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSecondsRealtime(time);
             pad.SetMotorSpeeds(0, 0);
             _rumbleCoroutine = null;
         }
