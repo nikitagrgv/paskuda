@@ -7,8 +7,8 @@ namespace Components
 {
     public class VisibilityChecker : MonoBehaviour
     {
-        public static float FieldOfView = 60f;
-        public static float Aspect = 0.5f;
+        public static float FieldOfView = 90f;
+        public static float Aspect = 0.75f;
         public static float Near = 0.2f;
         public static float Far = 40f;
 
