@@ -1,26 +1,39 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Components
 {
     public class VisibilityChecker : MonoBehaviour
     {
-        public HashSet<GameObject> VisibleObjects { get; } = new();
+        public ReadOnlyCollection<GameObject> VisibleObjects => _visibleObjects.AsReadOnly();
+
+        private readonly HashSet<GameObject> _visibleObjectsSet = new(5);
+        private readonly List<GameObject> _visibleObjects = new(5);
 
         private void Update()
         {
-            VisibleObjects.RemoveWhere(obj => !obj);
+            _visibleObjects.Clear();
+            _visibleObjectsSet.RemoveWhere(obj =>
+            {
+                bool deleted = !obj;
+                if (!deleted)
+                {
+                    _visibleObjects.Add(obj);
+                }
+
+                return deleted;
+            });
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            VisibleObjects.Add(other.gameObject);
+            _visibleObjectsSet.Add(other.gameObject);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            VisibleObjects.Remove(other.gameObject);
+            _visibleObjectsSet.Remove(other.gameObject);
         }
     }
 }
