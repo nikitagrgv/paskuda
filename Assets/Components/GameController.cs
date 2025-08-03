@@ -36,6 +36,7 @@ namespace Components
 
             _input = GetComponent<PlayerInput>();
             Assert.IsNotNull(_input);
+            _input.actions.FindActionMap("Spectator").Disable();
 
             Physics.gravity = Vector3.down * 9.81f * _consts.gravityMultiplier;
 
@@ -87,7 +88,9 @@ namespace Components
             spectatorCamera.transform.position = _consts.player.transform.position;
             spectatorCamera.transform.rotation = _consts.player.transform.rotation;
 
-            _input.SwitchCurrentActionMap("Spectator");
+            const string spectatorMapName = "Spectator";
+            _input.SwitchCurrentActionMap(spectatorMapName);
+            _input.actions.FindActionMap("Spectator");
         }
 
         private void SpawnNpc(Teams.TeamType team)
