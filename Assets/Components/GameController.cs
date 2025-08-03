@@ -87,6 +87,9 @@ namespace Components
             spectatorCamera.gameObject.SetActive(true);
             spectatorCamera.transform.position = _consts.player.transform.position;
             spectatorCamera.transform.rotation = _consts.player.transform.rotation;
+            Vector3 euler = _consts.player.transform.eulerAngles;
+            spectatorCamera.LookPitch = euler.x;
+            spectatorCamera.LookYaw = euler.y;
 
             const string spectatorMapName = "Spectator";
             _input.SwitchCurrentActionMap(spectatorMapName);
