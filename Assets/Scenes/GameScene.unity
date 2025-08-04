@@ -2297,7 +2297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1efb7eea5924e9479f5c7cdcf2f064b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2059177129}
+  player: {fileID: 0}
+  playerController: {fileID: 0}
   npcPrefab: {fileID: 898362589482774158, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   npcSpawnCount: 150
   gameFieldRadius: 50
@@ -5208,10 +5209,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3255179121981898597, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
-      propertyPath: gameConstants
-      value: 
-      objectReference: {fileID: 1140413249}
     - target: {fileID: 7167312169005661983, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
       propertyPath: spectatorCamera
       value: 
