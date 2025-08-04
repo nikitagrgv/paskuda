@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Components
 {
@@ -23,10 +21,12 @@ namespace Components
 
         public GameObject ignore;
 
-        public ReadOnlyCollection<GameObject> VisibleObjects => _visibleObjects.AsReadOnly();
+        struct Info
+        {
+            public RelationshipsActor RelationshipsActor;
+        }
 
-        private readonly HashSet<GameObject> _visibleObjectsSet = new(5);
-        private readonly List<GameObject> _visibleObjects = new(5);
+        private readonly Dictionary<GameObject, Info> _visibleObjectsMap = new(5);
 
         private static Vector3[] _frustumVertices;
         private static Mesh _frustumMesh;
@@ -38,37 +38,47 @@ namespace Components
 
         private void Update()
         {
-            _visibleObjects.Clear();
-            _visibleObjectsSet.RemoveWhere(obj =>
-            {
-                bool deleted = !obj;
-                if (!deleted)
-                {
-                    _visibleObjects.Add(obj);
-                }
-
-                return deleted;
-            });
+            // _visibleObjects.Clear();
+            // _visibleObjectsSet.RemoveWhere(obj =>
+            // {
+            //     bool deleted = !obj;
+            //     if (!deleted)
+            //     {
+            //         _visibleObjects.Add(obj);
+            //     }
+            //
+            //     return deleted;
+            // });
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject == ignore)
+            GameObject go = other.gameObject;
+            if (go == ignore)
             {
                 return;
             }
 
-            _visibleObjectsSet.Add(other.gameObject);
+            RelationshipsActor ra = go.GetComponent<RelationshipsActor>();
+            if (!ra)
+            {
+                return;
+            }
+
+            Info info = new() { RelationshipsActor = ra };
+
+            _visibleObjectsMap[go] = info;
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject == ignore)
+            GameObject go = other.gameObject;
+            if (go == ignore)
             {
                 return;
             }
 
-            _visibleObjectsSet.Remove(other.gameObject);
+            _visibleObjectsMap.Remove(go);
         }
 
         private void OnDrawGizmosSelected()
@@ -78,9 +88,9 @@ namespace Components
                 return;
 
             Gizmos.color = Color.red;
-            foreach (GameObject obj in _visibleObjects)
+            foreach (KeyValuePair<GameObject, Info> v in _visibleObjectsMap)
             {
-                Gizmos.DrawSphere(obj.transform.position, 2f);
+                Gizmos.DrawSphere(v.Key.transform.position, 2f);
             }
 
             Gizmos.color = Color.yellow;

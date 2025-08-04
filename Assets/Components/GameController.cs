@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 using System.Collections.ObjectModel;
 using UnityEngine.Assertions;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace Components
 {
@@ -69,6 +70,14 @@ namespace Components
             }
 
             IsSpawnFinished = true;
+        }
+
+        private void Update()
+        {
+            if (Keyboard.current.f5Key.wasPressedThisFrame)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
 
         private void RegisterPlayer()
