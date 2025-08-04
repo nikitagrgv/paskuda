@@ -12,7 +12,7 @@ namespace Components
 {
     public class GameController : MonoBehaviour
     {
-        public SpectatorCamera spectatorCamera;
+        public SpectatorCamera spectatorCameraPrefab;
 
         public bool IsSpawnFinished { get; private set; }
 
@@ -82,7 +82,10 @@ namespace Components
 
         private void RegisterPlayer()
         {
-            RegisterCharacter(_consts.player);
+            _consts.player = GameObject.FindWithTag("Player");
+            _consts.playerController = _consts.player?.GetComponent<GeneralCharacterController>();
+
+            RegisterCharacter(_consts.playerController);
 
             Health health = _consts.player.GetComponent<Health>();
             health.Died += OnPlayerDied;
@@ -135,12 +138,13 @@ namespace Components
             Camera playerCamera = _consts.player.GetComponentInChildren<Camera>();
             playerCamera.enabled = false;
 
-            spectatorCamera.gameObject.SetActive(true);
-            spectatorCamera.transform.position = _consts.player.transform.position;
-            spectatorCamera.transform.rotation = _consts.player.transform.rotation;
+            SpectatorCamera spectator = Instantiate(spectatorCameraPrefab);
+            spectator.gameObject.SetActive(true);
+            spectator.transform.position = _consts.player.transform.position;
+            spectator.transform.rotation = _consts.player.transform.rotation;
             Vector3 euler = _consts.player.transform.eulerAngles;
-            spectatorCamera.LookPitch = euler.x;
-            spectatorCamera.LookYaw = euler.y;
+            spectator.LookPitch = euler.x;
+            spectator.LookYaw = euler.y;
 
             _input.actions.FindActionMap(SpectatorMapName).Enable();
             _input.actions.FindActionMap(PlayerMapName).Disable();
