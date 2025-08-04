@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Components
+namespace Code.Components
 {
     public class GameConstants : MonoBehaviour
     {

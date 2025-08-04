@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Components
+namespace Code.Components
 {
     [RequireComponent(typeof(Rigidbody))]
     public class GeneralCharacterController : MonoBehaviour

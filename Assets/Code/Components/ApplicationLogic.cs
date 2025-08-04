@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace Components
+namespace Code.Components
 {
     public static class ApplicationLogic
     {

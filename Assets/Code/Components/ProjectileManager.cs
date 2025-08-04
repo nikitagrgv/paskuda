@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
 
-namespace Components
+namespace Code.Components
 {
     public class ProjectileManager : MonoBehaviour
     {

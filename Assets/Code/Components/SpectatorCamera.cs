@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Components
+namespace Code.Components
 {
     public class SpectatorCamera : MonoBehaviour
     {

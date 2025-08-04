@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Components
+namespace Code.Components
 {
     public class VisibilityChecker : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Components
+namespace Code.Components
 {
     [RequireComponent(typeof(Rigidbody))]
     public class ImpulseAware : MonoBehaviour

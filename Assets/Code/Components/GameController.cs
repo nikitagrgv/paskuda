@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-namespace Components
+namespace Code.Components
 {
     public class GameController : MonoBehaviour
     {

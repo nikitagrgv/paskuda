@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ColorUtility = UnityEngine.ColorUtility;
 
-namespace Components
+namespace Code.Components
 {
     public class UIOverlay : MonoBehaviour
     {

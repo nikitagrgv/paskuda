@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Components
+namespace Code.Components
 {
     public class RelationshipsActor : MonoBehaviour
     {
