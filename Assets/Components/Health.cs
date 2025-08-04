@@ -81,6 +81,11 @@ namespace Components
                 return;
             }
 
+            if (!sender)
+            {
+                sender = null;
+            }
+
             HealthChangeInfo info = new() { Delta = -amount, IsHit = true, Initiator = sender };
             ChangeHealth(info);
         }

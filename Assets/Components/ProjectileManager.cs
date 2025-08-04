@@ -130,8 +130,7 @@ namespace Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            GameObject validSender = info.Sender ? info.Sender : null;
-            health.ApplyDamageHit(info.Damage, validSender);
+            health.ApplyDamageHit(info.Damage, info.Sender);
         }
 
         private void MoveToDying(ProjectileInfo info)
