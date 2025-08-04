@@ -2269,7 +2269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a59f68e3da6844584877ea9cadd51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spectatorCamera: {fileID: 1855342218}
+  spectatorCamera: {fileID: 0}
 --- !u!114 &1140413248
 MonoBehaviour:
   m_ObjectHideFlags: 0
