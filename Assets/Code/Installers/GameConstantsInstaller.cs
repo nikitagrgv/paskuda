@@ -3,11 +3,11 @@ using Zenject;
 
 namespace Code.Installers
 {
-    public class ProjectileManagerInstaller : MonoInstaller
+    public class GameConstantsInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<ProjectileManager>()
+            Container.Bind<GameConstants>()
                 .FromComponentInChildrenOf(gameObject)
                 .AsSingle()
                 .NonLazy();

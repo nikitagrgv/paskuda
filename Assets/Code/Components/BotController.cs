@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 namespace Code.Components
 {
@@ -49,6 +50,13 @@ namespace Code.Components
         private VisibilityChecker _visibilityChecker;
         private GeneralCharacterController _ctrl;
 
+        private GameConstants _gameConstants;
+
+        [Inject]
+        public void Construct(GameConstants gameConstants)
+        {
+            _gameConstants = gameConstants;
+        }
 
         private void Start()
         {
@@ -147,7 +155,7 @@ namespace Code.Components
             if (_timerChangeWantedPosition <= 0)
             {
                 _timerChangeWantedPosition = Random.Range(minPeriodChangeWantedPosition, maxPeriodChangeWantedPosition);
-                Vector2 rand = Random.insideUnitCircle * _ctrl.gameConstants.gameFieldRadius;
+                Vector2 rand = Random.insideUnitCircle * _gameConstants.gameFieldRadius;
                 _wantedPosition = new Vector3(rand.x, 0, rand.y);
             }
 

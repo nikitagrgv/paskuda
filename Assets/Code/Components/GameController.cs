@@ -40,16 +40,14 @@ namespace Code.Components
         private DiContainer _container;
 
         [Inject]
-        public void Construct(DiContainer container)
+        public void Construct(DiContainer container, GameConstants consts)
         {
             _container = container;
+            _consts = consts;
         }
 
         private void Start()
         {
-            _consts = GetComponent<GameConstants>();
-            Assert.IsNotNull(_consts);
-
             _input = GetComponent<PlayerInput>();
             Assert.IsNotNull(_input);
             _input.actions.FindActionMap(SpectatorMapName).Disable();
@@ -91,8 +89,6 @@ namespace Code.Components
 
         private void RegisterPlayer()
         {
-            RegisterCharacter(_consts.player);
-
             Health health = _consts.player.GetComponent<Health>();
             health.BeforeDied += OnPlayerBeforeDied;
             health.HealthChanged += OnPlayerHealthChanged;
@@ -165,19 +161,12 @@ namespace Code.Components
                 _consts.npcPrefab, pos3,
                 Quaternion.identity, null);
 
-            RegisterCharacter(npc);
-
             RelationshipsActor relationships = npc.GetComponent<RelationshipsActor>();
             if (relationships)
             {
                 relationships.Team = team;
                 RegisterRelationshipsActor(relationships);
             }
-        }
-
-        private void RegisterCharacter(GeneralCharacterController character)
-        {
-            character.gameConstants = _consts;
         }
 
         private void RegisterRelationshipsActor(RelationshipsActor actor)

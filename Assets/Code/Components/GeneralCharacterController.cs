@@ -16,8 +16,6 @@ namespace Code.Components
             DoRepeat,
         }
 
-        public GameConstants gameConstants;
-
         public GameObject eyeObject;
         public GameObject firePoint;
 
@@ -145,8 +143,6 @@ namespace Code.Components
 
         private void Start()
         {
-            Assert.IsNotNull(gameConstants);
-
             GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
             Assert.IsNotNull(gameController);
 
