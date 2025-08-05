@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -128,6 +129,10 @@ namespace Code.Components
 
         private void OnDrawGizmosSelected()
         {
+            Gizmos.color = Color.blue.WithAlpha(0.8f);
+            Gizmos.DrawSphere(_wantedPosition, 2f);
+            Debug.Log(_wantedPosition);
+
             if (_targetEnemy)
             {
                 Gizmos.color = Color.red.WithAlpha(0.8f);
@@ -136,9 +141,6 @@ namespace Code.Components
                 Gizmos.color = Color.yellow.WithAlpha(0.8f);
                 Gizmos.DrawWireSphere(_targetEnemy.transform.position, _wantedRadiusAroundEnemy);
             }
-
-            Gizmos.color = Color.blue.WithAlpha(0.8f);
-            Gizmos.DrawSphere(_wantedPosition, 2f);
         }
 
         private void OnHealthChanged(Health.HealthChangeInfo info)
@@ -315,7 +317,7 @@ namespace Code.Components
                 Vector3 myPos = transform.position;
                 Vector3 dirToEnemy = enemyPos - myPos;
 
-                Vector3 cross = Vector3.Cross(dirToEnemy.WithY(0), Vector3.forward);
+                Vector3 cross = Vector3.Cross(dirToEnemy.WithY(0).normalized, Vector3.forward);
                 float angle = Mathf.Asin(cross.y);
 
                 const float maxDeltaAngle = 15f * Mathf.Deg2Rad;
@@ -324,6 +326,10 @@ namespace Code.Components
                     _wantedRadiusAroundEnemy * Mathf.Sin(newAngle) + enemyPos.x,
                     0,
                     _wantedRadiusAroundEnemy * Mathf.Cos(newAngle) + enemyPos.z);
+
+                Assert.IsFalse(float.IsNaN(_wantedPosition.x));
+                Assert.IsFalse(float.IsNaN(_wantedPosition.y));
+                Assert.IsFalse(float.IsNaN(_wantedPosition.z));
             }
 
             UpdateTargetVelocityFromWanted();
