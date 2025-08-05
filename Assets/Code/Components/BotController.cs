@@ -320,7 +320,7 @@ namespace Code.Components
                 Vector3 cross = Vector3.Cross(dirToEnemy.WithY(0).normalized, Vector3.forward);
                 float angle = Mathf.Asin(cross.y);
 
-                const float maxDeltaAngle = 15f * Mathf.Deg2Rad;
+                const float maxDeltaAngle = 45f * Mathf.Deg2Rad;
                 float newAngle = angle + Random.Range(-maxDeltaAngle, maxDeltaAngle);
                 _wantedPosition = new Vector3(
                     _wantedRadiusAroundEnemy * Mathf.Sin(newAngle) + enemyPos.x,
