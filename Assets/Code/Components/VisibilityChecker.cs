@@ -13,22 +13,22 @@ namespace Code.Components
         const float Near = 0.2f;
         const float Far = 35f;
 
-        private static Mesh FrustumMesh
-        {
-            get
-            {
-                CreateFrustumMeshLazy();
-                return _frustumMesh;
-            }
-        }
-
         public event Action<GameObject, Info> BecomeVisible;
         public event Action<GameObject, Info> BecomeInvisible;
 
-        public GameObject ignore;
+        public Teams.TeamType IgnoreTeam
+        {
+            get => _ignoreTeam;
+            set
+            {
+                _ignoreTeam = value;
+                _needInvalidateList = true;
+                _needInvalidateMap = true;
+                _needRecheckTeam = true;
+            }
+        }
 
-        private bool _needInvalidationMapThisFrame = true;
-        private bool _needInvalidationListThisFrame = true;
+        public GameObject ignore;
 
         public struct Info
         {
@@ -41,7 +41,7 @@ namespace Code.Components
         {
             get
             {
-                if (_needInvalidationMapThisFrame)
+                if (_needInvalidateMap)
                 {
                     InvalidateMap();
                 }
@@ -54,7 +54,7 @@ namespace Code.Components
         {
             get
             {
-                if (_needInvalidationListThisFrame)
+                if (_needInvalidateList)
                 {
                     InvalidateList();
                 }
@@ -63,12 +63,26 @@ namespace Code.Components
             }
         }
 
+        private static Mesh FrustumMesh
+        {
+            get
+            {
+                CreateFrustumMeshLazy();
+                return _frustumMesh;
+            }
+        }
+
+        private bool _needInvalidateMap = true;
+        private bool _needInvalidateList = true;
+        private bool _needRecheckTeam = true;
 
         private readonly Dictionary<GameObject, Info> _visibleObjectsMap = new(5);
         private readonly List<KeyValuePair<GameObject, Info>> _visibleObjectsList = new(5);
 
         private static Vector3[] _frustumVertices;
         private static Mesh _frustumMesh;
+
+        private Teams.TeamType _ignoreTeam = Teams.TeamType.None;
 
         private void Start()
         {
@@ -77,18 +91,20 @@ namespace Code.Components
 
         private void InvalidateMap()
         {
-            List<GameObject> invalid = _visibleObjectsMap
-                .Where(v => !v.Key)
+            var toRemove = (_needRecheckTeam
+                    ? _visibleObjectsMap.Where(v => !v.Key || v.Value.RelationshipsActor.Team == _ignoreTeam)
+                    : _visibleObjectsMap.Where(v => !v.Key))
                 .Select(v => v.Key)
                 .ToList();
-            invalid.ForEach(v => { _visibleObjectsMap.Remove(v); });
 
-            _needInvalidationMapThisFrame = false;
+            toRemove.ForEach(v => { _visibleObjectsMap.Remove(v); });
+            _needInvalidateMap = false;
+            _needRecheckTeam = false;
         }
 
         private void InvalidateList()
         {
-            if (_needInvalidationMapThisFrame)
+            if (_needInvalidateMap)
             {
                 InvalidateMap();
             }
@@ -102,8 +118,8 @@ namespace Code.Components
 
         private void LateUpdate()
         {
-            _needInvalidationMapThisFrame = true;
-            _needInvalidationListThisFrame = true;
+            _needInvalidateMap = true;
+            _needInvalidateList = true;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -120,9 +136,14 @@ namespace Code.Components
             }
 
             RelationshipsActor ra = go.GetComponent<RelationshipsActor>();
+            if (!ra || ra.Team == _ignoreTeam)
+            {
+                return;
+            }
+
             Health health = go.GetComponent<Health>();
             GeneralCharacterController character = go.GetComponent<GeneralCharacterController>();
-            if (!ra || !health || !character)
+            if (!health || !character)
             {
                 return;
             }
@@ -138,6 +159,11 @@ namespace Code.Components
         {
             GameObject go = other.gameObject;
             if (go == ignore)
+            {
+                return;
+            }
+
+            if (!VisibleObjectsMap.ContainsKey(go))
             {
                 return;
             }
