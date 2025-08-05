@@ -495,14 +495,18 @@ MonoBehaviour:
   minPeriodWantFireNoEnemy: 10
   maxPeriodWantFireNoEnemy: 90
   forgetEnemyTimout: 10
-  changeEnemyTimeoutMin: 1
-  changeEnemyTimeoutMax: 10
+  changeEnemyTimeoutMin: 5
+  changeEnemyTimeoutMax: 15
   minWantedRadiusAroundEnemy: 20
   maxWantedRadiusAroundEnemy: 40
   minTimeToChangeWantedRadiusAroundEnemy: 1
   maxTimeToChangeWantedRadiusAroundEnemy: 40
   minPeriodChangeWantedPositionAroundEnemy: 0.1
   maxPeriodChangeWantedPositionAroundEnemy: 10
+  minPeriodUpdateNearestEnemy: 0.1
+  maxPeriodUpdateNearestEnemy: 1
+  updateNearestEnemyChance: 0.4
+  updateNearestEnemyThreshold2: 4
 --- !u!114 &3283579822013187827
 MonoBehaviour:
   m_ObjectHideFlags: 0
