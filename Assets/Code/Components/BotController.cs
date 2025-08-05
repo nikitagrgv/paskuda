@@ -53,16 +53,16 @@ namespace Code.Components
         private GameConstants _gameConstants;
 
         [Inject]
-        public void Construct(GameConstants gameConstants)
+        public void Construct(GameConstants gameConstants, GeneralCharacterController ctrl,
+            VisibilityChecker visibilityChecker)
         {
             _gameConstants = gameConstants;
+            _ctrl = ctrl;
+            _visibilityChecker = visibilityChecker;
         }
 
         private void Start()
         {
-            _ctrl = GetComponent<GeneralCharacterController>();
-            _visibilityChecker = GetComponentInChildren<VisibilityChecker>();
-
             RandomizeWantFire();
         }
 
