@@ -190,7 +190,7 @@ namespace Code.Components
             if (_timerUpdatePitch <= 0)
             {
                 _timerUpdatePitch = Random.Range(minPeriodUpdatePitch, maxPeriodUpdatePitch);
-                _targetPitch = Random.Range(MathUtils.MinPitch, MathUtils.MaxPitch);
+                _targetPitch = Random.Range(ctrl.minPitch, ctrl.maxPitch);
             }
 
             float totalDeltaPitch = _targetPitch - ctrl.LookPitch;

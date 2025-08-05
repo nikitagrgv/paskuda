@@ -22,6 +22,9 @@ namespace Code.Components
         public GameObject firePoint;
 
         [Header("Movement")]
+        public float minPitch = -87f;
+        public float maxPitch = 87f;
+        
         public float moveAccelerationOnGround = 0.7f;
 
         public float moveAccelerationOnFly = 0.55f;
@@ -54,7 +57,7 @@ namespace Code.Components
         public float LookPitch
         {
             get => _lookPitch;
-            set => _lookPitch = MathUtils.ToValidPitch(value);
+            set => _lookPitch = Mathf.Clamp(value, minPitch, maxPitch);
         }
 
         public float LookYaw
