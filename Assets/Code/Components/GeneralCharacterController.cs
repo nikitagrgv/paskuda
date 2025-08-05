@@ -138,20 +138,15 @@ namespace Code.Components
         [Inject]
         public void Construct(ProjectileManager projectileManager, Health health)
         {
-            Debug.Log($"HEALTH INJECTED {name}");
             _projectileManager = projectileManager;
             _health = health;
         }
 
         private void Start()
         {
-            GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
-            Assert.IsNotNull(gameController);
-
             _rb = GetComponent<Rigidbody>();
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-            Debug.Log($"DIED SUBSCRIBED {name}");
             _health.Died += OnDied;
 
             _relationshipsActor = GetComponent<RelationshipsActor>();
