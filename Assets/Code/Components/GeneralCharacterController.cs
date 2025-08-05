@@ -318,7 +318,6 @@ namespace Code.Components
 
         private void OnDied()
         {
-            Debug.Log($"DIED! {name}");
             gameObject.SetActive(false);
             Destroy(gameObject);
         }
