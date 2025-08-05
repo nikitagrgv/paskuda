@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 2242502859226034665}
   - component: {fileID: 3429883301143939229}
   - component: {fileID: 1888688231931819344}
+  - component: {fileID: 7099661920986891666}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -278,6 +279,8 @@ MonoBehaviour:
   health: {fileID: 1888688231931819344}
   eyeObject: {fileID: 6991890367089023808}
   firePoint: {fileID: 3719713848046124468}
+  minPitch: -87
+  maxPitch: 87
   moveAccelerationOnGround: 0.7
   moveAccelerationOnFly: 0.55
   jumpHeight: 2
@@ -450,3 +453,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   god: 0
   dieEffect: {fileID: 7004678617841129273, guid: 4febd10bd18d509409f1cb81542824d9, type: 3}
+--- !u!114 &7099661920986891666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8686222816301400131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f01a8ec4aa4bb469e68aa75a32a259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  relationshipsActor: {fileID: 2242502859226034665}

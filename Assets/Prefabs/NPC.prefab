@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8001088909797912455}
   - component: {fileID: 7500601717443551807}
   - component: {fileID: 746949555717429810}
+  - component: {fileID: 3535276888483385636}
   m_Layer: 0
   m_Name: NPC Turret
   m_TagString: Untagged
@@ -62,7 +63,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2905731815652333941}
   m_Father: {fileID: 8998171442865906958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8001088909797912455
@@ -139,6 +141,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3535276888483385636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103009119015547159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f01a8ec4aa4bb469e68aa75a32a259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  relationshipsActor: {fileID: 3283579822013187827}
 --- !u!1 &1481288575160417339
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,6 +188,92 @@ Transform:
   - {fileID: 7695714836911556771}
   m_Father: {fileID: 5324406708937891236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5061338740347430089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2905731815652333941}
+  - component: {fileID: 4752568080961066278}
+  - component: {fileID: 9021952211877469918}
+  m_Layer: 0
+  m_Name: NPC Turret Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2905731815652333941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061338740347430089}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.4833}
+  m_LocalScale: {x: 0.7, y: 0.8, z: 0.05}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1420598650129255572}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &4752568080961066278
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061338740347430089}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &9021952211877469918
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061338740347430089}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 487500cb9ce8bd64abedf137cbc0f930, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5142210715877961110
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,6 +292,7 @@ GameObject:
   - component: {fileID: 3283579822013187827}
   - component: {fileID: 418775314125074125}
   - component: {fileID: 1371490772475302317}
+  - component: {fileID: 7291104532419240511}
   m_Layer: 7
   m_Name: NPC
   m_TagString: Untagged
@@ -388,6 +490,8 @@ MonoBehaviour:
   minPeriodWantFire: 0.1
   maxPeriodWantFire: 4
   forgetEnemyTimout: 10
+  changeEnemyTimeoutMin: 1
+  changeEnemyTimeoutMax: 10
 --- !u!114 &3283579822013187827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,6 +576,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   god: 0
   dieEffect: {fileID: 7004678617841129273, guid: 4febd10bd18d509409f1cb81542824d9, type: 3}
+--- !u!114 &7291104532419240511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5142210715877961110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f01a8ec4aa4bb469e68aa75a32a259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  relationshipsActor: {fileID: 3283579822013187827}
 --- !u!1 &6140371829412873171
 GameObject:
   m_ObjectHideFlags: 0

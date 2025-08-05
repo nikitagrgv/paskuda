@@ -154,7 +154,6 @@ namespace Code.Components
             health.Died += OnDied;
 
             _relationshipsActor = GetComponent<RelationshipsActor>();
-            UpdateColorFromTeam();
         }
 
         private void Update()
@@ -327,32 +326,6 @@ namespace Code.Components
         {
             gameObject.SetActive(false);
             Destroy(gameObject);
-        }
-
-        private void UpdateColorFromTeam()
-        {
-            Color color = Teams.ToColor(_relationshipsActor.Team);
-            // color = Color.Lerp(color, Color.gray, 0.0f);
-            if (_relationshipsActor != null)
-            {
-                UpdateColorRecursively(transform, color);
-            }
-        }
-
-        private static void UpdateColorRecursively(Transform transform, Color color)
-        {
-            GameObject go = transform.gameObject;
-
-            Renderer rnd = go.GetComponent<Renderer>();
-            if (rnd)
-            {
-                rnd.material.color = color;
-            }
-
-            foreach (Transform child in transform)
-            {
-                UpdateColorRecursively(child, color);
-            }
         }
 
         private bool CheckGround(Vector3 center, float radius, int mask)
