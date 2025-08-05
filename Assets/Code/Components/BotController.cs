@@ -172,6 +172,7 @@ namespace Code.Components
 
             _targetEnemy = actor.GetComponent<GeneralCharacterController>();
             RandomizeWantFire();
+            _timerChangeWantedPositionAroundEnemy = 0f;
         }
 
         private void OnTeamChanged()
@@ -198,6 +199,7 @@ namespace Code.Components
                 _targetEnemy = info.Character;
                 _timerChangeEnemy = Random.Range(changeEnemyTimeoutMin, changeEnemyTimeoutMax);
                 RandomizeWantFire();
+                _timerChangeWantedPositionAroundEnemy = 0f;
             }
 
             info.Health.Died += OnTargetDied;
@@ -241,6 +243,7 @@ namespace Code.Components
                 {
                     int index = Random.Range(0, visible.Count);
                     _targetEnemy = visible[index].Value.Character;
+                    _timerChangeWantedPositionAroundEnemy = 0f;
                     RandomizeWantFire();
                 }
 
