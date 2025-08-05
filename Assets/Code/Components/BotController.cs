@@ -321,6 +321,11 @@ namespace Code.Components
             float minDistance2 = curDistance2;
             foreach (KeyValuePair<GameObject, VisibilityChecker.Info> v in visibilityChecker.VisibleObjects)
             {
+                if (!v.Key)
+                {
+                    continue;
+                }
+
                 float distance2 = (v.Value.Character.transform.position - myPos).sqrMagnitude;
                 if (distance2 < minDistance2)
                 {
