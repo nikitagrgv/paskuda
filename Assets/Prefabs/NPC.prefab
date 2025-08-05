@@ -384,6 +384,7 @@ MonoBehaviour:
   maxPeriodChangeWantedPosition: 20
   minPeriodWantFire: 0.1
   maxPeriodWantFire: 4
+  forgetEnemyTimout: 10
 --- !u!114 &3283579822013187827
 MonoBehaviour:
   m_ObjectHideFlags: 0

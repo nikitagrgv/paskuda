@@ -16,7 +16,7 @@ namespace Code.Components
         public float LookPitch
         {
             get => _lookPitch;
-            set => _lookPitch = MathUtils.ToValidPitch(value);
+            set => _lookPitch = Mathf.Clamp(value, -89f, 89f);
         }
 
         public float LookYaw
