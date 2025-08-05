@@ -22,6 +22,9 @@ namespace Code.Components
         public float maxPeriodUpdateYaw = 4f;
         public float speedRotateYaw = 200f;
 
+        public float minPitch = -30f;
+        public float maxPitch = 30f;
+
         public float minPeriodUpdatePitch = 0.1f;
         public float maxPeriodUpdatePitch = 4f;
         public float speedRotatePitch = 200f;
@@ -250,7 +253,7 @@ namespace Code.Components
             if (_timerUpdatePitch <= 0)
             {
                 _timerUpdatePitch = Random.Range(minPeriodUpdatePitch, maxPeriodUpdatePitch);
-                _targetPitch = Random.Range(ctrl.minPitch, ctrl.maxPitch);
+                _targetPitch = Random.Range(minPitch, maxPitch);
             }
 
             float totalDeltaPitch = _targetPitch - ctrl.LookPitch;
