@@ -309,6 +309,11 @@ namespace Code.Components
                 return;
             }
 
+            if (!Utils.TryChance(updateNearestEnemyChance))
+            {
+                return;
+            }
+
             Vector3 myPos = transform.position;
             float curDistance2 = (_targetEnemy.transform.position - myPos).sqrMagnitude;
 
