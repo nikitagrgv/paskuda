@@ -301,8 +301,9 @@ namespace Code.Components
             {
                 _timerChangeWantedPositionAroundEnemy = Random.Range(minPeriodChangeWantedPositionAroundEnemy,
                     maxPeriodChangeWantedPositionAroundEnemy);
-                Vector2 rand = Random.insideUnitCircle * _wantedRadiusAroundEnemy;
-                _wantedPosition = new Vector3(rand.x, 0, rand.y);
+
+                float angle = Random.value * 360f;
+                _wantedPosition = new Vector3(_wantedRadiusAroundEnemy * Mathf.Sin(angle), 0, Mathf.Cos(angle));
             }
 
             UpdateTargetVelocityFromWanted();
