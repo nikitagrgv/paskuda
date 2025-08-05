@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using Zenject;
 
@@ -76,11 +77,12 @@ namespace Code.Components
             if (!_targetEnemy)
             {
                 UpdateTargetPosition(dt);
-                UpdateRotation(dt);
+                UpdateRandomRotation(dt);
             }
             else
             {
-                UpdateEnemyVisibility();
+                UpdateEnemyVisibility(dt);
+                UpdateRotationToEnemy(dt);
             }
 
             UpdateJump(dt);
@@ -121,7 +123,7 @@ namespace Code.Components
             _forgetEnemyTimer = -1f;
         }
 
-        private void UpdateEnemyVisibility()
+        private void UpdateEnemyVisibility(float dt)
         {
             if (_forgetEnemyTimer < 0)
             {
@@ -133,7 +135,7 @@ namespace Code.Components
                 return;
             }
 
-            _forgetEnemyTimer -= Time.deltaTime;
+            _forgetEnemyTimer -= dt;
             if (_forgetEnemyTimer < 0)
             {
                 _targetEnemy = null;
@@ -141,7 +143,23 @@ namespace Code.Components
             }
         }
 
-        private void UpdateRotation(float dt)
+        private void UpdateRotationToEnemy(float dt)
+        {
+            if (!_targetEnemy)
+            {
+                return;
+            }
+
+            Vector3 targetPos = _targetEnemy.transform.position;
+            Vector3 myPos = transform.position;
+            Vector3 dir = targetPos - myPos;
+
+            Vector3 eulerAngles = Quaternion.LookRotation(dir).eulerAngles;
+            ctrl.LookPitch = eulerAngles.y;
+            ctrl.LookYaw = eulerAngles.x;
+        }
+
+        private void UpdateRandomRotation(float dt)
         {
             // Yaw
             _timerUpdateYaw -= dt;
