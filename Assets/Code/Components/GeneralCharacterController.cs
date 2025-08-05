@@ -245,7 +245,8 @@ namespace Code.Components
             Vector3 end = groundCheckerCenter + Vector3.down * (groundCheckerRadius + normalCheckMaxDistance);
             Gizmos.DrawLine(groundCheckerCenter, end);
 
-            Gizmos.DrawLine(eyeObject.transform.position, eyeObject.transform.forward * 2f);
+            Gizmos.DrawLine(eyeObject.transform.position,
+                eyeObject.transform.position + eyeObject.transform.forward * 2f);
         }
 
         private bool DoJump()
