@@ -31,7 +31,7 @@ namespace Code.Components
         public float dashReloadTime = 2f;
 
         [Header("Ground Check")]
-        public LayerMask groundLayers;
+        public LayerMask groundLayers = Physics.AllLayers;
 
         public float groundCheckerRadius = 0.49f;
 
