@@ -27,7 +27,8 @@ namespace Code.Components
 
         public GameObject ignore;
 
-        private bool _needInvalidationThisFrame = true;
+        private bool _needInvalidationMapThisFrame = true;
+        private bool _needInvalidationListThisFrame = true;
 
         public struct Info
         {
@@ -40,16 +41,31 @@ namespace Code.Components
         {
             get
             {
-                if (_needInvalidationThisFrame)
+                if (_needInvalidationMapThisFrame)
                 {
-                    Invalidate();
+                    InvalidateMap();
                 }
 
                 return _visibleObjectsMap;
             }
         }
 
+        public List<KeyValuePair<GameObject, Info>> VisibleObjects
+        {
+            get
+            {
+                if (_needInvalidationListThisFrame)
+                {
+                    InvalidateList();
+                }
+
+                return _visibleObjectsList;
+            }
+        }
+
+
         private readonly Dictionary<GameObject, Info> _visibleObjectsMap = new(5);
+        private readonly List<KeyValuePair<GameObject, Info>> _visibleObjectsList = new(5);
 
         private static Vector3[] _frustumVertices;
         private static Mesh _frustumMesh;
@@ -59,7 +75,7 @@ namespace Code.Components
             GetComponent<MeshCollider>().sharedMesh = FrustumMesh;
         }
 
-        private void Invalidate()
+        private void InvalidateMap()
         {
             List<GameObject> invalid = _visibleObjectsMap
                 .Where(v => !v.Key)
@@ -67,12 +83,27 @@ namespace Code.Components
                 .ToList();
             invalid.ForEach(v => { _visibleObjectsMap.Remove(v); });
 
-            _needInvalidationThisFrame = false;
+            _needInvalidationMapThisFrame = false;
+        }
+
+        private void InvalidateList()
+        {
+            if (_needInvalidationMapThisFrame)
+            {
+                InvalidateMap();
+            }
+
+            _visibleObjectsList.Clear();
+            foreach (KeyValuePair<GameObject, Info> result in _visibleObjectsMap)
+            {
+                _visibleObjectsList.Add(result);
+            }
         }
 
         private void LateUpdate()
         {
-            _needInvalidationThisFrame = true;
+            _needInvalidationMapThisFrame = true;
+            _needInvalidationListThisFrame = true;
         }
 
         private void OnTriggerEnter(Collider other)

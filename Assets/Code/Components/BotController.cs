@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using Zenject;
@@ -36,6 +37,8 @@ namespace Code.Components
         public float maxPeriodWantFire = 10f;
 
         public float forgetEnemyTimout = 10f;
+        public float changeEnemyTimeoutMin = 1f;
+        public float changeEnemyTimeoutMax = 10f;
 
         private float _timerUpdateYaw;
         private float _targetYaw;
@@ -56,6 +59,8 @@ namespace Code.Components
 
         private GeneralCharacterController _targetEnemy;
         private float _forgetEnemyTimer = -1;
+
+        private float _changeEnemyTimer = -1;
 
         [Inject]
         public void Construct(GameConstants gameConstants)
@@ -83,6 +88,7 @@ namespace Code.Components
             else
             {
                 ctrl.TargetVelocity = Vector3.zero;
+                UpdateEnemyChange(dt);
                 UpdateEnemyVisibility(dt);
                 UpdateRotationToEnemy(dt);
             }
@@ -109,6 +115,7 @@ namespace Code.Components
             else
             {
                 _targetEnemy = info.Character;
+                _changeEnemyTimer = Random.Range(changeEnemyTimeoutMin, changeEnemyTimeoutMax);
             }
 
             info.Health.Died += OnTargetDied;
@@ -128,6 +135,34 @@ namespace Code.Components
         {
             _targetEnemy = null;
             _forgetEnemyTimer = -1f;
+            _changeEnemyTimer = -1f;
+        }
+
+        private void UpdateEnemyChange(float dt)
+        {
+            if (!_targetEnemy)
+            {
+                _changeEnemyTimer = -1f;
+                return;
+            }
+
+            if (_changeEnemyTimer < 0)
+            {
+                return;
+            }
+
+            _changeEnemyTimer -= dt;
+            if (_changeEnemyTimer < 0)
+            {
+                List<KeyValuePair<GameObject, VisibilityChecker.Info>> visible = visibilityChecker.VisibleObjects;
+                if (visible.Count != 0)
+                {
+                    int index = Random.Range(0, visible.Count);
+                    _targetEnemy = visible[index].Value.Character;
+                }
+
+                _changeEnemyTimer = Random.Range(minPeriodUpdatePitch, maxPeriodUpdatePitch);
+            }
         }
 
         private void UpdateEnemyVisibility(float dt)
