@@ -5,10 +5,16 @@ namespace Code.Components
 {
     public class RelationshipsActor : MonoBehaviour
     {
+        public event Action TeamChanged;
+
         public Teams.TeamType Team
         {
             get => team;
-            set => team = value;
+            set
+            {
+                team = value;
+                TeamChanged?.Invoke();
+            }
         }
 
         [SerializeField]

@@ -76,6 +76,9 @@ namespace Code.Components
 
             visibilityChecker.BecomeVisible += OnBecomeVisible;
             visibilityChecker.BecomeInvisible += OnBecomeInvisible;
+
+            visibilityChecker.IgnoreTeam = relationshipsActor.Team;
+            relationshipsActor.TeamChanged += OnTeamChanged;
         }
 
         private void Update()
@@ -107,6 +110,11 @@ namespace Code.Components
             {
                 Gizmos.DrawWireSphere(_targetEnemy.transform.position, 1f);
             }
+        }
+
+        private void OnTeamChanged()
+        {
+            visibilityChecker.IgnoreTeam = relationshipsActor.Team;
         }
 
         private void OnBecomeVisible(GameObject go, VisibilityChecker.Info info)
