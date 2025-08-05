@@ -313,7 +313,7 @@ namespace Code.Components
                 _wantedPosition = new Vector3(
                     _wantedRadiusAroundEnemy * Mathf.Sin(angle) + enemyPos.x,
                     0,
-                    Mathf.Cos(angle) + enemyPos.z);
+                    _wantedRadiusAroundEnemy * Mathf.Cos(angle) + enemyPos.z);
             }
 
             UpdateTargetVelocityFromWanted();
