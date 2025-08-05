@@ -178,9 +178,7 @@ namespace Code.Components
             if (_frustumVertices == null || _frustumVertices.Length < 8)
                 return;
 
-            Color color = Color.yellow;
-            color.a = 0.3f;
-            Gizmos.color = color;
+            Gizmos.color = Color.yellow.WithAlpha(0.1f);
             foreach (KeyValuePair<GameObject, Info> v in VisibleObjectsMap)
             {
                 Gizmos.DrawSphere(v.Key.transform.position, 2f);
