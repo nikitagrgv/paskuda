@@ -16,6 +16,8 @@ namespace Code.Components
             DoRepeat,
         }
 
+        public Health health;
+
         public GameObject eyeObject;
         public GameObject firePoint;
 
@@ -112,7 +114,6 @@ namespace Code.Components
 
         private Rigidbody _rb;
         private RelationshipsActor _relationshipsActor;
-        private Health _health;
 
         private float _lookPitch;
         private float _lookYaw;
@@ -136,10 +137,9 @@ namespace Code.Components
         private readonly RaycastHit[] _raycastHitBuffer = new RaycastHit[10];
 
         [Inject]
-        public void Construct(ProjectileManager projectileManager, Health health)
+        public void Construct(ProjectileManager projectileManager)
         {
             _projectileManager = projectileManager;
-            _health = health;
         }
 
         private void Start()
@@ -147,7 +147,7 @@ namespace Code.Components
             _rb = GetComponent<Rigidbody>();
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-            _health.Died += OnDied;
+            health.Died += OnDied;
 
             _relationshipsActor = GetComponent<RelationshipsActor>();
             UpdateColorFromTeam();
@@ -175,7 +175,7 @@ namespace Code.Components
 
             if (gameObject.transform.position.y < -1000)
             {
-                _health.ApplyDamageGeneral(500);
+                health.ApplyDamageGeneral(500);
             }
         }
 

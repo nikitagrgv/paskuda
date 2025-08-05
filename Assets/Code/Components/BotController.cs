@@ -5,6 +5,9 @@ namespace Code.Components
 {
     public class BotController : MonoBehaviour
     {
+        public VisibilityChecker visibilityChecker;
+        public GeneralCharacterController ctrl;
+
         [Header("Movement")]
         public float moveSpeed = 5f;
 
@@ -47,18 +50,12 @@ namespace Code.Components
 
         private float _timerWantFire;
 
-        private VisibilityChecker _visibilityChecker;
-        private GeneralCharacterController _ctrl;
-
         private GameConstants _gameConstants;
 
         [Inject]
-        public void Construct(GameConstants gameConstants, GeneralCharacterController ctrl,
-            VisibilityChecker visibilityChecker)
+        public void Construct(GameConstants gameConstants)
         {
             _gameConstants = gameConstants;
-            _ctrl = ctrl;
-            _visibilityChecker = visibilityChecker;
         }
 
         private void Start()
@@ -91,7 +88,7 @@ namespace Code.Components
                 _targetYaw = Random.Range(0, 360);
             }
 
-            float totalDeltaYaw = _targetYaw - _ctrl.LookYaw;
+            float totalDeltaYaw = _targetYaw - ctrl.LookYaw;
             if (totalDeltaYaw > 180) totalDeltaYaw -= 360;
             if (totalDeltaYaw < -180) totalDeltaYaw += 360;
 
@@ -99,11 +96,11 @@ namespace Code.Components
             float deltaYaw = deltaYawSign * speedRotateYaw * dt;
             if (Mathf.Abs(deltaYaw) > Mathf.Abs(totalDeltaYaw))
             {
-                _ctrl.LookYaw = _targetYaw;
+                ctrl.LookYaw = _targetYaw;
             }
             else
             {
-                _ctrl.LookYaw += deltaYaw;
+                ctrl.LookYaw += deltaYaw;
             }
 
             // Pitch
@@ -114,16 +111,16 @@ namespace Code.Components
                 _targetPitch = Random.Range(MathUtils.MinPitch, MathUtils.MaxPitch);
             }
 
-            float totalDeltaPitch = _targetPitch - _ctrl.LookPitch;
+            float totalDeltaPitch = _targetPitch - ctrl.LookPitch;
             float deltaPitchSign = Mathf.Sign(totalDeltaPitch);
             float deltaPitch = deltaPitchSign * speedRotatePitch * dt;
             if (Mathf.Abs(deltaPitch) > Mathf.Abs(totalDeltaPitch))
             {
-                _ctrl.LookPitch = _targetPitch;
+                ctrl.LookPitch = _targetPitch;
             }
             else
             {
-                _ctrl.LookPitch += deltaPitch;
+                ctrl.LookPitch += deltaPitch;
             }
         }
 
@@ -133,7 +130,7 @@ namespace Code.Components
             if (_timerJump <= 0)
             {
                 _timerJump = Random.Range(minPeriodJump, maxPeriodJump);
-                _ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
+                ctrl.JumpRequest = GeneralCharacterController.ActionRequestType.TryNow;
             }
         }
 
@@ -145,7 +142,7 @@ namespace Code.Components
                 _timerDash = Random.Range(minPeriodDash, maxPeriodDash);
                 Vector2 dashDir2d = Random.insideUnitCircle;
                 Vector3 dashDir = new(dashDir2d.x, 0, dashDir2d.y);
-                _ctrl.RequestDash(dashDir, GeneralCharacterController.ActionRequestType.TryNow);
+                ctrl.RequestDash(dashDir, GeneralCharacterController.ActionRequestType.TryNow);
             }
         }
 
@@ -165,11 +162,11 @@ namespace Code.Components
             float deltaMagnitude = deltaPosition.magnitude;
             if (deltaMagnitude < 0.5f)
             {
-                _ctrl.TargetVelocity = Vector3.zero;
+                ctrl.TargetVelocity = Vector3.zero;
             }
             else
             {
-                _ctrl.TargetVelocity = deltaPosition.normalized * moveSpeed;
+                ctrl.TargetVelocity = deltaPosition.normalized * moveSpeed;
             }
         }
 
@@ -179,7 +176,7 @@ namespace Code.Components
             if (_timerWantFire <= 0)
             {
                 RandomizeWantFire();
-                _ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoWhenReadyAndFinish;
+                ctrl.FireRequest = GeneralCharacterController.ActionRequestType.DoWhenReadyAndFinish;
             }
         }
 

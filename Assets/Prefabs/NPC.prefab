@@ -330,7 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 528bcf55e058a464e8b68dbcb60df6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameConstants: {fileID: 0}
+  health: {fileID: 1371490772475302317}
   eyeObject: {fileID: 1481288575160417339}
   firePoint: {fileID: 502479783636877160}
   moveAccelerationOnGround: 0.7
@@ -366,6 +366,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 313baaa047fb951439e5417d72a27882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visibilityChecker: {fileID: 4060042957962346892}
+  ctrl: {fileID: 898362589482774158}
   moveSpeed: 5
   moveSpeedSprint: 9
   minPeriodUpdateYaw: 0.1

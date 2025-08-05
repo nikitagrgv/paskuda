@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 528bcf55e058a464e8b68dbcb60df6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameConstants: {fileID: 0}
+  health: {fileID: 1888688231931819344}
   eyeObject: {fileID: 6991890367089023808}
   firePoint: {fileID: 3719713848046124468}
   moveAccelerationOnGround: 0.7
