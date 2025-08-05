@@ -29,7 +29,7 @@ namespace Code.Components
         public float minPeriodWantFire = 0.1f;
         public float maxPeriodWantFire = 10f;
 
-        private GeneralCharacterController _ctrl;
+        private GeneralCharacterController _targetEnemy;
 
         private float _timerUpdateYaw;
         private float _targetYaw;
@@ -47,7 +47,8 @@ namespace Code.Components
         private float _timerWantFire;
 
         private VisibilityChecker _visibilityChecker;
-        private GeneralCharacterController _targetEnemy;
+        private GeneralCharacterController _ctrl;
+
 
         private void Start()
         {

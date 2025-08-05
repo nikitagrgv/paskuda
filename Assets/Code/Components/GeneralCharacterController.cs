@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Zenject;
 
 namespace Code.Components
 {
@@ -136,13 +137,18 @@ namespace Code.Components
         private readonly Collider[] _colliderBuffer = new Collider[10];
         private readonly RaycastHit[] _raycastHitBuffer = new RaycastHit[10];
 
+        [Inject]
+        public void Construct(ProjectileManager projectileManager)
+        {
+            _projectileManager = projectileManager;
+        }
+
         private void Start()
         {
             Assert.IsNotNull(gameConstants);
 
             GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
             Assert.IsNotNull(gameController);
-            _projectileManager = gameController?.GetComponent<ProjectileManager>();
 
             _rb = GetComponent<Rigidbody>();
             _rb.interpolation = RigidbodyInterpolation.Interpolate;

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using UnityEngine.Assertions;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace Code.Components
 {
@@ -35,6 +36,14 @@ namespace Code.Components
 
         private const string SpectatorMapName = "Spectator";
         private const string PlayerMapName = "Player";
+
+        private DiContainer _container;
+
+        [Inject]
+        public void Construct(DiContainer container)
+        {
+            _container = container;
+        }
 
         private void Start()
         {
@@ -151,7 +160,10 @@ namespace Code.Components
         {
             Vector2 pos2 = Random.insideUnitCircle * _consts.gameFieldRadius;
             Vector3 pos3 = new(pos2.x, 1.5f, pos2.y);
-            GeneralCharacterController npc = Instantiate(_consts.npcPrefab, pos3, Quaternion.identity);
+
+            GeneralCharacterController npc = _container.InstantiatePrefabForComponent<GeneralCharacterController>(
+                _consts.npcPrefab, pos3,
+                Quaternion.identity, null);
 
             RegisterCharacter(npc);
 
