@@ -85,7 +85,7 @@ namespace Code.Components
             RegisterCharacter(_consts.player);
 
             Health health = _consts.player.GetComponent<Health>();
-            health.Died += OnPlayerDied;
+            health.BeforeDied += OnPlayerBeforeDied;
             health.HealthChanged += OnPlayerHealthChanged;
 
             RelationshipsActor playerRelationships = _consts.player.GetComponent<RelationshipsActor>();
@@ -128,7 +128,7 @@ namespace Code.Components
             _rumbleCoroutine = null;
         }
 
-        private void OnPlayerDied()
+        private void OnPlayerBeforeDied()
         {
             Time.timeScale = 1f;
 
@@ -171,10 +171,10 @@ namespace Code.Components
         private void RegisterRelationshipsActor(RelationshipsActor actor)
         {
             AddTeamAlive(actor.Team, 1);
-            actor.Died += () => OnCharacterDied(actor);
+            actor.GetComponent<Health>().BeforeDied += () => OnActorDied(actor);
         }
 
-        private void OnCharacterDied(RelationshipsActor actor)
+        private void OnActorDied(RelationshipsActor actor)
         {
             AddTeamAlive(actor.Team, -1);
         }

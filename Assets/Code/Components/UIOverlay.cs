@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
@@ -76,7 +77,7 @@ namespace Code.Components
 
             gameController.AliveCountChanged += (_, _) => UpdateScore();
             playerHealth.HealthChanged += OnPlayerHealthChanged;
-            playerHealth.Died += OnPlayerDied;
+            playerHealth.BeforeDied += OnPlayerBeforeDied;
             UpdateDash(true);
             StopHitmark();
             UpdateScore();
@@ -84,6 +85,12 @@ namespace Code.Components
             Health.AnyHealthChanged += OnAnyHealthChanged;
 
             _hasPlayer = true;
+        }
+
+        private void OnDestroy()
+        {
+            
+            Health.AnyHealthChanged -= OnAnyHealthChanged;
         }
 
         private void LateUpdate()
@@ -129,7 +136,7 @@ namespace Code.Components
             }
         }
 
-        private void OnPlayerDied()
+        private void OnPlayerBeforeDied()
         {
             _hasPlayer = false;
             playerController = null;

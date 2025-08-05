@@ -14,10 +14,11 @@ namespace Code.Components
         }
 
         public event Action<HealthChangeInfo> HealthChanged;
+        public event Action BeforeDied;
         public event Action Died;
 
+        // TODO: shouldn't us static events
         public static event Action<Health, HealthChangeInfo> AnyHealthChanged;
-        public static event Action<Health> AnyDied;
 
         public float MaxHealth
         {
@@ -102,7 +103,8 @@ namespace Code.Components
             info.Delta = _currentHealth - oldHealth;
             if (info.Delta != 0f)
             {
-                NotifyHealthChanged(info);
+                HealthChanged?.Invoke(info);
+                AnyHealthChanged?.Invoke(this, info);
             }
 
             if (IsDead)
@@ -114,20 +116,9 @@ namespace Code.Components
                     mm.stopAction = ParticleSystemStopAction.Destroy;
                 }
 
-                NotifyDied();
+                BeforeDied?.Invoke();
+                Died?.Invoke();
             }
-        }
-
-        private void NotifyHealthChanged(HealthChangeInfo info)
-        {
-            HealthChanged?.Invoke(info);
-            AnyHealthChanged?.Invoke(this, info);
-        }
-
-        protected virtual void NotifyDied()
-        {
-            Died?.Invoke();
-            AnyDied?.Invoke(this);
         }
     }
 }

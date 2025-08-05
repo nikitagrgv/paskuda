@@ -11,19 +11,7 @@ namespace Code.Components
             set => team = value;
         }
 
-        public event Action Died;
-
-        private void OnDestroy()
-        {
-            NotifyDied();
-        }
-
         [SerializeField]
         private Teams.TeamType team = Teams.TeamType.None;
-
-        private void NotifyDied()
-        {
-            Died?.Invoke();
-        }
     }
 }
