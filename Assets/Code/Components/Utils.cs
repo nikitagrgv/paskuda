@@ -38,5 +38,25 @@ namespace Code.Components
         {
             return new Color(color.r, color.g, color.b, alpha);
         }
+
+        public static Vector3 Moved(this Vector3 vector, float x, float y, float z)
+        {
+            return new Vector3(x + vector.x, y + vector.y, z + vector.z);
+        }
+
+        public static Vector3 WithX(this Vector3 vector, float v)
+        {
+            return new Vector3(v, vector.y, vector.z);
+        }
+
+        public static Vector3 WithY(this Vector3 vector, float v)
+        {
+            return new Vector3(vector.x, v, vector.z);
+        }
+
+        public static Vector3 WithZ(this Vector3 vector, float v)
+        {
+            return new Vector3(vector.x, vector.y, v);
+        }
     }
 }

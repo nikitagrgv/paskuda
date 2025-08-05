@@ -311,12 +311,19 @@ namespace Code.Components
                 _timerChangeWantedPositionAroundEnemy = Random.Range(minPeriodChangeWantedPositionAroundEnemy,
                     maxPeriodChangeWantedPositionAroundEnemy);
 
-                float angle = Random.value * 360f;
                 Vector3 enemyPos = _targetEnemy.transform.position;
+                Vector3 myPos = transform.position;
+                Vector3 dirToEnemy = enemyPos - myPos;
+
+                Vector3 cross = Vector3.Cross(dirToEnemy.WithY(0), Vector3.forward);
+                float angle = Mathf.Asin(cross.y);
+
+                const float maxDeltaAngle = 15f * Mathf.Deg2Rad;
+                float newAngle = angle + Random.Range(-maxDeltaAngle, maxDeltaAngle);
                 _wantedPosition = new Vector3(
-                    _wantedRadiusAroundEnemy * Mathf.Sin(angle) + enemyPos.x,
+                    _wantedRadiusAroundEnemy * Mathf.Sin(newAngle) + enemyPos.x,
                     0,
-                    _wantedRadiusAroundEnemy * Mathf.Cos(angle) + enemyPos.z);
+                    _wantedRadiusAroundEnemy * Mathf.Cos(newAngle) + enemyPos.z);
             }
 
             UpdateTargetVelocityFromWanted();
