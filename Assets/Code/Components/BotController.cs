@@ -137,7 +137,7 @@ namespace Code.Components
                 Gizmos.DrawWireSphere(_targetEnemy.transform.position, _wantedRadiusAroundEnemy);
             }
 
-            Gizmos.color = Color.deepPink.WithAlpha(0.8f);
+            Gizmos.color = Color.blue.WithAlpha(0.8f);
             Gizmos.DrawSphere(_wantedPosition, 2f);
         }
 
