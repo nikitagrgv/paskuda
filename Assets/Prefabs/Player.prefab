@@ -298,8 +298,8 @@ MonoBehaviour:
   fireReloadTime: 0.4
   bulletLifeTime: 2.5
   bulletSpeed: 170
-  bulletImpulse: 40
-  bulletReboundChance: 0.5
+  bulletImpulse: 20
+  bulletReboundChance: 0.7
   bulletBackImpulse: 2
   bulletDamage: 12
 --- !u!114 &7167312169005661983

@@ -324,7 +324,8 @@ namespace Code.Components
 
         private void RandomizeWantFire()
         {
-            _timerWantFire = Random.Range(minPeriodWantFire, maxPeriodWantFire);
+            float mul = _targetEnemy ? 0.2f : 1f;
+            _timerWantFire = Random.Range(minPeriodWantFire * mul, maxPeriodWantFire * mul);
         }
     }
 }

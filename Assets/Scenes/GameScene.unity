@@ -1630,7 +1630,7 @@ Transform:
   m_GameObject: {fileID: 941065866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.02, y: 1.5, z: -46.08}
+  m_LocalPosition: {x: -19.5, y: 1.5, z: -57.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1649,7 +1649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 0
+  count: 100
   team: 1
   radius: 20
   spawnOnStart: 1
@@ -5014,7 +5014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 1
+  count: 100
   team: 2
   radius: 20
   spawnOnStart: 1
