@@ -333,6 +333,8 @@ MonoBehaviour:
   health: {fileID: 1371490772475302317}
   eyeObject: {fileID: 1481288575160417339}
   firePoint: {fileID: 502479783636877160}
+  minPitch: -89
+  maxPitch: 55
   moveAccelerationOnGround: 0.7
   moveAccelerationOnFly: 0.55
   jumpHeight: 2
@@ -368,6 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visibilityChecker: {fileID: 4060042957962346892}
   ctrl: {fileID: 898362589482774158}
+  relationshipsActor: {fileID: 3283579822013187827}
   moveSpeed: 5
   moveSpeedSprint: 9
   minPeriodUpdateYaw: 0.1

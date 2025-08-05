@@ -8,6 +8,7 @@ namespace Code.Components
     {
         public VisibilityChecker visibilityChecker;
         public GeneralCharacterController ctrl;
+        public RelationshipsActor relationshipsActor;
 
         [Header("Movement")]
         public float moveSpeed = 5f;
@@ -93,6 +94,11 @@ namespace Code.Components
 
         private void OnBecomeVisible(GameObject go, VisibilityChecker.Info info)
         {
+            if (info.RelationshipsActor.Team == relationshipsActor.Team)
+            {
+                return;
+            }
+
             if (_targetEnemy)
             {
                 if (info.Character == _targetEnemy)
