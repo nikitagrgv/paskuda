@@ -191,7 +191,7 @@ namespace Code.Components
             _jumpTimer = Math.Max(0, _jumpTimer - dt);
 
             gameObject.transform.rotation = Quaternion.Euler(0, _lookYaw, 0);
-            eyeObject.transform.rotation = Quaternion.Euler(_lookPitch, _lookYaw, 0);
+            eyeObject.transform.localRotation = Quaternion.Euler(_lookPitch, 0, 0);
 
             Vector3 groundCheckerCenter = GetGroundCheckerCenter();
             _isGrounded = CheckGround(groundCheckerCenter, groundCheckerRadius, groundMask);
