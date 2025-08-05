@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Code.Components
 {
-    public static class MathUtils
+    public static class Utils
     {
         public static float ToAngleFrom0To360(float angle)
         {
@@ -32,6 +32,11 @@ namespace Code.Components
         public static bool TryChance(float chance)
         {
             return Random.value < chance;
+        }
+
+        public static Color WithAlpha(this Color color, float alpha)
+        {
+            return new Color(color.r, color.g, color.b, alpha);
         }
     }
 }

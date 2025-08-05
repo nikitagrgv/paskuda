@@ -128,11 +128,17 @@ namespace Code.Components
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.red;
             if (_targetEnemy)
             {
-                Gizmos.DrawWireSphere(_targetEnemy.transform.position, 1f);
+                Gizmos.color = Color.red.WithAlpha(0.5f);
+                Gizmos.DrawSphere(_targetEnemy.transform.position, 1f);
+
+                Gizmos.color = Color.yellow.WithAlpha(0.5f);
+                Gizmos.DrawWireSphere(_targetEnemy.transform.position, _wantedRadiusAroundEnemy);
             }
+
+            Gizmos.color = Color.aquamarine.WithAlpha(0.5f);
+            Gizmos.DrawSphere(_wantedPosition, 1f);
         }
 
         private void OnHealthChanged(Health.HealthChangeInfo info)
@@ -159,7 +165,7 @@ namespace Code.Components
             }
 
             float chanceToChange = _targetEnemy ? 0.4f : 0.99f;
-            if (!MathUtils.TryChance(chanceToChange))
+            if (!Utils.TryChance(chanceToChange))
             {
                 return;
             }
@@ -274,7 +280,7 @@ namespace Code.Components
             Vector3 dir = targetPos - myPos;
 
             Vector3 eulerAngles = Quaternion.LookRotation(dir).eulerAngles;
-            ctrl.LookPitch = MathUtils.ToAngleFromNegative180To180(eulerAngles.x);
+            ctrl.LookPitch = Utils.ToAngleFromNegative180To180(eulerAngles.x);
             ctrl.LookYaw = eulerAngles.y;
         }
 

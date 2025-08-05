@@ -99,7 +99,7 @@ namespace Code.Components
                 {
                     ApplyHit(hit, info);
 
-                    if (info.ReboundChance > 0f && MathUtils.TryChance(info.ReboundChance))
+                    if (info.ReboundChance > 0f && Utils.TryChance(info.ReboundChance))
                     {
                         info.Direction = Vector3.Reflect(info.Direction, hit.normal);
                         info.Projectile.transform.position = hit.point + info.Direction * 0.01f;

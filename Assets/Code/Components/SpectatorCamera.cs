@@ -22,7 +22,7 @@ namespace Code.Components
         public float LookYaw
         {
             get => _lookYaw;
-            set => _lookYaw = MathUtils.ToAngleFrom0To360(value);
+            set => _lookYaw = Utils.ToAngleFrom0To360(value);
         }
 
         private bool _fastSpeedEnabled;
