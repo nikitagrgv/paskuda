@@ -28,5 +28,10 @@ namespace Code.Components
                     return angle;
             }
         }
+
+        public static bool TryChance(float chance)
+        {
+            return Random.value < chance;
+        }
     }
 }

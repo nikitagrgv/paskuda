@@ -473,11 +473,14 @@ MonoBehaviour:
   visibilityChecker: {fileID: 4060042957962346892}
   ctrl: {fileID: 898362589482774158}
   relationshipsActor: {fileID: 3283579822013187827}
+  health: {fileID: 1371490772475302317}
   moveSpeed: 5
   moveSpeedSprint: 9
   minPeriodUpdateYaw: 0.1
   maxPeriodUpdateYaw: 4
   speedRotateYaw: 350
+  minPitch: -30
+  maxPitch: 30
   minPeriodUpdatePitch: 0.1
   maxPeriodUpdatePitch: 4
   speedRotatePitch: 200
@@ -492,6 +495,12 @@ MonoBehaviour:
   forgetEnemyTimout: 10
   changeEnemyTimeoutMin: 1
   changeEnemyTimeoutMax: 10
+  minWantedRadiusAroundEnemy: 5
+  maxWantedRadiusAroundEnemy: 30
+  minTimeToChangeWantedRadiusAroundEnemy: 1
+  maxTimeToChangeWantedRadiusAroundEnemy: 40
+  minPeriodChangeWantedPositionAroundEnemy: 0.1
+  maxPeriodChangeWantedPositionAroundEnemy: 10
 --- !u!114 &3283579822013187827
 MonoBehaviour:
   m_ObjectHideFlags: 0

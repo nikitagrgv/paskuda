@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
@@ -12,6 +13,7 @@ namespace Code.Components
         public VisibilityChecker visibilityChecker;
         public GeneralCharacterController ctrl;
         public RelationshipsActor relationshipsActor;
+        public Health health;
 
         [Header("Movement")]
         public float moveSpeed = 5f;
@@ -95,6 +97,8 @@ namespace Code.Components
 
             visibilityChecker.IgnoreTeam = relationshipsActor.Team;
             relationshipsActor.TeamChanged += OnTeamChanged;
+
+            health.HealthChanged += OnHealthChanged;
         }
 
         private void Update()
@@ -127,6 +131,38 @@ namespace Code.Components
             {
                 Gizmos.DrawWireSphere(_targetEnemy.transform.position, 1f);
             }
+        }
+
+        private void OnHealthChanged(Health.HealthChangeInfo info)
+        {
+            if (!info.IsHit)
+            {
+                return;
+            }
+
+            if (!info.Initiator)
+            {
+                return;
+            }
+
+            RelationshipsActor actor = info.Initiator.GetComponent<RelationshipsActor>();
+            if (!actor)
+            {
+                return;
+            }
+
+            if (actor.Team == relationshipsActor.Team)
+            {
+                return;
+            }
+
+            float chanceToChange = _targetEnemy ? 0.4f : 0.99f;
+            if (!MathUtils.TryChance(chanceToChange))
+            {
+                return;
+            }
+
+            _targetEnemy = actor.GetComponent<GeneralCharacterController>();
         }
 
         private void OnTeamChanged()
