@@ -71,11 +71,13 @@ namespace Code.Components
         private float _diedAnimationCurTime = -1f;
         private float _diedAnimationEndTime = -1f;
 
+        private bool _needUpdateScore = true;
+
         private void Start()
         {
             diedScreen.gameObject.SetActive(false);
 
-            gameController.AliveCountChanged += (_, _) => UpdateScore();
+            gameController.AliveCountChanged += (_, _) => _needUpdateScore = true;
             playerHealth.HealthChanged += OnPlayerHealthChanged;
             playerHealth.BeforeDied += OnPlayerBeforeDied;
             UpdateDash(true);
@@ -89,8 +91,16 @@ namespace Code.Components
 
         private void OnDestroy()
         {
-            
             Health.AnyHealthChanged -= OnAnyHealthChanged;
+        }
+
+        private void Update()
+        {
+            if (_needUpdateScore)
+            {
+                _needUpdateScore = false;
+                UpdateScore();
+            }
         }
 
         private void LateUpdate()
@@ -192,11 +202,6 @@ namespace Code.Components
 
         private void UpdateScore()
         {
-            if (!gameController.IsSpawnFinished)
-            {
-                return;
-            }
-
             IReadOnlyCollection<GameController.TeamInfo> allTeams = gameController.AllTeams;
 
             StringBuilder builder = new();

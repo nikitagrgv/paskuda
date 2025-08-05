@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 using System.Collections.ObjectModel;
 using UnityEngine.Assertions;
 using System.Collections;
+using Code.Factories;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -14,8 +15,6 @@ namespace Code.Components
     public class GameController : MonoBehaviour
     {
         public SpectatorCamera spectatorCamera;
-
-        public bool IsSpawnFinished { get; private set; }
 
         public event Action<Teams.TeamType, int> AliveCountChanged;
 
@@ -37,13 +36,15 @@ namespace Code.Components
         private const string SpectatorMapName = "Spectator";
         private const string PlayerMapName = "Player";
 
-        private DiContainer _container;
+        private ActorFactory _actorFactory;
 
         [Inject]
-        public void Construct(DiContainer container, GameConstants consts)
+        public void Construct(GameConstants consts, ActorFactory actorFactory)
         {
-            _container = container;
             _consts = consts;
+            _actorFactory = actorFactory;
+
+            _actorFactory.Spawned += OnActorSpawned;
         }
 
         private void Start()
@@ -60,23 +61,6 @@ namespace Code.Components
             Cursor.visible = false;
 
             RegisterPlayer();
-
-            int count = _consts.npcSpawnCount;
-            for (int i = 0; i < count; ++i)
-            {
-                int teamTypeNum = i % 3;
-                Teams.TeamType team;
-                switch (teamTypeNum)
-                {
-                    case 0: team = Teams.TeamType.Red; break;
-                    case 1: team = Teams.TeamType.Green; break;
-                    default: team = Teams.TeamType.Blue; break;
-                }
-
-                SpawnNpc(team);
-            }
-
-            IsSpawnFinished = true;
         }
 
         private void Update()
@@ -152,21 +136,9 @@ namespace Code.Components
             _input.SwitchCurrentActionMap(SpectatorMapName);
         }
 
-        private void SpawnNpc(Teams.TeamType team)
+        private void OnActorSpawned(RelationshipsActor actor)
         {
-            Vector2 pos2 = Random.insideUnitCircle * _consts.gameFieldRadius;
-            Vector3 pos3 = new(pos2.x, 1.5f, pos2.y);
-
-            GeneralCharacterController npc = _container.InstantiatePrefabForComponent<GeneralCharacterController>(
-                _consts.npcPrefab, pos3,
-                Quaternion.identity, null);
-
-            RelationshipsActor relationships = npc.GetComponent<RelationshipsActor>();
-            if (relationships)
-            {
-                relationships.Team = team;
-                RegisterRelationshipsActor(relationships);
-            }
+            RegisterRelationshipsActor(actor);
         }
 
         private void RegisterRelationshipsActor(RelationshipsActor actor)
