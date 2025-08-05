@@ -492,11 +492,13 @@ MonoBehaviour:
   maxPeriodChangeWantedPosition: 20
   minPeriodWantFire: 0.1
   maxPeriodWantFire: 4
+  minPeriodWantFireNoEnemy: 10
+  maxPeriodWantFireNoEnemy: 90
   forgetEnemyTimout: 10
   changeEnemyTimeoutMin: 1
   changeEnemyTimeoutMax: 10
-  minWantedRadiusAroundEnemy: 5
-  maxWantedRadiusAroundEnemy: 30
+  minWantedRadiusAroundEnemy: 20
+  maxWantedRadiusAroundEnemy: 40
   minTimeToChangeWantedRadiusAroundEnemy: 1
   maxTimeToChangeWantedRadiusAroundEnemy: 40
   minPeriodChangeWantedPositionAroundEnemy: 0.1

@@ -404,7 +404,7 @@ MonoBehaviour:
   player: {fileID: 2059177129}
   npcPrefab: {fileID: 898362589482774158, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   npcSpawnCount: 400
-  gameFieldRadius: 100
+  gameFieldRadius: 20
   gravityMultiplier: 1.2
 --- !u!1001 &340888013
 PrefabInstance:
@@ -1631,7 +1631,7 @@ Transform:
   m_GameObject: {fileID: 941065866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.5, y: 1.5, z: -57.7}
+  m_LocalPosition: {x: -39.3, y: 1.5, z: -13.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1650,7 +1650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 0
+  count: 200
   team: 1
   radius: 20
   spawnOnStart: 1
@@ -5045,7 +5045,7 @@ Transform:
   m_GameObject: {fileID: 1938533089}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -61.3, y: 1.5, z: 35.9}
+  m_LocalPosition: {x: -146, y: 1.5, z: -2.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5064,7 +5064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 1
+  count: 200
   team: 2
   radius: 20
   spawnOnStart: 1
