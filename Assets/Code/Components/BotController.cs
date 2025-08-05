@@ -33,7 +33,7 @@ namespace Code.Components
         public float minPeriodWantFire = 0.1f;
         public float maxPeriodWantFire = 10f;
 
-        private GeneralCharacterController _targetEnemy;
+        public float forgetEnemyTimout = 10f;
 
         private float _timerUpdateYaw;
         private float _targetYaw;
@@ -52,6 +52,9 @@ namespace Code.Components
 
         private GameConstants _gameConstants;
 
+        private GeneralCharacterController _targetEnemy;
+        private float _forgetEnemyTimer = -1;
+
         [Inject]
         public void Construct(GameConstants gameConstants)
         {
@@ -61,8 +64,9 @@ namespace Code.Components
         private void Start()
         {
             RandomizeWantFire();
-            
+
             visibilityChecker.BecomeVisible += OnBecomeVisible;
+            visibilityChecker.BecomeInvisible += OnBecomeInvisible;
         }
 
         private void Update()
@@ -74,6 +78,10 @@ namespace Code.Components
                 UpdateTargetPosition(dt);
                 UpdateRotation(dt);
             }
+            else
+            {
+                UpdateEnemyVisibility();
+            }
 
             UpdateJump(dt);
             UpdateDash(dt);
@@ -82,12 +90,55 @@ namespace Code.Components
 
         private void OnBecomeVisible(GameObject go, VisibilityChecker.Info info)
         {
+            if (_targetEnemy)
+            {
+                if (info.Character == _targetEnemy)
+                {
+                    _forgetEnemyTimer = -1f;
+                }
+            }
+            else
+            {
+                _targetEnemy = info.Character;
+            }
+
             info.Health.Died += OnTargetDied;
+        }
+
+        private void OnBecomeInvisible(GameObject go, VisibilityChecker.Info info)
+        {
+            if (info.Character != _targetEnemy)
+            {
+                return;
+            }
+
+            _forgetEnemyTimer = forgetEnemyTimout;
         }
 
         private void OnTargetDied()
         {
-            
+            _targetEnemy = null;
+            _forgetEnemyTimer = -1f;
+        }
+
+        private void UpdateEnemyVisibility()
+        {
+            if (_forgetEnemyTimer < 0)
+            {
+                return;
+            }
+
+            if (!_targetEnemy)
+            {
+                return;
+            }
+
+            _forgetEnemyTimer -= Time.deltaTime;
+            if (_forgetEnemyTimer < 0)
+            {
+                _targetEnemy = null;
+                _forgetEnemyTimer = -1f;
+            }
         }
 
         private void UpdateRotation(float dt)

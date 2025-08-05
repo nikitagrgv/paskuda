@@ -31,6 +31,7 @@ namespace Code.Components
 
         public struct Info
         {
+            public GeneralCharacterController Character;
             public RelationshipsActor RelationshipsActor;
             public Health Health;
         }
@@ -89,12 +90,13 @@ namespace Code.Components
 
             RelationshipsActor ra = go.GetComponent<RelationshipsActor>();
             Health health = go.GetComponent<Health>();
-            if (!ra || !health)
+            GeneralCharacterController character = go.GetComponent<GeneralCharacterController>();
+            if (!ra || !health || !character)
             {
                 return;
             }
 
-            Info info = new() { RelationshipsActor = ra, Health = health };
+            Info info = new() { Character = character, RelationshipsActor = ra, Health = health };
 
             VisibleObjectsMap[go] = info;
 
