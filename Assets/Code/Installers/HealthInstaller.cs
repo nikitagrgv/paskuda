@@ -8,7 +8,7 @@ namespace Code.Installers
         public override void InstallBindings()
         {
             Container.Bind<Health>()
-                .FromComponentInChildren(false)
+                .FromComponentInParentsAndChildren()
                 .AsTransient()
                 .Lazy();
         }
