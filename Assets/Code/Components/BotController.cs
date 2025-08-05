@@ -41,7 +41,9 @@ namespace Code.Components
         public float maxPeriodChangeWantedPosition = 20f;
 
         public float minPeriodWantFire = 0.1f;
-        public float maxPeriodWantFire = 10f;
+        public float maxPeriodWantFire = 0.5f;
+        public float minPeriodWantFireNoEnemy = 10f;
+        public float maxPeriodWantFireNoEnemy = 90f;
 
         public float forgetEnemyTimout = 10f;
         public float changeEnemyTimeoutMin = 1f;
@@ -412,8 +414,14 @@ namespace Code.Components
 
         private void RandomizeWantFire()
         {
-            float mul = _targetEnemy ? 0.1f : 1f;
-            _timerWantFire = Random.Range(minPeriodWantFire * mul, maxPeriodWantFire * mul);
+            if (_targetEnemy)
+            {
+                _timerWantFire = Random.Range(minPeriodWantFire, maxPeriodWantFire);
+            }
+            else
+            {
+                _timerWantFire = Random.Range(minPeriodWantFireNoEnemy, maxPeriodWantFireNoEnemy);
+            }
         }
     }
 }
