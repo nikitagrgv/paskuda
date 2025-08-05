@@ -9,7 +9,7 @@ namespace Code.Components
 {
     public class ProjectileManager : MonoBehaviour
     {
-        public LayerMask interactableLayers;
+        public LayerMask interactableLayers = Physics.AllLayers;
 
         private struct ProjectileInfo
         {
