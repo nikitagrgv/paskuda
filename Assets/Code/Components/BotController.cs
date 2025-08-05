@@ -296,7 +296,7 @@ namespace Code.Components
                 _wantedRadiusAroundEnemy = Random.Range(minWantedRadiusAroundEnemy, maxWantedRadiusAroundEnemy);
                 _timerChangeWantedRadiusAroundEnemy = Random.Range(minTimeToChangeWantedRadiusAroundEnemy,
                     maxTimeToChangeWantedRadiusAroundEnemy);
-                _timerChangeWantedPosition = 0f;
+                _timerChangeWantedPositionAroundEnemy = 0f;
             }
         }
 
