@@ -152,13 +152,14 @@ namespace Code.Components
             if (_frustumVertices == null || _frustumVertices.Length < 8)
                 return;
 
-            Gizmos.color = Color.red;
+            Color color = Color.yellow;
+            color.a = 0.3f;
+            Gizmos.color = color;
             foreach (KeyValuePair<GameObject, Info> v in VisibleObjectsMap)
             {
                 Gizmos.DrawSphere(v.Key.transform.position, 2f);
             }
 
-            Gizmos.color = Color.yellow;
             Transform t = transform;
 
             // Near plane
