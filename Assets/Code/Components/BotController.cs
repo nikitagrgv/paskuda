@@ -310,7 +310,9 @@ namespace Code.Components
 
                 float angle = Random.value * 360f;
                 Vector3 enemyPos = _targetEnemy.transform.position;
-                _wantedPosition = new Vector3(_wantedRadiusAroundEnemy * Mathf.Sin(angle) + enemyPos.x, 0,
+                _wantedPosition = new Vector3(
+                    _wantedRadiusAroundEnemy * Mathf.Sin(angle) + enemyPos.x,
+                    0,
                     Mathf.Cos(angle) + enemyPos.z);
             }
 
