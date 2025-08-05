@@ -61,6 +61,8 @@ namespace Code.Components
         private void Start()
         {
             RandomizeWantFire();
+            
+            visibilityChecker.BecomeVisible += OnBecomeVisible;
         }
 
         private void Update()
@@ -76,6 +78,16 @@ namespace Code.Components
             UpdateJump(dt);
             UpdateDash(dt);
             UpdateFire(dt);
+        }
+
+        private void OnBecomeVisible(GameObject go, VisibilityChecker.Info info)
+        {
+            info.Health.Died += OnTargetDied;
+        }
+
+        private void OnTargetDied()
+        {
+            
         }
 
         private void UpdateRotation(float dt)

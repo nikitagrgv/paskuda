@@ -27,13 +27,28 @@ namespace Code.Components
 
         public GameObject ignore;
 
+        private bool _needInvalidationThisFrame = true;
+
         public struct Info
         {
             public RelationshipsActor RelationshipsActor;
             public Health Health;
         }
 
-        public readonly Dictionary<GameObject, Info> VisibleObjectsMap = new(5);
+        public Dictionary<GameObject, Info> VisibleObjectsMap
+        {
+            get
+            {
+                if (_needInvalidationThisFrame)
+                {
+                    Invalidate();
+                }
+
+                return _visibleObjectsMap;
+            }
+        }
+
+        private readonly Dictionary<GameObject, Info> _visibleObjectsMap = new(5);
 
         private static Vector3[] _frustumVertices;
         private static Mesh _frustumMesh;
@@ -43,13 +58,20 @@ namespace Code.Components
             GetComponent<MeshCollider>().sharedMesh = FrustumMesh;
         }
 
-        private void Update()
+        private void Invalidate()
         {
-            List<GameObject> invalid = VisibleObjectsMap
+            List<GameObject> invalid = _visibleObjectsMap
                 .Where(v => !v.Key)
                 .Select(v => v.Key)
                 .ToList();
-            invalid.ForEach(v => { VisibleObjectsMap.Remove(v); });
+            invalid.ForEach(v => { _visibleObjectsMap.Remove(v); });
+
+            _needInvalidationThisFrame = false;
+        }
+
+        private void LateUpdate()
+        {
+            _needInvalidationThisFrame = true;
         }
 
         private void OnTriggerEnter(Collider other)
