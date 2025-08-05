@@ -17,10 +17,11 @@ namespace Code.Factories
             _container = container;
         }
 
-        public RelationshipsActor Create(RelationshipsActor prefab, Vector3 pos, Quaternion rot)
+        public RelationshipsActor Create(RelationshipsActor prefab, Teams.TeamType team, Vector3 pos, Quaternion rot)
         {
             RelationshipsActor actor =
                 _container.InstantiatePrefabForComponent<RelationshipsActor>(prefab, pos, rot, null);
+            actor.Team = team;
             Spawned?.Invoke(actor);
             return actor;
         }
