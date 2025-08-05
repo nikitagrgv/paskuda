@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Code.Components
@@ -11,5 +12,12 @@ namespace Code.Components
         public float gameFieldRadius = 200;
 
         public float gravityMultiplier = 1.2f;
+
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(player.transform.position, gameFieldRadius);
+        }
     }
 }
