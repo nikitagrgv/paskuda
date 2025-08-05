@@ -47,8 +47,8 @@ namespace Code.Components
         public float maxPeriodWantFireNoEnemy = 90f;
 
         public float forgetEnemyTimout = 10f;
-        public float changeEnemyTimeoutMin = 1f;
-        public float changeEnemyTimeoutMax = 10f;
+        public float changeEnemyTimeoutMin = 5f;
+        public float changeEnemyTimeoutMax = 15f;
 
         public float minWantedRadiusAroundEnemy = 5f;
         public float maxWantedRadiusAroundEnemy = 30f;
@@ -58,6 +58,11 @@ namespace Code.Components
 
         public float minPeriodChangeWantedPositionAroundEnemy = 0.1f;
         public float maxPeriodChangeWantedPositionAroundEnemy = 10f;
+
+        public float minPeriodUpdateNearestEnemy = 0.1f;
+        public float maxPeriodUpdateNearestEnemy = 1f;
+        public float updateNearestEnemyChance = 0.4f;
+        public float updateNearestEnemyThreshold2 = 4f;
 
         private float _timerUpdateYaw;
         private float _targetYaw;
@@ -80,6 +85,8 @@ namespace Code.Components
         private float _timerForgetEnemy = -1;
 
         private float _timerChangeEnemy = -1;
+
+        private float _timerUpdateNearestEnemy;
 
         private float _wantedRadiusAroundEnemy;
         private float _timerChangeWantedRadiusAroundEnemy;
@@ -120,6 +127,7 @@ namespace Code.Components
                 UpdateEnemyChange(dt);
                 UpdateEnemyVisibility(dt);
                 UpdateRotationToEnemy(dt);
+                UpdateNearestEnemy(dt);
             }
 
             UpdateJump(dt);
@@ -286,6 +294,45 @@ namespace Code.Components
             Vector3 eulerAngles = Quaternion.LookRotation(dir).eulerAngles;
             ctrl.LookPitch = Utils.ToAngleFromNegative180To180(eulerAngles.x);
             ctrl.LookYaw = eulerAngles.y;
+        }
+
+        private void UpdateNearestEnemy(float dt)
+        {
+            _timerUpdateNearestEnemy -= dt;
+            if (_timerUpdateNearestEnemy > 0)
+            {
+                return;
+            }
+
+            if (!_targetEnemy)
+            {
+                return;
+            }
+
+            Vector3 myPos = transform.position;
+            float curDistance2 = (_targetEnemy.transform.position - myPos).sqrMagnitude;
+
+            GeneralCharacterController min = null;
+            float minDistance2 = curDistance2;
+            foreach (KeyValuePair<GameObject, VisibilityChecker.Info> v in visibilityChecker.VisibleObjects)
+            {
+                float distance2 = (v.Value.Character.transform.position - myPos).sqrMagnitude;
+                if (distance2 < minDistance2)
+                {
+                    minDistance2 = distance2;
+                    min = v.Value.Character;
+                }
+            }
+
+            if (min)
+            {
+                _targetEnemy = min;
+                _timerChangeEnemy = Random.Range(changeEnemyTimeoutMin, changeEnemyTimeoutMax);
+                RandomizeWantFire();
+                _timerChangeWantedPositionAroundEnemy = 0f;
+            }
+
+            _timerUpdateNearestEnemy = Random.Range(minPeriodUpdateNearestEnemy, maxPeriodUpdateNearestEnemy);
         }
 
         private void RandomizeWantedRadiusAroundEnemy(float dt)
