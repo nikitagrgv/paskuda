@@ -45,6 +45,15 @@ namespace Code.Components
         public float changeEnemyTimeoutMin = 1f;
         public float changeEnemyTimeoutMax = 10f;
 
+        public float minWantedRadiusAroundEnemy = 5f;
+        public float maxWantedRadiusAroundEnemy = 30f;
+
+        public float minTimeToChangeWantedRadiusAroundEnemy = 1f;
+        public float maxTimeToChangeWantedRadiusAroundEnemy = 40f;
+
+        public float minPeriodChangeWantedPositionAroundEnemy = 0.1f;
+        public float maxPeriodChangeWantedPositionAroundEnemy = 10f;
+
         private float _timerUpdateYaw;
         private float _targetYaw;
 
@@ -63,9 +72,13 @@ namespace Code.Components
         private GameConstants _gameConstants;
 
         private GeneralCharacterController _targetEnemy;
-        private float _forgetEnemyTimer = -1;
+        private float _timerForgetEnemy = -1;
 
-        private float _changeEnemyTimer = -1;
+        private float _timerChangeEnemy = -1;
+
+        private float _wantedRadiusAroundEnemy;
+        private float _timerChangeWantedRadiusAroundEnemy;
+        private float _timerChangeWantedPositionAroundEnemy;
 
         [Inject]
         public void Construct(GameConstants gameConstants)
@@ -96,6 +109,8 @@ namespace Code.Components
             else
             {
                 ctrl.TargetVelocity = Vector3.zero;
+                UpdateTargetPositionAroundEnemy(dt);
+                RandomizeWantedRadiusAroundEnemy(dt);
                 UpdateEnemyChange(dt);
                 UpdateEnemyVisibility(dt);
                 UpdateRotationToEnemy(dt);
@@ -131,13 +146,13 @@ namespace Code.Components
             {
                 if (info.Character == _targetEnemy)
                 {
-                    _forgetEnemyTimer = -1f;
+                    _timerForgetEnemy = -1f;
                 }
             }
             else
             {
                 _targetEnemy = info.Character;
-                _changeEnemyTimer = Random.Range(changeEnemyTimeoutMin, changeEnemyTimeoutMax);
+                _timerChangeEnemy = Random.Range(changeEnemyTimeoutMin, changeEnemyTimeoutMax);
             }
 
             info.Health.Died += OnTargetDied;
@@ -150,31 +165,31 @@ namespace Code.Components
                 return;
             }
 
-            _forgetEnemyTimer = forgetEnemyTimout;
+            _timerForgetEnemy = forgetEnemyTimout;
         }
 
         private void OnTargetDied()
         {
             _targetEnemy = null;
-            _forgetEnemyTimer = -1f;
-            _changeEnemyTimer = -1f;
+            _timerForgetEnemy = -1f;
+            _timerChangeEnemy = -1f;
         }
 
         private void UpdateEnemyChange(float dt)
         {
             if (!_targetEnemy)
             {
-                _changeEnemyTimer = -1f;
+                _timerChangeEnemy = -1f;
                 return;
             }
 
-            if (_changeEnemyTimer < 0)
+            if (_timerChangeEnemy < 0)
             {
                 return;
             }
 
-            _changeEnemyTimer -= dt;
-            if (_changeEnemyTimer < 0)
+            _timerChangeEnemy -= dt;
+            if (_timerChangeEnemy < 0)
             {
                 List<KeyValuePair<GameObject, VisibilityChecker.Info>> visible = visibilityChecker.VisibleObjects;
                 if (visible.Count != 0)
@@ -183,13 +198,13 @@ namespace Code.Components
                     _targetEnemy = visible[index].Value.Character;
                 }
 
-                _changeEnemyTimer = Random.Range(minPeriodUpdatePitch, maxPeriodUpdatePitch);
+                _timerChangeEnemy = Random.Range(minPeriodUpdatePitch, maxPeriodUpdatePitch);
             }
         }
 
         private void UpdateEnemyVisibility(float dt)
         {
-            if (_forgetEnemyTimer < 0)
+            if (_timerForgetEnemy < 0)
             {
                 return;
             }
@@ -199,11 +214,11 @@ namespace Code.Components
                 return;
             }
 
-            _forgetEnemyTimer -= dt;
-            if (_forgetEnemyTimer < 0)
+            _timerForgetEnemy -= dt;
+            if (_timerForgetEnemy < 0)
             {
                 _targetEnemy = null;
-                _forgetEnemyTimer = -1f;
+                _timerForgetEnemy = -1f;
             }
         }
 
@@ -221,6 +236,52 @@ namespace Code.Components
             Vector3 eulerAngles = Quaternion.LookRotation(dir).eulerAngles;
             ctrl.LookPitch = MathUtils.ToAngleFromNegative180To180(eulerAngles.x);
             ctrl.LookYaw = eulerAngles.y;
+        }
+
+        private void RandomizeWantedRadiusAroundEnemy(float dt)
+        {
+            _timerChangeWantedRadiusAroundEnemy -= dt;
+            if (_timerChangeWantedRadiusAroundEnemy < 0)
+            {
+                _wantedRadiusAroundEnemy = Random.Range(minWantedRadiusAroundEnemy, maxWantedRadiusAroundEnemy);
+                _timerChangeWantedRadiusAroundEnemy = Random.Range(minTimeToChangeWantedRadiusAroundEnemy,
+                    maxTimeToChangeWantedRadiusAroundEnemy);
+            }
+        }
+
+        private void UpdateTargetPositionAroundEnemy(float dt)
+        {
+            if (!_targetEnemy)
+            {
+                return;
+            }
+
+            _timerChangeWantedPositionAroundEnemy -= dt;
+            if (_timerChangeWantedPositionAroundEnemy <= 0)
+            {
+                _timerChangeWantedPositionAroundEnemy = Random.Range(minPeriodChangeWantedPositionAroundEnemy,
+                    maxPeriodChangeWantedPositionAroundEnemy);
+                Vector2 rand = Random.insideUnitCircle * _wantedRadiusAroundEnemy;
+                _wantedPosition = new Vector3(rand.x, 0, rand.y);
+            }
+
+            UpdateTargetVelocityFromWanted();
+        }
+
+        private void UpdateTargetVelocityFromWanted()
+        {
+            Vector3 curPosition = transform.position;
+            Vector3 deltaPosition = _wantedPosition - curPosition;
+            deltaPosition.y = 0;
+            float deltaMagnitude = deltaPosition.magnitude;
+            if (deltaMagnitude < 0.5f)
+            {
+                ctrl.TargetVelocity = Vector3.zero;
+            }
+            else
+            {
+                ctrl.TargetVelocity = deltaPosition.normalized * moveSpeed;
+            }
         }
 
         private void UpdateRandomRotation(float dt)
@@ -301,18 +362,7 @@ namespace Code.Components
                 _wantedPosition = new Vector3(rand.x, 0, rand.y);
             }
 
-            Vector3 curPosition = transform.position;
-            Vector3 deltaPosition = _wantedPosition - curPosition;
-            deltaPosition.y = 0;
-            float deltaMagnitude = deltaPosition.magnitude;
-            if (deltaMagnitude < 0.5f)
-            {
-                ctrl.TargetVelocity = Vector3.zero;
-            }
-            else
-            {
-                ctrl.TargetVelocity = deltaPosition.normalized * moveSpeed;
-            }
+            UpdateTargetVelocityFromWanted();
         }
 
         private void UpdateFire(float dt)
