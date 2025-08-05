@@ -156,8 +156,8 @@ namespace Code.Components
             Vector3 dir = targetPos - myPos;
 
             Vector3 eulerAngles = Quaternion.LookRotation(dir).eulerAngles;
-            ctrl.LookPitch = eulerAngles.y;
-            ctrl.LookYaw = eulerAngles.x;
+            ctrl.LookPitch = eulerAngles.x;
+            ctrl.LookYaw = eulerAngles.y;
         }
 
         private void UpdateRandomRotation(float dt)

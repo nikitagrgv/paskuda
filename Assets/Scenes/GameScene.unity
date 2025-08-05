@@ -369,7 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2059177129}
   npcPrefab: {fileID: 898362589482774158, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  npcSpawnCount: 150
+  npcSpawnCount: 1
   gameFieldRadius: 50
   gravityMultiplier: 1.2
 --- !u!1001 &340888013
