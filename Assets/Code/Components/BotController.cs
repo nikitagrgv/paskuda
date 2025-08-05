@@ -216,7 +216,7 @@ namespace Code.Components
             Vector3 dir = targetPos - myPos;
 
             Vector3 eulerAngles = Quaternion.LookRotation(dir).eulerAngles;
-            ctrl.LookPitch = eulerAngles.x;
+            ctrl.LookPitch = MathUtils.ToAngleFromNegative180To180(eulerAngles.x);
             ctrl.LookYaw = eulerAngles.y;
         }
 
