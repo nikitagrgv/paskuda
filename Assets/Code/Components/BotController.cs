@@ -309,7 +309,9 @@ namespace Code.Components
                     maxPeriodChangeWantedPositionAroundEnemy);
 
                 float angle = Random.value * 360f;
-                _wantedPosition = new Vector3(_wantedRadiusAroundEnemy * Mathf.Sin(angle), 0, Mathf.Cos(angle));
+                Vector3 enemyPos = _targetEnemy.transform.position;
+                _wantedPosition = new Vector3(_wantedRadiusAroundEnemy * Mathf.Sin(angle) + enemyPos.x, 0,
+                    Mathf.Cos(angle) + enemyPos.z);
             }
 
             UpdateTargetVelocityFromWanted();
