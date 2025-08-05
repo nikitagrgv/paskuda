@@ -131,7 +131,6 @@ namespace Code.Components
         {
             Gizmos.color = Color.blue.WithAlpha(0.8f);
             Gizmos.DrawSphere(_wantedPosition, 2f);
-            Debug.Log(_wantedPosition);
 
             if (_targetEnemy)
             {
@@ -297,6 +296,7 @@ namespace Code.Components
                 _wantedRadiusAroundEnemy = Random.Range(minWantedRadiusAroundEnemy, maxWantedRadiusAroundEnemy);
                 _timerChangeWantedRadiusAroundEnemy = Random.Range(minTimeToChangeWantedRadiusAroundEnemy,
                     maxTimeToChangeWantedRadiusAroundEnemy);
+                _timerChangeWantedPosition = 0f;
             }
         }
 
