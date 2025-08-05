@@ -130,10 +130,10 @@ namespace Code.Components
         {
             if (_targetEnemy)
             {
-                Gizmos.color = Color.red.WithAlpha(0.5f);
+                Gizmos.color = Color.red.WithAlpha(0.8f);
                 Gizmos.DrawSphere(_targetEnemy.transform.position, 1f);
 
-                Gizmos.color = Color.yellow.WithAlpha(0.5f);
+                Gizmos.color = Color.yellow.WithAlpha(0.8f);
                 Gizmos.DrawWireSphere(_targetEnemy.transform.position, _wantedRadiusAroundEnemy);
             }
 
