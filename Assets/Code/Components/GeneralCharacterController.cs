@@ -136,9 +136,11 @@ namespace Code.Components
         private readonly RaycastHit[] _raycastHitBuffer = new RaycastHit[10];
 
         [Inject]
-        public void Construct(ProjectileManager projectileManager)
+        public void Construct(ProjectileManager projectileManager, Health health)
         {
+            Debug.Log($"HEALTH INJECTED {name}");
             _projectileManager = projectileManager;
+            _health = health;
         }
 
         private void Start()
@@ -149,7 +151,7 @@ namespace Code.Components
             _rb = GetComponent<Rigidbody>();
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-            _health = GetComponent<Health>();
+            Debug.Log($"DIED SUBSCRIBED {name}");
             _health.Died += OnDied;
 
             _relationshipsActor = GetComponent<RelationshipsActor>();
@@ -321,6 +323,7 @@ namespace Code.Components
 
         private void OnDied()
         {
+            Debug.Log($"DIED! {name}");
             gameObject.SetActive(false);
             Destroy(gameObject);
         }
