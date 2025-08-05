@@ -339,7 +339,6 @@ namespace Code.Components
                 _targetEnemy = min;
                 _timerChangeEnemy = Random.Range(changeEnemyTimeoutMin, changeEnemyTimeoutMax);
                 RandomizeWantFire();
-                _timerChangeWantedPositionAroundEnemy = 0f;
             }
 
             _timerUpdateNearestEnemy = Random.Range(minPeriodUpdateNearestEnemy, maxPeriodUpdateNearestEnemy);
