@@ -65,7 +65,7 @@ namespace Code.Components
                 if (info.TimeToLive <= 0)
                 {
                     _dying.RemoveAtSwapBack(i);
-                    Destroy(info.Projectile);
+                    Destroy(info.Projectile.gameObject);
                     i--;
                     count--;
                     continue;
