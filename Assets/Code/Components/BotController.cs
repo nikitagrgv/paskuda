@@ -108,9 +108,8 @@ namespace Code.Components
             }
             else
             {
-                ctrl.TargetVelocity = Vector3.zero;
-                UpdateTargetPositionAroundEnemy(dt);
                 RandomizeWantedRadiusAroundEnemy(dt);
+                UpdateTargetPositionAroundEnemy(dt);
                 UpdateEnemyChange(dt);
                 UpdateEnemyVisibility(dt);
                 UpdateRotationToEnemy(dt);
