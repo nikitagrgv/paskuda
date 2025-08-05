@@ -1650,7 +1650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 100
+  count: 0
   team: 1
   radius: 20
   spawnOnStart: 1
@@ -2155,7 +2155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 100
+  count: 0
   team: 3
   radius: 20
   spawnOnStart: 1
@@ -5064,7 +5064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 100
+  count: 1
   team: 2
   radius: 20
   spawnOnStart: 1

@@ -138,7 +138,7 @@ namespace Code.Components
             }
 
             Gizmos.color = Color.deepPink.WithAlpha(0.8f);
-            Gizmos.DrawSphere(_wantedPosition, 1f);
+            Gizmos.DrawSphere(_wantedPosition, 2f);
         }
 
         private void OnHealthChanged(Health.HealthChangeInfo info)
