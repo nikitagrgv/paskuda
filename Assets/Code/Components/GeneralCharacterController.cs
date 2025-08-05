@@ -64,7 +64,7 @@ namespace Code.Components
         public float LookYaw
         {
             get => _lookYaw;
-            set => _lookYaw = MathUtils.ToValidYaw(value);
+            set => _lookYaw = MathUtils.ToAngleFrom0To360(value);
         }
 
         public ActionRequestType JumpRequest
