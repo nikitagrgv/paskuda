@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace Code.Components
 {
@@ -96,6 +98,15 @@ namespace Code.Components
             UpdateJump(dt);
             UpdateDash(dt);
             UpdateFire(dt);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            if (_targetEnemy)
+            {
+                Gizmos.DrawWireSphere(_targetEnemy.transform.position, 1f);
+            }
         }
 
         private void OnBecomeVisible(GameObject go, VisibilityChecker.Info info)

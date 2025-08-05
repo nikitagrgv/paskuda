@@ -23,8 +23,9 @@ namespace Code.Components
 
         [Header("Movement")]
         public float minPitch = -87f;
+
         public float maxPitch = 87f;
-        
+
         public float moveAccelerationOnGround = 0.7f;
 
         public float moveAccelerationOnFly = 0.55f;
@@ -243,6 +244,8 @@ namespace Code.Components
 
             Vector3 end = groundCheckerCenter + Vector3.down * (groundCheckerRadius + normalCheckMaxDistance);
             Gizmos.DrawLine(groundCheckerCenter, end);
+
+            Gizmos.DrawLine(eyeObject.transform.position, eyeObject.transform.forward * 2f);
         }
 
         private bool DoJump()
