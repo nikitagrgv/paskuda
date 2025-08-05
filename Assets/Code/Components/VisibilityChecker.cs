@@ -1,16 +1,19 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using ModestTree;
 
 namespace Code.Components
 {
     public class VisibilityChecker : MonoBehaviour
     {
-        public static float FieldOfView = 90f;
-        public static float Aspect = 1f;
-        public static float Near = 0.2f;
-        public static float Far = 35f;
+        const float FieldOfView = 90f;
+        const float Aspect = 1f;
+        const float Near = 0.2f;
+        const float Far = 35f;
 
-        public static Mesh FrustumMesh
+        private static Mesh FrustumMesh
         {
             get
             {
@@ -19,14 +22,18 @@ namespace Code.Components
             }
         }
 
+        public event Action<GameObject, Info> BecomeVisible;
+        public event Action<GameObject, Info> BecomeInvisible;
+
         public GameObject ignore;
 
-        struct Info
+        public struct Info
         {
             public RelationshipsActor RelationshipsActor;
+            public Health Health;
         }
 
-        private readonly Dictionary<GameObject, Info> _visibleObjectsMap = new(5);
+        public readonly Dictionary<GameObject, Info> VisibleObjectsMap = new(5);
 
         private static Vector3[] _frustumVertices;
         private static Mesh _frustumMesh;
@@ -38,17 +45,11 @@ namespace Code.Components
 
         private void Update()
         {
-            // _visibleObjects.Clear();
-            // _visibleObjectsSet.RemoveWhere(obj =>
-            // {
-            //     bool deleted = !obj;
-            //     if (!deleted)
-            //     {
-            //         _visibleObjects.Add(obj);
-            //     }
-            //
-            //     return deleted;
-            // });
+            List<GameObject> invalid = VisibleObjectsMap
+                .Where(v => !v.Key)
+                .Select(v => v.Key)
+                .ToList();
+            invalid.ForEach(v => { VisibleObjectsMap.Remove(v); });
         }
 
         private void OnTriggerEnter(Collider other)
@@ -59,15 +60,23 @@ namespace Code.Components
                 return;
             }
 
-            RelationshipsActor ra = go.GetComponent<RelationshipsActor>();
-            if (!ra)
+            if (VisibleObjectsMap.ContainsKey(go))
             {
                 return;
             }
 
-            Info info = new() { RelationshipsActor = ra };
+            RelationshipsActor ra = go.GetComponent<RelationshipsActor>();
+            Health health = go.GetComponent<Health>();
+            if (!ra || !health)
+            {
+                return;
+            }
 
-            _visibleObjectsMap[go] = info;
+            Info info = new() { RelationshipsActor = ra, Health = health };
+
+            VisibleObjectsMap[go] = info;
+
+            BecomeVisible?.Invoke(go, info);
         }
 
         private void OnTriggerExit(Collider other)
@@ -78,7 +87,8 @@ namespace Code.Components
                 return;
             }
 
-            _visibleObjectsMap.Remove(go);
+            Info info = VisibleObjectsMap.GetValueAndRemove(go);
+            BecomeInvisible?.Invoke(go, info);
         }
 
         private void OnDrawGizmosSelected()
@@ -88,7 +98,7 @@ namespace Code.Components
                 return;
 
             Gizmos.color = Color.red;
-            foreach (KeyValuePair<GameObject, Info> v in _visibleObjectsMap)
+            foreach (KeyValuePair<GameObject, Info> v in VisibleObjectsMap)
             {
                 Gizmos.DrawSphere(v.Key.transform.position, 2f);
             }
