@@ -39,12 +39,15 @@ namespace Code.Components
         private ActorFactory _actorFactory;
 
         [Inject]
-        public void Construct(GameConstants consts, ActorFactory actorFactory)
+        public void Construct(GameConstants consts, [InjectOptional] ActorFactory actorFactory)
         {
             _consts = consts;
             _actorFactory = actorFactory;
 
-            _actorFactory.Spawned += OnActorSpawned;
+            if (_actorFactory)
+            {
+                _actorFactory.Spawned += OnActorSpawned;
+            }
         }
 
         private void Start()
