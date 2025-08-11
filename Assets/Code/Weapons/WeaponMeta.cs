@@ -32,6 +32,7 @@ namespace Code.Weapons
             {
                 Projectile projectile = _projectiles.Last();
                 _projectiles.RemoveAt(_projectiles.Count - 1);
+                projectile.gameObject.SetActive(true);
                 return projectile;
             }
 
