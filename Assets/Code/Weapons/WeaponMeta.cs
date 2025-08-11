@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Code.Components;
 using UnityEngine;
 
@@ -27,12 +28,20 @@ namespace Code.Weapons
 
         public Projectile SpawnProjectile()
         {
+            if (_projectiles.Count > 0)
+            {
+                Projectile projectile = _projectiles.Last();
+                _projectiles.RemoveAt(_projectiles.Count - 1);
+                return projectile;
+            }
+
             return Instantiate(projectilePrefab);
         }
 
         public void RemoveProjectile(Projectile projectile)
         {
-            Destroy(projectile.gameObject);
+            projectile.gameObject.SetActive(false);
+            _projectiles.Add(projectile);
         }
 
         [NonSerialized]
