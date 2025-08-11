@@ -333,7 +333,7 @@ GameObject:
   m_Component:
   - component: {fileID: 229692973}
   m_Layer: 0
-  m_Name: Spawners
+  m_Name: Game Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -402,8 +402,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2059177129}
-  npcPrefab: {fileID: 898362589482774158, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  npcSpawnCount: 400
   gameFieldRadius: 50
   gravityMultiplier: 1.2
 --- !u!1001 &340888013
@@ -1675,7 +1673,7 @@ Transform:
   m_GameObject: {fileID: 941065866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -171.8, y: 1.5, z: 54.9}
+  m_LocalPosition: {x: -67.8, y: 1.5, z: -0.7999954}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1696,7 +1694,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   count: 100
   team: 1
-  radius: 200
+  radius: 50
   spawnOnStart: 1
 --- !u!1 &1055604813
 GameObject:
@@ -2210,7 +2208,7 @@ Transform:
   m_GameObject: {fileID: 1117985436}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -140.6, y: 1.5, z: 62.7}
+  m_LocalPosition: {x: -36.600006, y: 1.5, z: 7.000004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2231,7 +2229,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   count: 100
   team: 3
-  radius: 200
+  radius: 50
   spawnOnStart: 1
 --- !u!1 &1121747892
 GameObject:
@@ -5161,7 +5159,7 @@ Transform:
   m_GameObject: {fileID: 1938533089}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -133.7, y: 1.5, z: 35.3}
+  m_LocalPosition: {x: -29.7, y: 1.5, z: -20.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5182,7 +5180,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   count: 100
   team: 2
-  radius: 200
+  radius: 50
   spawnOnStart: 1
 --- !u!1 &1960275807
 GameObject:
