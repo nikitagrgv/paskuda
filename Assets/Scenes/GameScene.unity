@@ -832,7 +832,7 @@ MonoBehaviour:
   - weapon: {fileID: 11400000, guid: 5fe4f411b63b5ad479e64498346b1c6f, type: 2}
     chanceFactor: 2
   - weapon: {fileID: 11400000, guid: e4c9c36d8057d1b42864ed89247cb5e6, type: 2}
-    chanceFactor: 1
+    chanceFactor: 199
 --- !u!1 &480546952
 GameObject:
   m_ObjectHideFlags: 0

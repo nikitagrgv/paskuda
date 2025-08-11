@@ -499,7 +499,7 @@ namespace Code.Components
         {
             if (ctrl.weapon.fireReloadTime < 0.01f)
             {
-                if (_targetEnemy)
+                if (!_targetEnemy)
                 {
                     return;
                 }
