@@ -32,13 +32,10 @@ namespace Code.Components
 
             dir = dir.WithSpread(weapon.spread);
 
-            Vector2 spread = Random.insideUnitCircle * weapon.spread;
-            Vector3 newDir = Quaternion.Euler(spread.x, spread.y, 0f) * dir; 
-
             projectile.transform.position = start;
             projectile.transform.rotation = Quaternion.LookRotation(dir);
 
-            Vector3 velocity = newDir * weapon.bulletSpeed;
+            Vector3 velocity = dir * weapon.bulletSpeed;
 
             ProjectileInfo info = new()
             {
