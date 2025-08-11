@@ -139,7 +139,6 @@ namespace Code.Components
             }
             else
             {
-                Debug.Log("SET");
                 _timeController.SetTimeScale(0.25f);
             }
         }
