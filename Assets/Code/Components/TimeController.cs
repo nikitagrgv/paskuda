@@ -10,14 +10,16 @@ namespace Code.Components
 
         public void SetTimeScale(float scale)
         {
+            Debug.Log($"SET {scale}");
             Time.timeScale = scale;
             _scaleChanged = true;
         }
 
         public void ResetTimeScale()
         {
+            Debug.Log("RESET");
             Time.timeScale = 1;
-            _scaleChanged = true;
+            _scaleChanged = false;
         }
 
         private void OnDisable()

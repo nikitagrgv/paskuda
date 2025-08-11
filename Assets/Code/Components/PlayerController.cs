@@ -130,6 +130,8 @@ namespace Code.Components
             {
                 return;
             }
+            
+            Debug.Log(context);
 
             if (_timeController.IsTimeScaleChanged())
             {
@@ -137,6 +139,7 @@ namespace Code.Components
             }
             else
             {
+                Debug.Log("SET");
                 _timeController.SetTimeScale(0.25f);
             }
         }
