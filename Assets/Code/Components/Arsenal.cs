@@ -6,6 +6,5 @@ namespace Code.Components
 {
     public class Arsenal : MonoBehaviour
     {
-        public List<Weapon> weapons;
     }
 }
