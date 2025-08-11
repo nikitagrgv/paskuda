@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Code.Weapons;
 using UnityEngine;
 
 namespace Code.Components
