@@ -12,7 +12,7 @@ namespace Code.Components
         public class ArsenalWeapon
         {
             public WeaponMeta weapon;
-            public float chanceFactor;
+            public float chanceFactor = 1f;
         }
 
         public List<ArsenalWeapon> weapons = new();
