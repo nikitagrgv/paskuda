@@ -1650,7 +1650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 200
+  count: 100
   team: 1
   radius: 20
   spawnOnStart: 1
@@ -1939,6 +1939,7 @@ GameObject:
   - component: {fileID: 1105136995}
   - component: {fileID: 1105136996}
   - component: {fileID: 1105136997}
+  - component: {fileID: 1105136998}
   m_Layer: 0
   m_Name: System
   m_TagString: Untagged
@@ -1963,6 +1964,7 @@ Transform:
   - {fileID: 1140413245}
   - {fileID: 1204683197}
   - {fileID: 1733928914}
+  - {fileID: 1856439785}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1105136994
@@ -1982,6 +1984,7 @@ MonoBehaviour:
   - {fileID: 1105136995}
   - {fileID: 1105136996}
   - {fileID: 1105136997}
+  - {fileID: 1105136998}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2033,6 +2036,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a37be5a21db141568b9d90cf96fb3c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1105136998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105136992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 490d9cf407f0d2a499501238927cbaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1116715650
@@ -2155,7 +2170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 200
+  count: 100
   team: 3
   radius: 20
   spawnOnStart: 1
@@ -4662,6 +4677,50 @@ MonoBehaviour:
   mouseSensitivity: 0.06
   gamepadSensitivity: 60
   gamepadFastSensitivity: 160
+--- !u!1 &1856439784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1856439785}
+  - component: {fileID: 1856439786}
+  m_Layer: 0
+  m_Name: Time Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1856439785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856439784}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1105136993}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1856439786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856439784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de7aff97faa0c5f4e8105033df6f3c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1873263982
 GameObject:
   m_ObjectHideFlags: 0
@@ -5064,7 +5123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
-  count: 200
+  count: 100
   team: 2
   radius: 20
   spawnOnStart: 1

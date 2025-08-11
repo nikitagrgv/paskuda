@@ -4,6 +4,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 using ColorUtility = UnityEngine.ColorUtility;
 
 namespace Code.Components
@@ -72,6 +73,14 @@ namespace Code.Components
         private float _diedAnimationEndTime = -1f;
 
         private bool _needUpdateScore = true;
+
+        private TimeController _timeController;
+
+        [Inject]
+        public void Construct(TimeController timeController)
+        {
+            _timeController = timeController;
+        }
 
         private void Start()
         {
@@ -173,12 +182,15 @@ namespace Code.Components
 
             float value = diedAnimationCurve.Evaluate(_diedAnimationCurTime);
             diedScreen.alpha = value;
-            Time.timeScale = 1f - value;
-            if (_diedAnimationCurTime > _diedAnimationEndTime)
+            if (_diedAnimationCurTime < _diedAnimationEndTime)
+            {
+                _timeController.SetTimeScale(1f - value);
+            }
+            else
             {
                 diedScreen.gameObject.SetActive(false);
                 _diedAnimationCurTime = -1f;
-                Time.timeScale = 1f;
+                _timeController.ResetTimeScale();
             }
         }
 

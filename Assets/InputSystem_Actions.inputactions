@@ -517,10 +517,21 @@
                 {
                     "name": "",
                     "id": "6c4f5615-7ff9-4421-b90d-0e650c5e5340",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
+                    "action": "ToggleSlowMotionMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6b3b2f38-5f48-450c-a2f9-b5e8c5d236d2",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
                     "action": "ToggleSlowMotionMode",
                     "isComposite": false,
                     "isPartOfComposite": false

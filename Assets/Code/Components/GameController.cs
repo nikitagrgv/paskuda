@@ -37,12 +37,15 @@ namespace Code.Components
         private const string PlayerMapName = "Player";
 
         private ActorFactory _actorFactory;
+        private TimeController _timeController;
 
         [Inject]
-        public void Construct(GameConstants consts, [InjectOptional] ActorFactory actorFactory)
+        public void Construct(GameConstants consts, [InjectOptional] ActorFactory actorFactory,
+            TimeController timeController)
         {
             _consts = consts;
             _actorFactory = actorFactory;
+            _timeController = timeController;
 
             if (_actorFactory)
             {
@@ -122,7 +125,7 @@ namespace Code.Components
 
         private void OnPlayerBeforeDied()
         {
-            Time.timeScale = 1f;
+            _timeController.ResetTimeScale();
 
             Camera playerCamera = _consts.player.GetComponentInChildren<Camera>();
             playerCamera.enabled = false;

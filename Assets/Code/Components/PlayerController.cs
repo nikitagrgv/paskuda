@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -29,6 +30,14 @@ namespace Code.Components
         private bool _isWalking;
 
         private GeneralCharacterController _ctrl;
+
+        private TimeController _timeController;
+
+        [Inject]
+        private void Construct(TimeController timeController)
+        {
+            _timeController = timeController;
+        }
 
         private void Start()
         {
@@ -122,13 +131,13 @@ namespace Code.Components
                 return;
             }
 
-            if (Mathf.Approximately(Time.timeScale, 1f))
+            if (_timeController.IsTimeScaleChanged())
             {
-                Time.timeScale = 0.25f;
+                _timeController.ResetTimeScale();
             }
             else
             {
-                Time.timeScale = 1f;
+                _timeController.SetTimeScale(0.25f);
             }
         }
 
