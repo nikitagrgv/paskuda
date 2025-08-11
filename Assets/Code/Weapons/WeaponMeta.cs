@@ -28,15 +28,15 @@ namespace Code.Weapons
 
         public Projectile SpawnProjectile()
         {
-            if (_projectiles.Count > 0)
+            if (_projectiles.Count <= 0)
             {
-                Projectile projectile = _projectiles.Last();
-                _projectiles.RemoveAt(_projectiles.Count - 1);
-                projectile.gameObject.SetActive(true);
-                return projectile;
+                return Instantiate(projectilePrefab);
             }
 
-            return Instantiate(projectilePrefab);
+            Projectile projectile = _projectiles.Last();
+            _projectiles.RemoveAt(_projectiles.Count - 1);
+            projectile.gameObject.SetActive(true);
+            return projectile;
         }
 
         public void RemoveProjectile(Projectile projectile)
