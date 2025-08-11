@@ -20,6 +20,7 @@ public class TeamSpawner : MonoBehaviour
     public void Construct(ActorFactory factory, Arsenal arsenal)
     {
         _factory = factory;
+        _arsenal = arsenal;
     }
 
     public void Start()
@@ -49,6 +50,10 @@ public class TeamSpawner : MonoBehaviour
         Vector2 pos2 = Random.insideUnitCircle * radius;
         Vector3 pos3 = transform.position + new Vector3(pos2.x, 0f, pos2.y);
 
-        _factory.Create(npcPrefab, team, pos3, Quaternion.identity);
+        _factory.Create(npcPrefab, team, pos3, Quaternion.identity, actor =>
+        {
+            GeneralCharacterController c = actor.GetComponent<GeneralCharacterController>();
+            c.weapon = _arsenal.GetRandomWeapon();
+        });
     }
 }
