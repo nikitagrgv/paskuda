@@ -16,6 +16,7 @@ namespace Code.Weapons
 
         public float fireReloadTime = 0.4f;
         public float bulletDamage = 12f;
+        public int numBullets = 1;
 
         public float bulletImpulse = 20f;
         public float bulletBackImpulse = 2f;

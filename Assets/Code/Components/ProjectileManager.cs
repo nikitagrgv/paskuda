@@ -25,27 +25,36 @@ namespace Code.Components
         private readonly List<ProjectileInfo> _active = new();
         private readonly List<ProjectileInfo> _dying = new();
 
-        public void Fire(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color)
+        public void Fire(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color,
+            out Vector3 backImpulse)
         {
-            Projectile projectile = weapon.SpawnProjectile();
-            projectile.SetColor(color);
+            backImpulse = new Vector3();
 
-            dir = dir.WithSpread(weapon.spread);
-
-            projectile.transform.position = start;
-            projectile.transform.rotation = Quaternion.LookRotation(dir);
-
-            Vector3 velocity = dir * weapon.bulletSpeed;
-
-            ProjectileInfo info = new()
+            int numBullets = weapon.numBullets;
+            for (int i = 0; i < numBullets; i++)
             {
-                Sender = sender,
-                Weapon = weapon,
-                Projectile = projectile,
-                Velocity = velocity,
-                TimeToLive = weapon.bulletLifeTime,
-            };
-            _active.Add(info);
+                Projectile projectile = weapon.SpawnProjectile();
+                projectile.SetColor(color);
+
+                Vector3 newDir = dir.WithSpread(weapon.spread);
+
+                projectile.transform.position = start;
+                projectile.transform.rotation = Quaternion.LookRotation(newDir);
+
+                Vector3 velocity = newDir * weapon.bulletSpeed;
+
+                ProjectileInfo info = new()
+                {
+                    Sender = sender,
+                    Weapon = weapon,
+                    Projectile = projectile,
+                    Velocity = velocity,
+                    TimeToLive = weapon.bulletLifeTime,
+                };
+                _active.Add(info);
+
+                backImpulse -= newDir * weapon.bulletBackImpulse;
+            }
         }
 
         private void Update()

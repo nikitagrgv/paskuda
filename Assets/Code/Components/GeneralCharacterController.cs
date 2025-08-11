@@ -293,8 +293,8 @@ namespace Code.Components
 
             Color color = Teams.ToColor(_relationshipsActor.Team);
 
-            _projectileManager.Fire(gameObject, weapon, start, lookDir, color);
-            _rb.AddForceAtPosition(-lookDir * weapon.bulletBackImpulse, start, ForceMode.Impulse);
+            _projectileManager.Fire(gameObject, weapon, start, lookDir, color, out Vector3 backImpulse);
+            _rb.AddForceAtPosition(backImpulse, start, ForceMode.Impulse);
 
             NotifyFired();
             return true;
