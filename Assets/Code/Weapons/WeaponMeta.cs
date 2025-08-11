@@ -45,6 +45,11 @@ namespace Code.Weapons
             _projectiles.Add(projectile);
         }
 
+        public void MakeCrashed(Projectile projectile)
+        {
+            projectile.MakeCrashed();
+        }
+
         [NonSerialized]
         private List<Projectile> _projectiles = new();
     }
