@@ -23,6 +23,6 @@ MonoBehaviour:
   bulletLifeTime: 0.2
   bulletSpeed: 10000
   spread: 0
-  bulletReboundChance: 1
+  bulletReboundChance: 0.8
   multiplierByRebound: 0.4
   bulletGravityFactor: 1
