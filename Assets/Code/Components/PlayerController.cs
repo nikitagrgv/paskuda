@@ -124,7 +124,7 @@ namespace Code.Components
 
             if (Mathf.Approximately(Time.timeScale, 1f))
             {
-                Time.timeScale = 0.1f;
+                Time.timeScale = 0.25f;
             }
             else
             {
