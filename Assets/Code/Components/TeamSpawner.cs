@@ -14,9 +14,10 @@ public class TeamSpawner : MonoBehaviour
     public bool spawnOnStart = true;
 
     private ActorFactory _factory;
+    private Arsenal _arsenal;
 
     [Inject]
-    public void Construct(ActorFactory factory)
+    public void Construct(ActorFactory factory, Arsenal arsenal)
     {
         _factory = factory;
     }
