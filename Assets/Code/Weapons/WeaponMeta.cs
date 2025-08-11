@@ -22,6 +22,7 @@ namespace Code.Weapons
 
         public float bulletLifeTime = 2.5f;
         public float bulletSpeed = 170f;
+        public float spread = 0.1f;
 
         public float bulletReboundChance = 0.6f;
         public float bulletGravityFactor = 1f;
