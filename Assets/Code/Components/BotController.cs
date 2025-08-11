@@ -497,6 +497,17 @@ namespace Code.Components
 
         private void RandomizeWantFire()
         {
+            if (ctrl.weapon.fireReloadTime < 0.01f)
+            {
+                if (_targetEnemy)
+                {
+                    return;
+                }
+
+                float mul = ctrl.weapon.fireReloadTime * 3;
+                _timerWantFire = Random.Range(minPeriodWantFire * mul, maxPeriodWantFire * mul);
+            }
+
             if (_targetEnemy)
             {
                 _timerWantFire = Random.Range(minPeriodWantFire, maxPeriodWantFire);
