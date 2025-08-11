@@ -54,7 +54,7 @@ namespace Code.Components
                 };
                 _active.Add(info);
 
-                backImpulse -= newDir * weapon.bulletBackImpulse;
+                backImpulse -= newDir * backImpulseByBullet;
             }
         }
 
