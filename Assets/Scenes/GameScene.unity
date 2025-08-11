@@ -1675,7 +1675,7 @@ Transform:
   m_GameObject: {fileID: 941065866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -39.3, y: 1.5, z: -13.6}
+  m_LocalPosition: {x: -171.8, y: 1.5, z: 54.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1696,7 +1696,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   count: 100
   team: 1
-  radius: 20
+  radius: 200
   spawnOnStart: 1
 --- !u!1 &1055604813
 GameObject:
@@ -2210,7 +2210,7 @@ Transform:
   m_GameObject: {fileID: 1117985436}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -56.6, y: 1.5, z: 223.9}
+  m_LocalPosition: {x: -140.6, y: 1.5, z: 62.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2231,7 +2231,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   count: 100
   team: 3
-  radius: 20
+  radius: 200
   spawnOnStart: 1
 --- !u!1 &1121747892
 GameObject:
@@ -5161,7 +5161,7 @@ Transform:
   m_GameObject: {fileID: 1938533089}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -146, y: 1.5, z: -2.4}
+  m_LocalPosition: {x: -133.7, y: 1.5, z: 35.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5182,7 +5182,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 3283579822013187827, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   count: 100
   team: 2
-  radius: 20
+  radius: 200
   spawnOnStart: 1
 --- !u!1 &1960275807
 GameObject:
