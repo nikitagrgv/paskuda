@@ -103,7 +103,9 @@ namespace Code.Components
         public float RemainingDashTimeNormalized => Mathf.Clamp(_dashTimer / dashReloadTime, 0f, 1f);
 
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
-        public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / weapon.fireReloadTime, 0f, 1f);
+
+        public float RemainingReloadTimeNormalized =>
+            weapon.fireReloadTime == 0 ? 0 : Mathf.Clamp(_fireTimer / weapon.fireReloadTime, 0f, 1f);
 
         public event Action Fired;
 

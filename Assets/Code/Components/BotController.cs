@@ -505,7 +505,7 @@ namespace Code.Components
                 }
 
                 float mul = ctrl.weapon.fireReloadTime * 3;
-                _timerWantFire = Random.Range(minPeriodWantFire * mul, maxPeriodWantFire * mul);
+                _timerWantFire = Random.Range(0, maxPeriodWantFire * mul);
                 return;
             }
 
