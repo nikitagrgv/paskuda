@@ -127,7 +127,7 @@ namespace Code.Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            float damage = info.Weapon.bulletImpulse;
+            float damage = info.Weapon.bulletDamage;
             health.ApplyDamageHit(damage, info.Sender);
         }
 
