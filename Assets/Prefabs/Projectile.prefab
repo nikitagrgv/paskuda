@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 385431825134229407}
   - component: {fileID: 4338427497736120012}
   m_Layer: 0
-  m_Name: Base
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,10 +133,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc079847b9161924ebf2b340dd5f6ff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileBase: {fileID: 5934472508386744487}
-  projectileBaseRenderer: {fileID: 4338427497736120012}
-  projectileTrail: {fileID: 8074878735589325944}
-  projectileExplosion: {fileID: 5136679464494330324}
+  projectileHead: {fileID: 5934472508386744487}
+  projectileHeadRenderer: {fileID: 4338427497736120012}
+  projectileTrailRenderer: {fileID: 8074878735589325944}
+  projectileExplosionRenderer: {fileID: 5136679464494330324}
+  projectileExplosionParticles: {fileID: 8399113598546582742}
 --- !u!1 &6966268579849161866
 GameObject:
   m_ObjectHideFlags: 0
