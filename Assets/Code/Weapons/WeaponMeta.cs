@@ -46,6 +46,6 @@ namespace Code.Weapons
         }
 
         [NonSerialized]
-        private List<Projectile> _projectiles;
+        private List<Projectile> _projectiles = new();
     }
 }
