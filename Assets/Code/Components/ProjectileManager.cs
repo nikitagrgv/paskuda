@@ -30,12 +30,15 @@ namespace Code.Components
             Projectile projectile = weapon.SpawnProjectile();
             projectile.SetColor(color);
 
-            Vector3 spread = Random.insideUnitSphere * weapon.spread;
+            dir = dir.WithSpread(weapon.spread);
+
+            Vector2 spread = Random.insideUnitCircle * weapon.spread;
+            Vector3 newDir = Quaternion.Euler(spread.x, spread.y, 0f) * dir; 
 
             projectile.transform.position = start;
             projectile.transform.rotation = Quaternion.LookRotation(dir);
 
-            Vector3 velocity = (dir + spread).normalized * weapon.bulletSpeed;
+            Vector3 velocity = newDir * weapon.bulletSpeed;
 
             ProjectileInfo info = new()
             {

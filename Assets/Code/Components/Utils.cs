@@ -29,6 +29,12 @@ namespace Code.Components
             }
         }
 
+        public static Vector3 WithSpread(this Vector3 direction, float spread)
+        {
+            Vector2 spreadVec = Random.insideUnitCircle * spread;
+            return Quaternion.Euler(spreadVec.x, spreadVec.y, 0f) * direction;
+        }
+
         public static bool TryChance(float chance)
         {
             return Random.value < chance;
