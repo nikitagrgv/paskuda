@@ -506,6 +506,7 @@ namespace Code.Components
 
                 float mul = ctrl.weapon.fireReloadTime * 3;
                 _timerWantFire = Random.Range(minPeriodWantFire * mul, maxPeriodWantFire * mul);
+                return;
             }
 
             if (_targetEnemy)
