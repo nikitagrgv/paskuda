@@ -76,7 +76,7 @@ namespace Code.Components
 
         private float _timerWantFire;
 
-        private GameConstants _gameConstants;
+        private GameField _gameField;
 
         private GeneralCharacterController _targetEnemy;
         private float _timerForgetEnemy = -1;
@@ -90,9 +90,9 @@ namespace Code.Components
         private float _timerChangeWantedPositionAroundEnemy;
 
         [Inject]
-        public void Construct(GameConstants gameConstants)
+        public void Construct(GameField gameField)
         {
-            _gameConstants = gameConstants;
+            _gameField = gameField;
         }
 
         private void Start()
@@ -478,7 +478,7 @@ namespace Code.Components
             if (_timerChangeWantedPosition <= 0)
             {
                 _timerChangeWantedPosition = Random.Range(minPeriodChangeWantedPosition, maxPeriodChangeWantedPosition);
-                Vector2 rand = Random.insideUnitCircle * _gameConstants.gameFieldRadius;
+                Vector2 rand = Random.insideUnitCircle * _gameField.gameFieldRadius;
                 _wantedPosition = new Vector3(rand.x, 0, rand.y);
             }
 
