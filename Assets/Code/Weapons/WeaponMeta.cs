@@ -23,6 +23,7 @@ namespace Code.Weapons
         public float bulletSpeed = 170f;
 
         public float bulletReboundChance = 0.6f;
+        public float bulletGravityFactor = 1f;
 
         public Projectile SpawnProjectile()
         {

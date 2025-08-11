@@ -4,6 +4,7 @@ using Code.Weapons;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
+using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Code.Components
@@ -71,6 +72,8 @@ namespace Code.Components
 
         private void UpdateActive(float dt)
         {
+            Vector3 gravity = Physics.gravity;
+
             int mask = interactableLayers.value;
 
             int count = _active.Count;
