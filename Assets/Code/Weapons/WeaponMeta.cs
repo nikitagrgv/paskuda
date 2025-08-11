@@ -35,13 +35,13 @@ namespace Code.Weapons
 
             Projectile projectile = _projectiles.Last();
             _projectiles.RemoveAt(_projectiles.Count - 1);
-            projectile.gameObject.SetActive(true);
+            projectile.MakeVisible();
             return projectile;
         }
 
         public void RemoveProjectile(Projectile projectile)
         {
-            projectile.gameObject.SetActive(false);
+            projectile.MakeHidden();
             _projectiles.Add(projectile);
         }
 
