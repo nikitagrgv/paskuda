@@ -25,15 +25,17 @@ namespace Code.Components
         private readonly List<ProjectileInfo> _active = new();
         private readonly List<ProjectileInfo> _dying = new();
 
-        public void AddProjectile(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color)
+        public void Fire(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color)
         {
             Projectile projectile = weapon.SpawnProjectile();
             projectile.SetColor(color);
 
+            Vector3 spread = Random.insideUnitSphere * weapon.spread;
+
             projectile.transform.position = start;
             projectile.transform.rotation = Quaternion.LookRotation(dir);
 
-            Vector3 velocity = dir * weapon.bulletSpeed;
+            Vector3 velocity = (dir + spread).normalized * weapon.bulletSpeed;
 
             ProjectileInfo info = new()
             {
