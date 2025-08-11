@@ -45,7 +45,7 @@ namespace Code.Weapons
             _projectiles.Add(projectile);
         }
 
-        public void MakeCrashed(Projectile projectile)
+        public void CrashProjectile(Projectile projectile)
         {
             projectile.MakeCrashed();
         }

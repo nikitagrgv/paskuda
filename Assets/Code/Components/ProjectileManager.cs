@@ -143,7 +143,7 @@ namespace Code.Components
         private void MoveToDying(ProjectileInfo info)
         {
             info.TimeToLive = 1f;
-            info.Weapon.MakeCrashed(info.Projectile);
+            info.Weapon.CrashProjectile(info.Projectile);
             _dying.Add(info);
         }
     }
