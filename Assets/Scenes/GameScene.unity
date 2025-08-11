@@ -1940,6 +1940,7 @@ GameObject:
   - component: {fileID: 1105136996}
   - component: {fileID: 1105136997}
   - component: {fileID: 1105136998}
+  - component: {fileID: 1105136999}
   m_Layer: 0
   m_Name: System
   m_TagString: Untagged
@@ -1985,6 +1986,7 @@ MonoBehaviour:
   - {fileID: 1105136996}
   - {fileID: 1105136997}
   - {fileID: 1105136998}
+  - {fileID: 1105136999}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2048,6 +2050,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 490d9cf407f0d2a499501238927cbaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1105136999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105136992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6524c0baca314652bf459521e271da50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1116715650
@@ -4839,8 +4853,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe25b39e76db16f46b9d3385e84a95ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 1140413247}
-  projectileManager: {fileID: 0}
   playerController: {fileID: 2059177129}
   playerHealth: {fileID: 1143200943}
   healthImage: {fileID: 545946222}
