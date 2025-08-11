@@ -17,7 +17,7 @@ namespace Code.Components
 
         public List<ArsenalWeapon> weapons = new();
 
-        private bool _calculated = false;
+        private bool _calculated;
         private float _totalChance;
 
         public WeaponMeta GetRandomWeapon()
