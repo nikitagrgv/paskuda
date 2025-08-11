@@ -182,7 +182,7 @@ namespace Code.Components
 
             float value = diedAnimationCurve.Evaluate(_diedAnimationCurTime);
             diedScreen.alpha = value;
-            if (_diedAnimationCurTime < _diedAnimationEndTime)
+            if (_diedAnimationCurTime <= _diedAnimationEndTime)
             {
                 _timeController.SetTimeScale(1f - value);
             }
