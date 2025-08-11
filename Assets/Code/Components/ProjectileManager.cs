@@ -28,9 +28,10 @@ namespace Code.Components
         public void Fire(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color,
             out Vector3 backImpulse)
         {
-            backImpulse = new Vector3();
-
             int numBullets = weapon.numBullets;
+
+            float backImpulseByBullet = weapon.bulletBackImpulse / numBullets;
+            backImpulse = new Vector3();
             for (int i = 0; i < numBullets; i++)
             {
                 Projectile projectile = weapon.SpawnProjectile();
@@ -138,7 +139,9 @@ namespace Code.Components
 
         private static void ApplyHit(RaycastHit hit, ProjectileInfo info)
         {
-            float impulse = info.Weapon.bulletImpulse;
+            float numBullets = info.Weapon.numBullets;
+
+            float impulse = info.Weapon.bulletImpulse / numBullets;
             hit.rigidbody?.AddForceAtPosition(info.Velocity.normalized * impulse, hit.point, ForceMode.Impulse);
 
             GameObject go = hit.collider?.gameObject;
@@ -147,7 +150,7 @@ namespace Code.Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            float damage = info.Weapon.bulletDamage;
+            float damage = info.Weapon.bulletDamage / numBullets;
             health.ApplyDamageHit(damage, info.Sender);
         }
 
