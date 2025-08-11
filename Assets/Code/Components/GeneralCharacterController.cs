@@ -158,7 +158,7 @@ namespace Code.Components
             _fireTimer = Math.Max(0, _fireTimer - dt);
             if (_fireRequest != ActionRequestType.NotRequested)
             {
-                bool done = DoFire();
+                bool done = DoFire(dt);
                 UpdateRequest(ref _fireRequest, done);
             }
 
@@ -279,7 +279,7 @@ namespace Code.Components
             return true;
         }
 
-        private bool DoFire()
+        private bool DoFire(float dt)
         {
             if (_fireTimer > 0)
             {
@@ -293,7 +293,7 @@ namespace Code.Components
 
             Color color = Teams.ToColor(_relationshipsActor.Team);
 
-            _projectileManager.Fire(gameObject, weapon, start, lookDir, color, out Vector3 backImpulse);
+            _projectileManager.Fire(gameObject, weapon, start, lookDir, color, dt, out Vector3 backImpulse);
             _rb.AddForceAtPosition(backImpulse, start, ForceMode.Impulse);
 
             NotifyFired();

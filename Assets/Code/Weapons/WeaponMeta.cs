@@ -14,6 +14,8 @@ namespace Code.Weapons
 
         public Projectile projectilePrefab;
 
+        public bool isDamageByTime;
+
         public float fireReloadTime = 0.4f;
         public float bulletDamage = 12f;
         public int numBullets = 1;

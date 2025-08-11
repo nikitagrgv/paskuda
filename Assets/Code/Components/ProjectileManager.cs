@@ -20,15 +20,18 @@ namespace Code.Components
             public Projectile Projectile;
             public Vector3 Velocity;
             public float TimeToLive;
+            public float EffectMultiplier;
         }
 
         private readonly List<ProjectileInfo> _active = new();
         private readonly List<ProjectileInfo> _dying = new();
 
-        public void Fire(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color,
+        public void Fire(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color, float dt,
             out Vector3 backImpulse)
         {
             int numBullets = weapon.numBullets;
+
+            float effectMultiplier = weapon.isDamageByTime ? dt * weapon.bulletDamage : 1f;
 
             float backImpulseByBullet = weapon.bulletBackImpulse / numBullets;
             backImpulse = new Vector3();
@@ -51,6 +54,7 @@ namespace Code.Components
                     Projectile = projectile,
                     Velocity = velocity,
                     TimeToLive = weapon.bulletLifeTime,
+                    EffectMultiplier = effectMultiplier,
                 };
                 _active.Add(info);
 
@@ -140,8 +144,9 @@ namespace Code.Components
         private static void ApplyHit(RaycastHit hit, ProjectileInfo info)
         {
             float numBullets = info.Weapon.numBullets;
+            float multiplier = info.EffectMultiplier / numBullets;
 
-            float impulse = info.Weapon.bulletImpulse / numBullets;
+            float impulse = info.Weapon.bulletImpulse * multiplier;
             hit.rigidbody?.AddForceAtPosition(info.Velocity.normalized * impulse, hit.point, ForceMode.Impulse);
 
             GameObject go = hit.collider?.gameObject;
@@ -150,7 +155,7 @@ namespace Code.Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            float damage = info.Weapon.bulletDamage / numBullets;
+            float damage = info.Weapon.bulletDamage * multiplier;
             health.ApplyDamageHit(damage, info.Sender);
         }
 
