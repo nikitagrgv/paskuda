@@ -28,6 +28,7 @@ namespace Code.Weapons
         public float spread = 0.1f;
 
         public float bulletReboundChance = 0.6f;
+        public float multiplierByRebound = 0.4f;
         public float bulletGravityFactor = 1f;
 
         public Projectile SpawnProjectile()

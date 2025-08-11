@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Default Weapon
   projectilePrefab: {fileID: 4518421509016054231, guid: cfd35198d285da04f8c257c0f0290908, type: 3}
+  isDamageByTime: 0
   fireReloadTime: 3
   bulletDamage: 40
   numBullets: 20
@@ -23,4 +24,5 @@ MonoBehaviour:
   bulletSpeed: 140
   spread: 3
   bulletReboundChance: 0.05
+  multiplierByRebound: 0.4
   bulletGravityFactor: 0.9

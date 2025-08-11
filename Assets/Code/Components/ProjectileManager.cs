@@ -124,6 +124,7 @@ namespace Code.Components
                     {
                         info.Velocity = Vector3.Reflect(info.Velocity, hit.normal);
                         info.Projectile.transform.position = hit.point + dir * 0.01f;
+                        info.EffectMultiplier *= info.Weapon.multiplierByRebound;
                         _active[i] = info;
                         continue;
                     }
