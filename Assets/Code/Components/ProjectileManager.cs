@@ -33,7 +33,7 @@ namespace Code.Components
 
             float effectMultiplier = weapon.isDamageByTime ? dt * weapon.bulletDamage : 1f;
 
-            float backImpulseByBullet = weapon.bulletBackImpulse / numBullets;
+            float backImpulseByBullet = weapon.bulletBackImpulse * effectMultiplier / numBullets;
             backImpulse = new Vector3();
             for (int i = 0; i < numBullets; i++)
             {
