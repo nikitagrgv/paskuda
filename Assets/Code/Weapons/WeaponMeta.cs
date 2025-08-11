@@ -47,6 +47,20 @@ namespace Code.Weapons
             _projectiles.Add(projectile);
         }
 
+        public void ClearProjectiles()
+        {
+            foreach (Projectile projectile in _projectiles)
+            {
+                if (projectile)
+                {
+                    projectile.MakeHidden();
+                    Destroy(projectile.gameObject);
+                }
+            }
+
+            _projectiles.Clear();
+        }
+
         public void CrashProjectile(Projectile projectile)
         {
             projectile.MakeCrashed();
