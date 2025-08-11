@@ -19,5 +19,6 @@ MonoBehaviour:
   bulletImpulse: 20
   bulletBackImpulse: 2
   bulletLifeTime: 2.5
-  bulletSpeed: 200
+  bulletSpeed: 140
   bulletReboundChance: 0.6
+  bulletGravityFactor: 1
