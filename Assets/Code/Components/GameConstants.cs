@@ -17,7 +17,7 @@ namespace Code.Components
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(player.transform.position, gameFieldRadius);
+            Gizmos.DrawWireSphere(transform.position, gameFieldRadius);
         }
     }
 }

@@ -404,7 +404,7 @@ MonoBehaviour:
   player: {fileID: 2059177129}
   npcPrefab: {fileID: 898362589482774158, guid: c4d1bff0bceb3754dbba42be9dd7c94b, type: 3}
   npcSpawnCount: 400
-  gameFieldRadius: 20
+  gameFieldRadius: 50
   gravityMultiplier: 1.2
 --- !u!1001 &340888013
 PrefabInstance:
@@ -5837,7 +5837,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1147383931944137402, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.94
+      value: -36.87
       objectReference: {fileID: 0}
     - target: {fileID: 1147383931944137402, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5845,7 +5845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147383931944137402, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -52.47
+      value: -23.93
       objectReference: {fileID: 0}
     - target: {fileID: 1147383931944137402, guid: 9ea92ade83ab4554f8d26e616bbf2874, type: 3}
       propertyPath: m_LocalRotation.w
