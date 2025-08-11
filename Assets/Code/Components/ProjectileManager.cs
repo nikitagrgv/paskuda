@@ -18,7 +18,7 @@ namespace Code.Components
             public GameObject Sender;
             public WeaponMeta Weapon;
             public Projectile Projectile;
-            public Vector3 Direction;
+            public Vector3 Velocity;
             public float TimeToLive;
         }
 
@@ -32,12 +32,15 @@ namespace Code.Components
 
             projectile.transform.position = start;
             projectile.transform.rotation = Quaternion.LookRotation(dir);
+
+            Vector3 velocity = dir * weapon.bulletSpeed;
+
             ProjectileInfo info = new()
             {
                 Sender = sender,
                 Weapon = weapon,
                 Projectile = projectile,
-                Direction = dir,
+                Velocity = velocity,
                 TimeToLive = weapon.bulletLifeTime,
             };
             _active.Add(info);
@@ -90,9 +93,12 @@ namespace Code.Components
                     continue;
                 }
 
+                info.Velocity += info.Weapon.bulletGravityFactor * dt * gravity;
+
                 Vector3 oldPosition = info.Projectile.transform.position;
-                float speed = info.Weapon.bulletSpeed;
-                if (Physics.Raycast(oldPosition, info.Direction, out RaycastHit hit, speed * dt, mask,
+                float speed = info.Velocity.magnitude;
+                Vector3 dir = info.Velocity / speed;
+                if (Physics.Raycast(oldPosition, dir, out RaycastHit hit, speed * dt, mask,
                         QueryTriggerInteraction.Ignore))
                 {
                     ApplyHit(hit, info);
@@ -100,8 +106,8 @@ namespace Code.Components
                     float reboundChance = info.Weapon.bulletReboundChance;
                     if (reboundChance > 0f && Utils.TryChance(reboundChance))
                     {
-                        info.Direction = Vector3.Reflect(info.Direction, hit.normal);
-                        info.Projectile.transform.position = hit.point + info.Direction * 0.01f;
+                        info.Velocity = Vector3.Reflect(info.Velocity, hit.normal);
+                        info.Projectile.transform.position = hit.point + dir * 0.01f;
                         _active[i] = info;
                         continue;
                     }
@@ -114,7 +120,7 @@ namespace Code.Components
                     continue;
                 }
 
-                info.Projectile.transform.position = oldPosition + speed * dt * info.Direction;
+                info.Projectile.transform.position = oldPosition + dt * info.Velocity;
                 _active[i] = info;
             }
         }
@@ -122,7 +128,7 @@ namespace Code.Components
         private static void ApplyHit(RaycastHit hit, ProjectileInfo info)
         {
             float impulse = info.Weapon.bulletImpulse;
-            hit.rigidbody?.AddForceAtPosition(info.Direction * impulse, hit.point, ForceMode.Impulse);
+            hit.rigidbody?.AddForceAtPosition(info.Velocity.normalized * impulse, hit.point, ForceMode.Impulse);
 
             GameObject go = hit.collider?.gameObject;
             if (!go) return;
