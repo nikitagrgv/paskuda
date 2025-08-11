@@ -131,8 +131,6 @@ namespace Code.Components
                 return;
             }
             
-            Debug.Log(context);
-
             if (_timeController.IsTimeScaleChanged())
             {
                 _timeController.ResetTimeScale();
