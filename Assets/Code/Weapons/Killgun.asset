@@ -16,7 +16,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 4518421509016054231, guid: cfd35198d285da04f8c257c0f0290908, type: 3}
   fireReloadTime: 0
   bulletDamage: 12
-  bulletImpulse: 20
+  numBullets: 1
+  bulletImpulse: 12
   bulletBackImpulse: 2
   bulletLifeTime: 2.5
   bulletSpeed: 140

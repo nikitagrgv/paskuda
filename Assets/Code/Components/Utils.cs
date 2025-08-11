@@ -31,8 +31,29 @@ namespace Code.Components
 
         public static Vector3 WithSpread(this Vector3 direction, float spread)
         {
+            if (direction == Vector3.zero) return Vector3.zero;
+
+            Vector3 fwd = direction.normalized;
+
+            Vector3 perp = Vector3.Cross(fwd, Vector3.forward);
+            if (perp.sqrMagnitude < 0.0001f)
+            {
+                perp = Vector3.Cross(fwd, Vector3.up);
+            }
+
+            perp.Normalize();
+
+            Vector3 perp2 = Vector3.Cross(fwd, perp).normalized;
+
             Vector2 spreadVec = Random.insideUnitCircle * spread;
-            return Quaternion.Euler(spreadVec.x, spreadVec.y, 0f) * direction;
+
+            float angle = spreadVec.magnitude;
+            if (angle == 0f) return direction;
+
+            Vector3 axis = (spreadVec.x * perp + spreadVec.y * perp2).normalized;
+
+            Quaternion spreadQuat = Quaternion.AngleAxis(angle, axis);
+            return spreadQuat * direction;
         }
 
         public static bool TryChance(float chance)

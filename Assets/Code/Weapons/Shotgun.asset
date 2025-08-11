@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Default Weapon
   projectilePrefab: {fileID: 4518421509016054231, guid: cfd35198d285da04f8c257c0f0290908, type: 3}
-  fireReloadTime: 0
-  bulletDamage: 12
-  bulletImpulse: 20
-  bulletBackImpulse: 0.1
+  fireReloadTime: 1.7
+  bulletDamage: 1.2
+  numBullets: 40
+  bulletImpulse: 1.2
+  bulletBackImpulse: 0.12
   bulletLifeTime: 2.5
-  bulletSpeed: 140
-  spread: 8
-  bulletReboundChance: 0.6
-  bulletGravityFactor: 0.8
+  bulletSpeed: 80
+  spread: 5
+  bulletReboundChance: 0.05
+  bulletGravityFactor: 0.9
