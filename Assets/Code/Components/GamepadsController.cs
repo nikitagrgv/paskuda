@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
@@ -13,7 +14,6 @@ public class GamepadsController : MonoBehaviour
         ReadOnlyArray<Gamepad> gamepads = Gamepad.all;
         foreach (Gamepad gamepad in gamepads)
         {
-            Debug.Log($"Detected gamepad: {gamepad.name} (Path: {gamepad.device.path})");
             if (gamepad.name.StartsWith("XInput"))
             {
                 xBoxGamepads.Add(gamepad);
@@ -31,6 +31,12 @@ public class GamepadsController : MonoBehaviour
                 Debug.Log($"Removed gamepad: {gamepad.name} (Path: {gamepad.device.path})");
                 InputSystem.RemoveDevice(gamepad.device);
             }
+        }
+
+        gamepads = Gamepad.all;
+        foreach (Gamepad gamepad in gamepads)
+        {
+            Debug.Log($"Used gamepad: {gamepad.name} (Path: {gamepad.device.path})");
         }
     }
 }
