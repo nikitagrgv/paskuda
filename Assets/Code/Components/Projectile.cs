@@ -13,16 +13,25 @@ namespace Code.Components
 
         public void SetColor(Color color)
         {
-            Material baseMat = projectileHeadRenderer.material;
-            baseMat.color = color;
-            ApplyEmissionForLitMaterial(baseMat, color, 8f);
+            if (projectileHeadRenderer)
+            {
+                Material baseMat = projectileHeadRenderer.material;
+                baseMat.color = color;
+                ApplyEmissionForLitMaterial(baseMat, color, 8f);
+            }
 
-            Material trailMat = projectileTrailRenderer.material;
-            trailMat.color = color;
-            ApplyEmissionForLitMaterial(trailMat, color, 4.5f);
+            if (projectileTrailRenderer)
+            {
+                Material trailMat = projectileTrailRenderer.material;
+                trailMat.color = color;
+                ApplyEmissionForLitMaterial(trailMat, color, 4.5f);
+            }
 
-            Material explosionMat = projectileExplosionRenderer.material;
-            ApplyEmissionForLitMaterial(explosionMat, color, 5f);
+            if (projectileExplosionRenderer)
+            {
+                Material explosionMat = projectileExplosionRenderer.material;
+                ApplyEmissionForLitMaterial(explosionMat, color, 5f);
+            }
         }
 
         public void MakeHidden()
@@ -48,11 +57,13 @@ namespace Code.Components
 
         private void SetHeadVisible(bool visible)
         {
-            projectileHead.gameObject.SetActive(visible);
+            projectileHead?.gameObject.SetActive(visible);
         }
 
         private void SetExplosionVisible(bool visible)
         {
+            if (!projectileExplosionParticles) return;
+
             projectileExplosionParticles.gameObject.SetActive(visible);
             if (visible)
             {
@@ -67,6 +78,8 @@ namespace Code.Components
 
         private void SetTrailVisible(bool visible)
         {
+            if (!projectileTrailRenderer) return;
+
             projectileTrailRenderer.gameObject.SetActive(visible);
             projectileTrailRenderer.enabled = visible;
             if (!visible)
