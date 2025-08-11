@@ -22,7 +22,7 @@ namespace Code.Components
 
         public WeaponMeta GetRandomWeapon()
         {
-            if (_calculated)
+            if (!_calculated)
             {
                 Recalculate();
             }
