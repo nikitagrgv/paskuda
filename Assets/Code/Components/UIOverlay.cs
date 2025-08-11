@@ -11,8 +11,6 @@ namespace Code.Components
 {
     public class UIOverlay : MonoBehaviour
     {
-        public GameController gameController;
-        public ProjectileManager projectileManager;
         public GeneralCharacterController playerController;
         public Health playerHealth;
         public Image healthImage;
@@ -74,11 +72,13 @@ namespace Code.Components
 
         private bool _needUpdateScore = true;
 
+        private GameController _gameController;
         private TimeController _timeController;
 
         [Inject]
-        public void Construct(TimeController timeController)
+        public void Construct(GameController gameController, TimeController timeController)
         {
+            _gameController = gameController;
             _timeController = timeController;
         }
 
@@ -86,7 +86,7 @@ namespace Code.Components
         {
             diedScreen.gameObject.SetActive(false);
 
-            gameController.AliveCountChanged += (_, _) => _needUpdateScore = true;
+            _gameController.AliveCountChanged += (_, _) => _needUpdateScore = true;
             playerHealth.HealthChanged += OnPlayerHealthChanged;
             playerHealth.BeforeDied += OnPlayerBeforeDied;
             UpdateDash(true);
@@ -214,7 +214,7 @@ namespace Code.Components
 
         private void UpdateScore()
         {
-            IReadOnlyCollection<GameController.TeamInfo> allTeams = gameController.AllTeams;
+            IReadOnlyCollection<GameController.TeamInfo> allTeams = _gameController.AllTeams;
 
             StringBuilder builder = new();
             builder.Append("<color=\"white\">");
