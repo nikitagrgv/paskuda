@@ -1,10 +1,11 @@
 using System;
+using UnityEngine;
 
 namespace Code.Weapons
 {
     [Serializable]
     public class Weapon
     {
-        private string Name { get; set; }
+        public string name;
     }
 }
