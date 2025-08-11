@@ -15,7 +15,7 @@ namespace Code.Components
             public float chanceFactor;
         }
 
-        public List<ArsenalWeapon> Weapons = new();
+        public List<ArsenalWeapon> weapons = new();
 
         private bool _calculated = false;
         private float _totalChance;
@@ -30,7 +30,7 @@ namespace Code.Components
             float rand = Random.Range(0f, _totalChance);
 
             float accumulated = 0f;
-            foreach (ArsenalWeapon arsenalWeapon in Weapons)
+            foreach (ArsenalWeapon arsenalWeapon in weapons)
             {
                 accumulated += arsenalWeapon.chanceFactor;
                 if (rand < accumulated)
@@ -39,7 +39,7 @@ namespace Code.Components
                 }
             }
 
-            return Weapons[^1].weapon;
+            return weapons[^1].weapon;
         }
 
         private void Recalculate()
@@ -47,7 +47,7 @@ namespace Code.Components
             _calculated = true;
 
             _totalChance = 0f;
-            foreach (ArsenalWeapon arsenalWeapon in Weapons)
+            foreach (ArsenalWeapon arsenalWeapon in weapons)
             {
                 _totalChance += arsenalWeapon.chanceFactor;
             }
