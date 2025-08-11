@@ -290,13 +290,10 @@ namespace Code.Components
 
             Vector3 start = firePoint.transform.position;
             Vector3 lookDir = firePoint.transform.forward;
-            Vector3 resultVelocity = _rb.linearVelocity + lookDir * weapon.bulletSpeed;
-            float resultSpeed = resultVelocity.magnitude;
-            Vector3 dir = resultVelocity / resultSpeed;
 
             Color color = Teams.ToColor(_relationshipsActor.Team);
 
-            _projectileManager.AddProjectile(gameObject, weapon, start, dir, color);
+            _projectileManager.AddProjectile(gameObject, weapon, start, lookDir, color);
             _rb.AddForceAtPosition(-lookDir * weapon.bulletBackImpulse, start, ForceMode.Impulse);
 
             NotifyFired();
