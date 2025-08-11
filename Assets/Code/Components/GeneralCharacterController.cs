@@ -1,4 +1,5 @@
 using System;
+using Code.Weapons;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
@@ -45,15 +46,7 @@ namespace Code.Components
         public float normalCheckMaxDistance = 0.5f;
 
         [Header("Weapons")]
-        public Projectile projectilePrefab;
-
-        public float fireReloadTime = 0.4f;
-        public float bulletLifeTime = 2.5f;
-        public float bulletSpeed = 170f;
-        public float bulletImpulse = 20f;
-        public float bulletReboundChance = 0.6f;
-        public float bulletBackImpulse = 2f;
-        public float bulletDamage = 12f;
+        public WeaponMeta weapon;
 
         public float LookPitch
         {
@@ -110,7 +103,7 @@ namespace Code.Components
         public float RemainingDashTimeNormalized => Mathf.Clamp(_dashTimer / dashReloadTime, 0f, 1f);
 
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
-        public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / fireReloadTime, 0f, 1f);
+        public float RemainingReloadTimeNormalized => Mathf.Clamp(_fireTimer / weapon.fireReloadTime, 0f, 1f);
 
         public event Action Fired;
 
@@ -293,34 +286,22 @@ namespace Code.Components
                 return false;
             }
 
-            _fireTimer = fireReloadTime;
-
-            Projectile projectile = SpawnProjectile();
+            _fireTimer = weapon.fireReloadTime;
 
             Vector3 start = firePoint.transform.position;
             Vector3 lookDir = firePoint.transform.forward;
-            Vector3 resultVelocity = _rb.linearVelocity + lookDir * bulletSpeed;
+            Vector3 resultVelocity = _rb.linearVelocity + lookDir * weapon.bulletSpeed;
             float resultSpeed = resultVelocity.magnitude;
             Vector3 dir = resultVelocity / resultSpeed;
 
-            _projectileManager.AddProjectile(gameObject, projectile, start, dir, bulletLifeTime, bulletDamage,
-                resultSpeed,
-                bulletImpulse,
-                bulletReboundChance);
-            _rb.AddForceAtPosition(-lookDir * bulletBackImpulse, start, ForceMode.Impulse);
+            Color color = Teams.ToColor(_relationshipsActor.Team);
+
+            _projectileManager.AddProjectile(gameObject, weapon, start, dir, color);
+            _rb.AddForceAtPosition(-lookDir * weapon.bulletBackImpulse, start, ForceMode.Impulse);
 
             NotifyFired();
             return true;
         }
-
-        private Projectile SpawnProjectile()
-        {
-            Projectile projectile = Instantiate(projectilePrefab);
-            Color color = Teams.ToColor(_relationshipsActor.Team);
-            projectile.SetColor(color);
-            return projectile;
-        }
-
 
         private void OnDied()
         {

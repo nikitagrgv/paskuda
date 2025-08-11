@@ -294,14 +294,7 @@ MonoBehaviour:
   groundCheckerRadius: 0.49
   groundCheckerOffset: 0.57
   normalCheckMaxDistance: 0.5
-  projectilePrefab: {fileID: 4518421509016054231, guid: cfd35198d285da04f8c257c0f0290908, type: 3}
-  fireReloadTime: 0.4
-  bulletLifeTime: 2.5
-  bulletSpeed: 170
-  bulletImpulse: 20
-  bulletReboundChance: 0.7
-  bulletBackImpulse: 2
-  bulletDamage: 12
+  weapon: {fileID: 11400000, guid: 90e4e13c97184c84d95e6e408764c1be, type: 2}
 --- !u!114 &7167312169005661983
 MonoBehaviour:
   m_ObjectHideFlags: 0

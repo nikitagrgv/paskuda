@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Code.Weapons;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -14,36 +15,29 @@ namespace Code.Components
         private struct ProjectileInfo
         {
             public GameObject Sender;
+            public WeaponMeta Weapon;
             public Projectile Projectile;
             public Vector3 Direction;
             public float TimeToLive;
-            public float Damage;
-            public float Speed;
-            public float Impulse;
-            public float ReboundChance;
         }
 
         private readonly List<ProjectileInfo> _active = new();
         private readonly List<ProjectileInfo> _dying = new();
 
-        public void AddProjectile(GameObject sender, Projectile projectile, Vector3 start, Vector3 dir,
-            float lifetime, float damage,
-            float speed,
-            float impulse,
-            float reboundChance)
+        public void AddProjectile(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color)
         {
+            Projectile projectile = weapon.SpawnProjectile();
+            projectile.SetColor(color);
+
             projectile.transform.position = start;
             projectile.transform.rotation = Quaternion.LookRotation(dir);
             ProjectileInfo info = new()
             {
                 Sender = sender,
+                Weapon = weapon,
                 Projectile = projectile,
                 Direction = dir,
-                TimeToLive = lifetime,
-                Damage = damage,
-                Speed = speed,
-                Impulse = impulse,
-                ReboundChance = reboundChance
+                TimeToLive = weapon.bulletLifeTime,
             };
             _active.Add(info);
         }
@@ -94,12 +88,14 @@ namespace Code.Components
                 }
 
                 Vector3 oldPosition = info.Projectile.transform.position;
-                if (Physics.Raycast(oldPosition, info.Direction, out RaycastHit hit, info.Speed * dt,
-                        mask, QueryTriggerInteraction.Ignore))
+                float speed = info.Weapon.bulletSpeed;
+                if (Physics.Raycast(oldPosition, info.Direction, out RaycastHit hit, speed * dt, mask,
+                        QueryTriggerInteraction.Ignore))
                 {
                     ApplyHit(hit, info);
 
-                    if (info.ReboundChance > 0f && Utils.TryChance(info.ReboundChance))
+                    float reboundChance = info.Weapon.bulletReboundChance;
+                    if (reboundChance > 0f && Utils.TryChance(reboundChance))
                     {
                         info.Direction = Vector3.Reflect(info.Direction, hit.normal);
                         info.Projectile.transform.position = hit.point + info.Direction * 0.01f;
@@ -115,14 +111,15 @@ namespace Code.Components
                     continue;
                 }
 
-                info.Projectile.transform.position = oldPosition + info.Speed * dt * info.Direction;
+                info.Projectile.transform.position = oldPosition + speed * dt * info.Direction;
                 _active[i] = info;
             }
         }
 
         private static void ApplyHit(RaycastHit hit, ProjectileInfo info)
         {
-            hit.rigidbody?.AddForceAtPosition(info.Direction * info.Impulse, hit.point, ForceMode.Impulse);
+            float impulse = info.Weapon.bulletImpulse;
+            hit.rigidbody?.AddForceAtPosition(info.Direction * impulse, hit.point, ForceMode.Impulse);
 
             GameObject go = hit.collider?.gameObject;
             if (!go) return;
@@ -130,7 +127,8 @@ namespace Code.Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            health.ApplyDamageHit(info.Damage, info.Sender);
+            float damage = info.Weapon.bulletImpulse;
+            health.ApplyDamageHit(damage, info.Sender);
         }
 
         private void MoveToDying(ProjectileInfo info)
