@@ -47,13 +47,13 @@ namespace Code.Components
         [Header("Weapons")]
         public Projectile projectilePrefab;
 
-        public float fireReloadTime = 1f;
-        public float bulletLifeTime = 4f;
-        public float bulletSpeed = 100f;
-        public float bulletImpulse = 40f;
-        public float bulletReboundChance = 0.9f;
-        public float bulletBackImpulse = 10f;
-        public float bulletDamage = 10f;
+        public float fireReloadTime = 0.4f;
+        public float bulletLifeTime = 2.5f;
+        public float bulletSpeed = 170f;
+        public float bulletImpulse = 20f;
+        public float bulletReboundChance = 0.6f;
+        public float bulletBackImpulse = 2f;
+        public float bulletDamage = 12f;
 
         public float LookPitch
         {
