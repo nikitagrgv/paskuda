@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Code.Weapons
@@ -32,9 +33,28 @@ namespace Code.Weapons
         private int _ammoInMagazine;
         private int _totalAmmo;
 
-        public void Cool()
+        public bool TryFire()
         {
+            if (!IsReadyToFire)
+            {
+                return false;
+            }
+
+            if (_ammoInMagazine == 0)
+            {
+                return false;
+            }
+
+            _ammoInMagazine--;
+            if (_ammoInMagazine == 0)
+            {
+                int delta = Math.Min(_meta.ammoInMagazine, _totalAmmo);
+                _ammoInMagazine = delta;
+                _totalAmmo -= delta;
+            }
+
             _cooldownTimer = _meta.cooldownTime;
+            return true;
         }
 
         public void UpdateTimer(float dt)

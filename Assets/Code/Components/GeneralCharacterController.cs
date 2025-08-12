@@ -298,12 +298,11 @@ namespace Code.Components
 
         private bool DoFire(float dt)
         {
-            if (!_activeWeapon.IsReadyToFire)
+            bool fired = _activeWeapon.TryFire();
+            if (!fired)
             {
                 return false;
             }
-
-            _activeWeapon.Cool();
 
             Vector3 start = firePoint.transform.position;
             Vector3 lookDir = firePoint.transform.forward;
