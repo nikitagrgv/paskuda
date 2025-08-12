@@ -73,6 +73,9 @@ namespace Code.Components
 
         private bool _needUpdateScore = true;
 
+        private int _lastAmmoInMagazine = -1;
+        private int _lastAmmoNotInMagazine = -1;
+
         private GameController _gameController;
         private TimeController _timeController;
 
@@ -111,6 +114,8 @@ namespace Code.Components
                 _needUpdateScore = false;
                 UpdateScore();
             }
+
+            UpdateAmmo();
         }
 
         private void LateUpdate()
@@ -233,6 +238,21 @@ namespace Code.Components
 
             string score = builder.ToString();
             scoreText.text = score;
+        }
+
+        private void UpdateAmmo()
+        {
+            int ammoInMagazine = playerController.AmmoInMagazine;
+            int ammoNotInMagazine = playerController.AmmoNotInMagazine;
+            if (_lastAmmoInMagazine == ammoInMagazine && _lastAmmoNotInMagazine == ammoNotInMagazine)
+            {
+                return;
+            }
+
+            _lastAmmoInMagazine = ammoInMagazine;
+            _lastAmmoNotInMagazine = ammoNotInMagazine;
+
+            ammoText.text = $"<color=\"white\">{ammoInMagazine}/{ammoNotInMagazine}</color>";
         }
 
         private void UpdateHitmarkCurveCache()

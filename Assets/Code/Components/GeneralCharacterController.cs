@@ -116,6 +116,9 @@ namespace Code.Components
         }
 
         public float RemainingCooldownTimeNormalized => _activeWeapon.RemainingCooldownTimeNormalized;
+        public int AmmoInMagazine => _activeWeapon.AmmoInMagazine;
+        public int TotalAmmo => _activeWeapon.TotalAmmo;
+        public int AmmoNotInMagazine => _activeWeapon.AmmoNotInMagazine;
 
         public event Action Fired;
 
