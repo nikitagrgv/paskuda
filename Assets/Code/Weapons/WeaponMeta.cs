@@ -28,5 +28,8 @@ namespace Code.Weapons
         public float bulletReboundChance = 0.6f;
         public float multiplierByRebound = 0.4f;
         public float bulletGravityFactor = 1f;
+
+        public int ammoInMagazine = 30;
+        public int maxAmmo = 1200;
     }
 }
