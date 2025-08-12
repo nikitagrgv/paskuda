@@ -1,7 +1,6 @@
 using System;
 using Code.Weapons;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Zenject;
 
 namespace Code.Components

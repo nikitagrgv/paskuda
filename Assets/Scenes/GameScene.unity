@@ -119,6 +119,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &70143740
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 70143741}
+  - component: {fileID: 70143742}
+  m_Layer: 0
+  m_Name: Camera Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &70143741
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70143740}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1105136993}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70143742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70143740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9b7b4b0dd0943c1bd37a5b7179ef6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &133814356
 GameObject:
   m_ObjectHideFlags: 0
@@ -2099,6 +2143,7 @@ GameObject:
   - component: {fileID: 1105136999}
   - component: {fileID: 1105137000}
   - component: {fileID: 1105137001}
+  - component: {fileID: 1105137002}
   m_Layer: 0
   m_Name: System
   m_TagString: Untagged
@@ -2125,6 +2170,7 @@ Transform:
   - {fileID: 1733928914}
   - {fileID: 1856439785}
   - {fileID: 480546953}
+  - {fileID: 70143741}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1105136994
@@ -2148,6 +2194,7 @@ MonoBehaviour:
   - {fileID: 1105136999}
   - {fileID: 1105137000}
   - {fileID: 1105137001}
+  - {fileID: 1105137002}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2251,6 +2298,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instance: {fileID: 441264853}
+--- !u!114 &1105137002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105136992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4d7e122a114b85af084a70a12c279a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1116715650
 GameObject:
   m_ObjectHideFlags: 0
@@ -4873,6 +4932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d0d502990ea1b41af46f6b99d43e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spectatorCamera: {fileID: 1855342216}
   normalSpeed: 10
   fastSpeed: 30
   mouseSensitivity: 0.06

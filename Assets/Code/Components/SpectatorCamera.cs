@@ -6,6 +6,8 @@ namespace Code.Components
 {
     public class SpectatorCamera : MonoBehaviour
     {
+        public Camera spectatorCamera;
+
         public float normalSpeed = 10f;
         public float fastSpeed = 30f;
 

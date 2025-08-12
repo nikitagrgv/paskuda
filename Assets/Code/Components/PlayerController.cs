@@ -21,6 +21,8 @@ namespace Code.Components
 
         public float gamepadSensitivity = 60f;
         public float gamepadFastSensitivity = 160f;
+        
+        public Camera playerCamera;
 
         private Vector2 _moveInputDir = Vector2.zero;
 

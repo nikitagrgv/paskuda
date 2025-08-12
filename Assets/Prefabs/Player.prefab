@@ -312,6 +312,7 @@ MonoBehaviour:
   mouseSensitivity: 0.06
   gamepadSensitivity: 60
   gamepadFastSensitivity: 160
+  playerCamera: {fileID: 4087083082278845220}
 --- !u!136 &4870284494648936503
 CapsuleCollider:
   m_ObjectHideFlags: 0

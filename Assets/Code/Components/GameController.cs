@@ -38,14 +38,16 @@ namespace Code.Components
 
         private ActorFactory _actorFactory;
         private TimeController _timeController;
+        private CameraManager _cameraManager;
 
         [Inject]
         public void Construct(GameConstants consts, [InjectOptional] ActorFactory actorFactory,
-            TimeController timeController)
+            TimeController timeController, CameraManager cameraManager)
         {
             _consts = consts;
             _actorFactory = actorFactory;
             _timeController = timeController;
+            _cameraManager = cameraManager;
 
             if (_actorFactory)
             {
@@ -79,6 +81,8 @@ namespace Code.Components
 
         private void RegisterPlayer()
         {
+            _cameraManager.ActiveCamera = _consts.player.GetComponent<PlayerController>().playerCamera;
+
             Health health = _consts.player.GetComponent<Health>();
             health.BeforeDied += OnPlayerBeforeDied;
             health.HealthChanged += OnPlayerHealthChanged;
@@ -130,6 +134,7 @@ namespace Code.Components
             Camera playerCamera = _consts.player.GetComponentInChildren<Camera>();
             playerCamera.enabled = false;
 
+            _cameraManager.ActiveCamera = spectatorCamera.spectatorCamera;
             spectatorCamera.gameObject.SetActive(true);
             spectatorCamera.transform.position = _consts.player.transform.position;
             spectatorCamera.transform.rotation = _consts.player.transform.rotation;
