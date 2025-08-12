@@ -48,7 +48,7 @@ namespace Code.Components
         private static readonly Color NorReadyColor = new(1f, 0.5f, 0.5f);
         private static readonly Color ReadyColor = new(0.5f, 1f, 0.5f);
 
-        private static readonly Color ReloadColor = new(0f, 0.4f, 0.9f);
+        private static readonly Color ReloadColor = new(0.9f, 0.4f, 0.1f);
         private static readonly Color CooldownColor = new(0f, 0.9f, 0.4f);
 
         private bool _dashReady;
