@@ -45,8 +45,11 @@ namespace Code.Components
             }
         }
 
-        private readonly Color _norReadyColor = new(1f, 0.5f, 0.5f);
-        private readonly Color _readyColor = new(0.5f, 1f, 0.5f);
+        private static readonly Color NorReadyColor = new(1f, 0.5f, 0.5f);
+        private static readonly Color ReadyColor = new(0.5f, 1f, 0.5f);
+
+        private static readonly Color ReloadColor = new(0f, 0.4f, 0.9f);
+        private static readonly Color CooldownColor = new(0f, 0.9f, 0.4f);
 
         private bool _dashReady;
 
@@ -71,6 +74,9 @@ namespace Code.Components
         private float _diedAnimationCurTime = -1f;
         private float _diedAnimationEndTime = -1f;
 
+        private bool lastIsReloading = false;
+        private float lastReloadProgress;
+
         private bool _needUpdateScore = true;
 
         private int _lastAmmoInMagazine = -1;
@@ -94,6 +100,7 @@ namespace Code.Components
             playerHealth.HealthChanged += OnPlayerHealthChanged;
             playerHealth.BeforeDied += OnPlayerBeforeDied;
             UpdateDash(true);
+            UpdateReloadProgress(true);
             StopHitmark();
             UpdateScore();
 
@@ -119,7 +126,7 @@ namespace Code.Components
             {
                 UpdateDash(false);
                 UpdateHitmark();
-                UpdateReloadProgress();
+                UpdateReloadProgress(false);
                 UpdateAmmo();
             }
 
@@ -143,10 +150,23 @@ namespace Code.Components
             }
         }
 
-        private void UpdateReloadProgress()
+        private void UpdateReloadProgress(bool force)
         {
-            float reload = playerController.RemainingFireTimeNormalized;
-            reloadProgressImage.fillAmount = reload;
+            bool isReloading = playerController.IsReloading;
+            float reloadProgress = playerController.RemainingFireTimeNormalized;
+
+            if (force || reloadProgress != lastReloadProgress)
+            {
+                lastReloadProgress = reloadProgress;
+                reloadProgressImage.fillAmount = reloadProgress;
+            }
+
+            if (force || isReloading != lastIsReloading)
+            {
+                lastIsReloading = isReloading;
+                Color color = isReloading ? ReloadColor : CooldownColor;
+                reloadProgressImage.color = color;
+            }
         }
 
         private void OnAnyHealthChanged(Health health, Health.HealthChangeInfo info)
@@ -206,7 +226,7 @@ namespace Code.Components
             bool ready = playerController.IsDashReady;
             if (force || ready != _dashReady)
             {
-                dashImage.color = ready ? _readyColor : _norReadyColor;
+                dashImage.color = ready ? ReadyColor : NorReadyColor;
                 _dashReady = ready;
             }
 
