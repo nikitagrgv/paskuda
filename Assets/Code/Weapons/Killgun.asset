@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bdbf8ecf4374871975114d38aa624a0, type: 3}
   m_Name: Killgun
   m_EditorClassIdentifier: 
-  weaponName: Default Weapon
+  weaponName: Killgun
   projectilePrefab: {fileID: 4518421509016054231, guid: cfd35198d285da04f8c257c0f0290908, type: 3}
   isDamageByTime: 0
   fireReloadTime: 0

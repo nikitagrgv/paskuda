@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bdbf8ecf4374871975114d38aa624a0, type: 3}
   m_Name: Lazer
   m_EditorClassIdentifier: 
-  weaponName: Default Weapon
+  weaponName: Lazer
   projectilePrefab: {fileID: 4518421509016054231, guid: 4396f76e6e02c3545bf2992be48b4856, type: 3}
   isDamageByTime: 1
   fireReloadTime: 0
