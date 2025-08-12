@@ -107,17 +107,14 @@ namespace Code.Components
             Health.AnyHealthChanged -= OnAnyHealthChanged;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (_needUpdateScore)
             {
                 _needUpdateScore = false;
                 UpdateScore();
             }
-        }
 
-        private void LateUpdate()
-        {
             if (_hasPlayer)
             {
                 UpdateDash(false);
