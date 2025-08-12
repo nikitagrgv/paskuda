@@ -497,14 +497,14 @@ namespace Code.Components
 
         private void RandomizeWantFire()
         {
-            if (ctrl.ActiveWeaponMeta.fireReloadTime < 0.01f)
+            if (ctrl.ActiveWeapon.fireReloadTime < 0.01f)
             {
                 if (!_targetEnemy)
                 {
                     return;
                 }
 
-                float mul = ctrl.ActiveWeaponMeta.fireReloadTime * 3;
+                float mul = ctrl.ActiveWeapon.fireReloadTime * 3;
                 _timerWantFire = Random.Range(0, maxPeriodWantFire * mul);
                 return;
             }

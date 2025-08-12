@@ -46,7 +46,8 @@ namespace Code.Components
         public float normalCheckMaxDistance = 0.5f;
 
         [Header("Weapons")]
-        public WeaponMeta initialWeapon;
+        [SerializeField]
+        private WeaponMeta initialWeapon;
 
         public float LookPitch
         {
@@ -104,7 +105,16 @@ namespace Code.Components
 
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
 
-        public WeaponMeta ActiveWeaponMeta => _activeWeapon.Meta;
+        public WeaponMeta ActiveWeapon
+        {
+            get => _activeWeapon.Meta;
+            set
+            {
+                initialWeapon = value;
+                _activeWeapon.Meta = value;
+            }
+        }
+
         public float RemainingReloadTimeNormalized => _activeWeapon.RemainingReloadTimeNormalized;
 
         public event Action Fired;
