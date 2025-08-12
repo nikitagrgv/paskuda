@@ -294,7 +294,7 @@ MonoBehaviour:
   groundCheckerRadius: 0.49
   groundCheckerOffset: 0.57
   normalCheckMaxDistance: 0.5
-  weapon: {fileID: 11400000, guid: 5fe4f411b63b5ad479e64498346b1c6f, type: 2}
+  initialWeapon: {fileID: 11400000, guid: 5fe4f411b63b5ad479e64498346b1c6f, type: 2}
 --- !u!114 &7167312169005661983
 MonoBehaviour:
   m_ObjectHideFlags: 0
