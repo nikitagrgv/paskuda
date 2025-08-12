@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Code.Components
@@ -84,6 +85,19 @@ namespace Code.Components
         public static Vector3 WithZ(this Vector3 vector, float v)
         {
             return new Vector3(vector.x, vector.y, v);
+        }
+
+        public static TValue GetOrCreate<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+            where TValue : new()
+        {
+            if (dictionary.TryGetValue(key, out TValue value))
+            {
+                return value;
+            }
+
+            value = new TValue();
+            dictionary.Add(key, value);
+            return value;
         }
     }
 }

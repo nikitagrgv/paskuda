@@ -42,14 +42,6 @@ namespace Code.Components
             return weapons[^1].weapon;
         }
 
-        private void OnDestroy()
-        {
-            foreach (ArsenalWeapon weapon in weapons)
-            {
-                weapon.weapon.ClearProjectiles();
-            }
-        }
-
         private void Recalculate()
         {
             _calculated = true;

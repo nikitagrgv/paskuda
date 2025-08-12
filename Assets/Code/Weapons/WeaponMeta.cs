@@ -30,46 +30,5 @@ namespace Code.Weapons
         public float bulletReboundChance = 0.6f;
         public float multiplierByRebound = 0.4f;
         public float bulletGravityFactor = 1f;
-
-        public Projectile SpawnProjectile()
-        {
-            if (_projectiles.Count <= 0)
-            {
-                return Instantiate(projectilePrefab);
-            }
-
-            Projectile projectile = _projectiles.Last();
-            _projectiles.RemoveAt(_projectiles.Count - 1);
-            projectile.MakeVisible();
-            return projectile;
-        }
-
-        public void RemoveProjectile(Projectile projectile)
-        {
-            projectile.MakeHidden();
-            _projectiles.Add(projectile);
-        }
-
-        public void ClearProjectiles()
-        {
-            foreach (Projectile projectile in _projectiles)
-            {
-                if (projectile)
-                {
-                    projectile.MakeHidden();
-                    Destroy(projectile.gameObject);
-                }
-            }
-
-            _projectiles.Clear();
-        }
-
-        public void CrashProjectile(Projectile projectile)
-        {
-            projectile.MakeCrashed();
-        }
-
-        [NonSerialized]
-        private List<Projectile> _projectiles = new();
     }
 }

@@ -130,7 +130,7 @@ namespace Code.Components
                 return;
             }
 
-            if (VisibleObjectsMap.ContainsKey(go))
+            if (_visibleObjectsMap.ContainsKey(go))
             {
                 return;
             }
@@ -150,7 +150,7 @@ namespace Code.Components
 
             Info info = new() { Character = character, RelationshipsActor = ra, Health = health };
 
-            VisibleObjectsMap[go] = info;
+            _visibleObjectsMap[go] = info;
 
             BecomeVisible?.Invoke(go, info);
         }
@@ -163,12 +163,12 @@ namespace Code.Components
                 return;
             }
 
-            if (!VisibleObjectsMap.ContainsKey(go))
+            if (!_visibleObjectsMap.ContainsKey(go))
             {
                 return;
             }
 
-            Info info = VisibleObjectsMap.GetValueAndRemove(go);
+            Info info = _visibleObjectsMap.GetValueAndRemove(go);
             BecomeInvisible?.Invoke(go, info);
         }
 

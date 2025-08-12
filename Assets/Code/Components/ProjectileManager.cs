@@ -16,19 +16,26 @@ namespace Code.Components
         private struct ProjectileInfo
         {
             public GameObject Sender;
-            public WeaponMeta Weapon;
             public Projectile Projectile;
             public Vector3 Velocity;
             public float TimeToLive;
             public float EffectMultiplier;
         }
 
-        private readonly List<ProjectileInfo> _active = new();
-        private readonly List<ProjectileInfo> _dying = new();
+        private class WeaponProjectiles
+        {
+            public readonly List<ProjectileInfo> Active = new();
+            public readonly List<ProjectileInfo> Dying = new();
+            public readonly List<Projectile> Pool = new();
+        }
+
+        private Dictionary<WeaponMeta, WeaponProjectiles> _projectilesByWeapon = new();
 
         public void Fire(GameObject sender, WeaponMeta weapon, Vector3 start, Vector3 dir, Color color, float dt,
             out Vector3 backImpulse)
         {
+            WeaponProjectiles wp = _projectilesByWeapon.GetOrCreate(weapon);
+
             int numBullets = weapon.numBullets;
 
             float effectMultiplier = weapon.isDamageByTime ? dt * weapon.bulletDamage : 1f;
@@ -37,7 +44,7 @@ namespace Code.Components
             backImpulse = new Vector3();
             for (int i = 0; i < numBullets; i++)
             {
-                Projectile projectile = weapon.SpawnProjectile();
+                Projectile projectile = SpawnProjectile(weapon, wp);
                 projectile.SetColor(color);
 
                 Vector3 newDir = dir.WithSpread(weapon.spread);
@@ -50,13 +57,12 @@ namespace Code.Components
                 ProjectileInfo info = new()
                 {
                     Sender = sender,
-                    Weapon = weapon,
                     Projectile = projectile,
                     Velocity = velocity,
                     TimeToLive = weapon.bulletLifeTime,
                     EffectMultiplier = effectMultiplier,
                 };
-                _active.Add(info);
+                wp.Active.Add(info);
 
                 backImpulse -= newDir * backImpulseByBullet;
             }
@@ -65,51 +71,56 @@ namespace Code.Components
         private void Update()
         {
             float dt = Time.deltaTime;
-            UpdateDying(dt);
-            UpdateActive(dt);
-        }
-
-        private void UpdateDying(float dt)
-        {
-            int count = _dying.Count;
-            for (int i = 0; i < count; i++)
+            foreach (KeyValuePair<WeaponMeta, WeaponProjectiles> p in _projectilesByWeapon)
             {
-                ProjectileInfo info = _dying[i];
-                info.TimeToLive -= dt;
-                if (info.TimeToLive <= 0)
-                {
-                    _dying.RemoveAtSwapBack(i);
-                    info.Weapon.RemoveProjectile(info.Projectile);
-                    i--;
-                    count--;
-                    continue;
-                }
-
-                _dying[i] = info;
+                UpdateDying(p.Value, dt);
+                UpdateActive(p.Key, p.Value, dt);
             }
         }
 
-        private void UpdateActive(float dt)
+        private void UpdateDying(WeaponProjectiles wp, float dt)
         {
-            Vector3 gravity = Physics.gravity;
+            List<ProjectileInfo> dying = wp.Dying;
 
-            int mask = interactableLayers.value;
-
-            int count = _active.Count;
+            int count = dying.Count;
             for (int i = 0; i < count; i++)
             {
-                ProjectileInfo info = _active[i];
+                ProjectileInfo info = dying[i];
                 info.TimeToLive -= dt;
                 if (info.TimeToLive <= 0)
                 {
-                    _active.RemoveAtSwapBack(i);
-                    MoveToDying(info);
+                    dying.RemoveAtSwapBack(i);
+                    RemoveProjectile(info.Projectile, wp);
                     i--;
                     count--;
                     continue;
                 }
 
-                info.Velocity += info.Weapon.bulletGravityFactor * dt * gravity;
+                dying[i] = info;
+            }
+        }
+
+        private void UpdateActive(WeaponMeta weapon, WeaponProjectiles wp, float dt)
+        {
+            List<ProjectileInfo> active = wp.Active;
+
+            Vector3 gravity = Physics.gravity;
+            int mask = interactableLayers.value;
+            int count = active.Count;
+            for (int i = 0; i < count; i++)
+            {
+                ProjectileInfo info = active[i];
+                info.TimeToLive -= dt;
+                if (info.TimeToLive <= 0)
+                {
+                    active.RemoveAtSwapBack(i);
+                    MoveToDying(info, wp);
+                    i--;
+                    count--;
+                    continue;
+                }
+
+                info.Velocity += weapon.bulletGravityFactor * dt * gravity;
 
                 Vector3 oldPosition = info.Projectile.transform.position;
                 float speed = info.Velocity.magnitude;
@@ -117,37 +128,37 @@ namespace Code.Components
                 if (Physics.Raycast(oldPosition, dir, out RaycastHit hit, speed * dt, mask,
                         QueryTriggerInteraction.Ignore))
                 {
-                    ApplyHit(hit, info);
+                    ApplyHit(hit, weapon, info);
 
-                    float reboundChance = info.Weapon.bulletReboundChance;
+                    float reboundChance = weapon.bulletReboundChance;
                     if (reboundChance > 0f && Utils.TryChance(reboundChance))
                     {
                         info.Velocity = Vector3.Reflect(info.Velocity, hit.normal);
                         info.Projectile.transform.position = hit.point + dir * 0.01f;
-                        info.EffectMultiplier *= info.Weapon.multiplierByRebound;
-                        _active[i] = info;
+                        info.EffectMultiplier *= weapon.multiplierByRebound;
+                        active[i] = info;
                         continue;
                     }
 
                     info.Projectile.transform.position = hit.point;
-                    _active.RemoveAtSwapBack(i);
-                    MoveToDying(info);
+                    active.RemoveAtSwapBack(i);
+                    MoveToDying(info, wp);
                     i--;
                     count--;
                     continue;
                 }
 
                 info.Projectile.transform.position = oldPosition + dt * info.Velocity;
-                _active[i] = info;
+                active[i] = info;
             }
         }
 
-        private static void ApplyHit(RaycastHit hit, ProjectileInfo info)
+        private static void ApplyHit(RaycastHit hit, WeaponMeta weapon, ProjectileInfo info)
         {
-            float numBullets = info.Weapon.numBullets;
+            float numBullets = weapon.numBullets;
             float multiplier = info.EffectMultiplier / numBullets;
 
-            float impulse = info.Weapon.bulletImpulse * multiplier;
+            float impulse = weapon.bulletImpulse * multiplier;
             hit.rigidbody?.AddForceAtPosition(info.Velocity.normalized * impulse, hit.point, ForceMode.Impulse);
 
             GameObject go = hit.collider?.gameObject;
@@ -156,15 +167,38 @@ namespace Code.Components
             Health health = go.GetComponentInParent<Health>();
             if (!health) return;
 
-            float damage = info.Weapon.bulletDamage * multiplier;
+            float damage = weapon.bulletDamage * multiplier;
             health.ApplyDamageHit(damage, info.Sender);
         }
 
-        private void MoveToDying(ProjectileInfo info)
+        private void MoveToDying(ProjectileInfo info, WeaponProjectiles wp)
         {
             info.TimeToLive = 1f;
-            info.Weapon.CrashProjectile(info.Projectile);
-            _dying.Add(info);
+            info.Projectile.MakeCrashed();
+            wp.Dying.Add(info);
+        }
+
+        private Projectile SpawnProjectile(WeaponMeta weapon, WeaponProjectiles wp)
+        {
+            List<Projectile> pool = wp.Pool;
+
+            if (pool.Count <= 0)
+            {
+                return Instantiate(weapon.projectilePrefab);
+            }
+
+            Projectile projectile = pool[^1];
+            pool.RemoveAt(pool.Count - 1);
+            projectile.MakeVisible();
+            return projectile;
+        }
+
+        private void RemoveProjectile(Projectile projectile, WeaponProjectiles wp)
+        {
+            List<Projectile> pool = wp.Pool;
+
+            projectile.MakeHidden();
+            pool.Add(projectile);
         }
     }
 }
