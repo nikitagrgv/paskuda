@@ -58,7 +58,7 @@ namespace Code.Weapons
             if (_ammoInMagazine == 0)
             {
                 _reloadTimer = _meta.reloadTime;
-                return false;
+                return true;
             }
 
             _cooldownTimer = _meta.cooldownTime;
