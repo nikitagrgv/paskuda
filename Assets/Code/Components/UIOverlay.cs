@@ -114,8 +114,6 @@ namespace Code.Components
                 _needUpdateScore = false;
                 UpdateScore();
             }
-
-            UpdateAmmo();
         }
 
         private void LateUpdate()
@@ -125,6 +123,7 @@ namespace Code.Components
                 UpdateDash(false);
                 UpdateHitmark();
                 UpdateReloadProgress();
+                UpdateAmmo();
             }
 
             UpdateDiedScreenAnimation();

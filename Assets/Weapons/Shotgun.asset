@@ -26,3 +26,5 @@ MonoBehaviour:
   bulletReboundChance: 0.05
   multiplierByRebound: 0.4
   bulletGravityFactor: 0.9
+  ammoInMagazine: 2
+  initialAmmo: 40
