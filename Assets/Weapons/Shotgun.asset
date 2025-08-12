@@ -15,7 +15,8 @@ MonoBehaviour:
   weaponName: Shotgun
   projectilePrefab: {fileID: 4518421509016054231, guid: cfd35198d285da04f8c257c0f0290908, type: 3}
   isDamageByTime: 0
-  cooldownTime: 3
+  cooldownTime: 0.8
+  reloadTime: 3
   bulletDamage: 40
   numBullets: 20
   bulletImpulse: 50
@@ -27,4 +28,4 @@ MonoBehaviour:
   multiplierByRebound: 0.4
   bulletGravityFactor: 0.9
   ammoInMagazine: 4
-  initialAmmo: 60
+  initialAmmo: 80
