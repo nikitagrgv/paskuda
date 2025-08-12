@@ -53,7 +53,7 @@ public class TeamSpawner : MonoBehaviour
         _factory.Create(npcPrefab, team, pos3, Quaternion.identity, actor =>
         {
             GeneralCharacterController c = actor.GetComponent<GeneralCharacterController>();
-            c.weapon = _arsenal.GetRandomWeapon();
+            c.initialWeapon = _arsenal.GetRandomWeapon();
         });
     }
 }

@@ -46,7 +46,7 @@ namespace Code.Components
         public float normalCheckMaxDistance = 0.5f;
 
         [Header("Weapons")]
-        public WeaponMeta weapon;
+        public WeaponMeta initialWeapon;
 
         public float LookPitch
         {
@@ -104,8 +104,8 @@ namespace Code.Components
 
         public bool IsJumpReady => _jumpTimer <= 0 && _hasDoubleJump;
 
-        public float RemainingReloadTimeNormalized =>
-            weapon.fireReloadTime == 0 ? 0 : Mathf.Clamp(_fireTimer / weapon.fireReloadTime, 0f, 1f);
+        public WeaponMeta ActiveWeaponMeta => _activeWeapon.Meta;
+        public float RemainingReloadTimeNormalized => _activeWeapon.RemainingReloadTimeNormalized;
 
         public event Action Fired;
 
@@ -126,7 +126,7 @@ namespace Code.Components
         private bool _hasDoubleJump;
 
         private ActionRequestType _fireRequest = ActionRequestType.NotRequested;
-        private float _fireTimer;
+        private Weapon _activeWeapon = new();
 
         private Vector3 _dashTargetXZ = Vector3.zero;
         private ActionRequestType _dashRequest = ActionRequestType.NotRequested;
@@ -151,13 +151,18 @@ namespace Code.Components
             _relationshipsActor = GetComponent<RelationshipsActor>();
         }
 
+        private void OnEnable()
+        {
+            _activeWeapon.Meta = initialWeapon;
+        }
+
         private void Update()
         {
             float dt = Time.deltaTime;
 
             eyeObject.transform.rotation = Quaternion.Euler(_lookPitch, _lookYaw, 0);
 
-            _fireTimer = Math.Max(0, _fireTimer - dt);
+            _activeWeapon.UpdateTimer(dt);
             if (_fireRequest != ActionRequestType.NotRequested)
             {
                 bool done = DoFire(dt);
@@ -283,19 +288,19 @@ namespace Code.Components
 
         private bool DoFire(float dt)
         {
-            if (_fireTimer > 0)
+            if (!_activeWeapon.IsReadyToFire)
             {
                 return false;
             }
 
-            _fireTimer = weapon.fireReloadTime;
+            _activeWeapon.Reload();
 
             Vector3 start = firePoint.transform.position;
             Vector3 lookDir = firePoint.transform.forward;
 
             Color color = Teams.ToColor(_relationshipsActor.Team);
 
-            _projectileManager.Fire(gameObject, weapon, start, lookDir, color, dt, out Vector3 backImpulse);
+            _projectileManager.Fire(gameObject, _activeWeapon.Meta, start, lookDir, color, dt, out Vector3 backImpulse);
             _rb.AddForceAtPosition(backImpulse, start, ForceMode.Impulse);
 
             NotifyFired();
