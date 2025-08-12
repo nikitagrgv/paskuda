@@ -23,10 +23,15 @@ namespace Code.Weapons
             set => _cooldownTimer = Mathf.Clamp(value, 0, _meta.cooldownTime);
         }
 
-        public bool IsReadyToFire => _cooldownTimer <= 0;
+        public bool IsReadyToFire => _cooldownTimer <= 0 && _reloadTimer <= 0;
+        public bool IsCoolingDown => _cooldownTimer > 0;
+        public bool IsReloading => _reloadTimer > 0;
 
         public float RemainingCooldownTimeNormalized =>
             _meta.cooldownTime == 0 ? 0 : Mathf.Clamp01(_cooldownTimer / _meta.cooldownTime);
+
+        public float RemainingReloadTimeNormalized =>
+            _meta.reloadTime == 0 ? 0 : Mathf.Clamp01(_reloadTimer / _meta.reloadTime);
 
         public int AmmoInMagazine => _ammoInMagazine;
         public int TotalAmmo => _totalAmmo;
@@ -34,6 +39,7 @@ namespace Code.Weapons
 
         private WeaponMeta _meta;
         private float _cooldownTimer;
+        private float _reloadTimer;
         private int _ammoInMagazine;
         private int _totalAmmo;
 
