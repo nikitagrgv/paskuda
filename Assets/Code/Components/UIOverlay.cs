@@ -20,6 +20,7 @@ namespace Code.Components
         public TextMeshProUGUI scoreText;
         public CanvasGroup hitmark;
         public CanvasGroup playerOverlay;
+        public TextMeshProUGUI ammoText;
 
         public CanvasGroup diedScreen;
 
