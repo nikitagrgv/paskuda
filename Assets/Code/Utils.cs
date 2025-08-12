@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Code.Components
+namespace Code
 {
     public static class Utils
     {
