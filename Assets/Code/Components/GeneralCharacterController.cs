@@ -115,6 +115,7 @@ namespace Code.Components
             }
         }
 
+        public bool IsReloading => _activeWeapon.IsReloading;
         public float RemainingFireTimeNormalized => _activeWeapon.RemainingTimeNormalized;
         public int AmmoInMagazine => _activeWeapon.AmmoInMagazine;
         public int TotalAmmo => _activeWeapon.TotalAmmo;
