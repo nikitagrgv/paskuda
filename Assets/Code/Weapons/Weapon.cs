@@ -12,15 +12,10 @@ namespace Code.Weapons
             {
                 _meta = value;
                 _cooldownTimer = 0f;
+                _reloadTimer = 0f;
                 _ammoInMagazine = _meta.ammoInMagazine;
                 _totalAmmo = _meta.initialAmmo;
             }
-        }
-
-        public float CooldownTimer
-        {
-            get => _cooldownTimer;
-            set => _cooldownTimer = Mathf.Clamp(value, 0, _meta.cooldownTime);
         }
 
         public bool IsReadyToFire => _cooldownTimer <= 0 && _reloadTimer <= 0;
@@ -32,6 +27,9 @@ namespace Code.Weapons
 
         public float RemainingReloadTimeNormalized =>
             _meta.reloadTime == 0 ? 0 : Mathf.Clamp01(_reloadTimer / _meta.reloadTime);
+
+        public float RemainingTimeNormalized =>
+            _reloadTimer > 0 ? RemainingReloadTimeNormalized : RemainingCooldownTimeNormalized;
 
         public int AmmoInMagazine => _ammoInMagazine;
         public int TotalAmmo => _totalAmmo;
@@ -59,16 +57,23 @@ namespace Code.Weapons
             _totalAmmo--;
             if (_ammoInMagazine == 0)
             {
-                _ammoInMagazine = Math.Min(_meta.ammoInMagazine, _totalAmmo);
+                _reloadTimer = _meta.reloadTime;
+                return false;
             }
 
             _cooldownTimer = _meta.cooldownTime;
             return true;
         }
 
-        public void UpdateTimer(float dt)
+        public void Update(float dt)
         {
-            CooldownTimer -= dt;
+            _cooldownTimer = Mathf.Clamp(_cooldownTimer - dt, 0, _meta.cooldownTime);
+            _reloadTimer = Mathf.Clamp(_reloadTimer - dt, 0, _meta.reloadTime);
+
+            if (_ammoInMagazine == 0 && _totalAmmo != 0 && !IsReloading)
+            {
+                _ammoInMagazine = Math.Min(_meta.ammoInMagazine, _totalAmmo);
+            }
         }
     }
 }

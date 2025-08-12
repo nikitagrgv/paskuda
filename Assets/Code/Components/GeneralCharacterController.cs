@@ -175,7 +175,7 @@ namespace Code.Components
 
             eyeObject.transform.rotation = Quaternion.Euler(_lookPitch, _lookYaw, 0);
 
-            _activeWeapon.UpdateTimer(dt);
+            _activeWeapon.Update(dt);
             if (_fireRequest != ActionRequestType.NotRequested)
             {
                 bool done = DoFire(dt);
