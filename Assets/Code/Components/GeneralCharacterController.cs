@@ -115,7 +115,7 @@ namespace Code.Components
             }
         }
 
-        public float RemainingReloadTimeNormalized => _activeWeapon.RemainingReloadTimeNormalized;
+        public float RemainingCooldownTimeNormalized => _activeWeapon.RemainingCooldownTimeNormalized;
 
         public event Action Fired;
 
@@ -303,7 +303,7 @@ namespace Code.Components
                 return false;
             }
 
-            _activeWeapon.Reload();
+            _activeWeapon.Cool();
 
             Vector3 start = firePoint.transform.position;
             Vector3 lookDir = firePoint.transform.forward;

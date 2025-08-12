@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Lazer
   projectilePrefab: {fileID: 4518421509016054231, guid: 4396f76e6e02c3545bf2992be48b4856, type: 3}
   isDamageByTime: 1
-  fireReloadTime: 0
+  cooldownTime: 0
   bulletDamage: 5
   numBullets: 1
   bulletImpulse: 3

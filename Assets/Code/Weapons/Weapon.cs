@@ -10,32 +10,36 @@ namespace Code.Weapons
             set
             {
                 _meta = value;
-                _reloadTimer = 0f;
+                _cooldownTimer = 0f;
+                _ammoInMagazine = _meta.ammoInMagazine;
+                _totalAmmo = _meta.initialAmmo;
             }
         }
 
-        public float ReloadTimer
+        public float CooldownTimer
         {
-            get => _reloadTimer;
-            set => _reloadTimer = Mathf.Clamp(value, 0, _meta.fireReloadTime);
+            get => _cooldownTimer;
+            set => _cooldownTimer = Mathf.Clamp(value, 0, _meta.cooldownTime);
         }
 
-        public bool IsReadyToFire => _reloadTimer <= 0;
+        public bool IsReadyToFire => _cooldownTimer <= 0;
 
-        public float RemainingReloadTimeNormalized =>
-            _meta.fireReloadTime == 0 ? 0 : Mathf.Clamp01(_reloadTimer / _meta.fireReloadTime);
+        public float RemainingCooldownTimeNormalized =>
+            _meta.cooldownTime == 0 ? 0 : Mathf.Clamp01(_cooldownTimer / _meta.cooldownTime);
 
         private WeaponMeta _meta;
-        private float _reloadTimer;
+        private float _cooldownTimer;
+        private int _ammoInMagazine;
+        private int _totalAmmo;
 
-        public void Reload()
+        public void Cool()
         {
-            _reloadTimer = _meta.fireReloadTime;
+            _cooldownTimer = _meta.cooldownTime;
         }
 
         public void UpdateTimer(float dt)
         {
-            ReloadTimer -= dt;
+            CooldownTimer -= dt;
         }
     }
 }

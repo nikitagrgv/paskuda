@@ -144,7 +144,7 @@ namespace Code.Components
 
         private void UpdateReloadProgress()
         {
-            float reload = playerController.RemainingReloadTimeNormalized;
+            float reload = playerController.RemainingCooldownTimeNormalized;
             reloadProgressImage.fillAmount = reload;
         }
 
